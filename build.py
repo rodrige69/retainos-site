@@ -143,11 +143,14 @@ def topbar(alt=None, nav=True):
     else:
         toggle = '<div class="lang" role="group" aria-label="Language / Idioma"><button type="button" data-setlang="en" aria-pressed="true">EN</button><button type="button" data-setlang="es" aria-pressed="false">ES</button></div>'
     links = ""
+    learn = T("Learning Center", "Aprende", "a", "", href(url("/learn", "/es/aprende"))) if LANG else T('<a href="/learn">Learning Center</a>', '<a href="/es/aprende">Aprende</a>')
     if nav and LANG:
         links = ('<div class="nav">' + T("How it works", "Cómo funciona", "a", "", href("#how"))
                  + T("Industries", "Industrias", "a", "", href(url("/#industries", "/es#industries")))
                  + T("Rewards", "Premios", "a", "", href(url("/rewards", "/es/premios")))
-                 + T("Plans", "Planes", "a", "", href("#plans")) + "</div>")
+                 + T("Plans", "Planes", "a", "", href("#plans")) + learn + "</div>")
+    else:
+        links = '<div class="nav">' + learn + "</div>"
     home = url("/", "/es") if LANG else "#top"
     return f'<header class="wrap top"><a class="logo" href="{home}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a><div class="topr">{links}{toggle}</div></header>'
 
@@ -506,7 +509,7 @@ def footer():
 <div><a class="logo" href="{url('/', '/es')}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>{T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "p")}</div>
 <div>{T("Automated Loyalty &amp; Referral Programs", "Programas automatizados de lealtad y referidos", "h3")}<ul class="two">{li(loyal)}</ul>
 {T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul></div>
-<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="/learn">{L("Learning Center", "Centro de aprendizaje (en inglés)")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
+<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="{url('/learn', '/es/aprende')}">{L("Learning Center", "Centro de aprendizaje")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
 </div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is a service of", "RetainOS es un servicio de")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
 
 
