@@ -213,6 +213,53 @@ footer .flinks{display:inline-flex;gap:6px}
 .fab{position:fixed;right:18px;bottom:18px;z-index:50;display:flex;align-items:center;gap:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:800;padding:12px 16px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .fab:hover{background:var(--accent-dk)}
 @media (max-width:560px){.fab span{display:none}.fab{padding:14px}}
+/* Learning Center */
+.btn.sm{padding:9px 16px;font-size:15px}
+.crumbs{font-size:14px;color:var(--muted);margin:8px 0 18px}.crumbs a{color:var(--muted)}.crumbs span{margin:0 4px}
+.tag{display:inline-block;background:var(--accent-bg);color:var(--accent-dk);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.post{max-width:1120px;padding-top:8px;padding-bottom:40px}
+.phead{max-width:820px}.phead h1{font-size:clamp(32px,4.6vw,50px);font-weight:800;line-height:1.08;margin:14px 0 12px}
+.pmeta{color:var(--muted);font-size:15px;margin:0}
+.hero-img{margin:26px 0 8px}.hero-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:22px;display:block}
+.hero-img figcaption{font-size:13px;color:var(--muted);margin-top:8px}.hero-img figcaption a{color:var(--muted)}
+.pgrid{display:grid;grid-template-columns:250px minmax(0,1fr);gap:48px;margin-top:28px;align-items:start}
+.toc{position:sticky;top:20px;font-size:15px}
+.toc summary{font-weight:800;cursor:pointer;margin-bottom:10px;color:var(--ink)}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;border-left:2px solid var(--line)}
+.toc a{display:block;padding:6px 12px;color:var(--ink2);text-decoration:none;line-height:1.35}.toc a:hover{color:var(--accent-dk);background:var(--accent-bg)}
+.prose{max-width:720px;font-size:18px;line-height:1.7;color:var(--ink2)}
+.prose h2{font-size:28px;line-height:1.2;color:var(--ink);margin:44px 0 12px;scroll-margin-top:20px}
+.prose h3{font-size:20px;color:var(--ink);margin:26px 0 6px}
+.prose p{margin:0 0 16px}.prose ul{padding-left:22px;margin:0 0 16px}.prose li{margin-bottom:6px}
+.prose a{color:var(--accent-dk)}.prose strong{color:var(--ink)}
+.quick{background:#fff;border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:16px;padding:20px 22px;margin:0 0 28px}
+.quick p{margin:0;color:var(--ink);font-size:18px}
+.prose .example{background:var(--accent-bg);border-radius:18px;padding:6px 24px 10px;margin:36px 0}
+.prose .example h2{margin-top:22px;font-size:22px}
+.faqv h3{margin-top:22px}
+.fitbox{background:var(--dark);color:#E4E1DA;border-radius:22px;padding:30px;margin:44px 0 24px}
+.fitbox h2{color:#fff;margin:6px 0 12px}.fitbox p{color:#E4E1DA}.fitbox .fine,.fitbox .fine a{color:#B9B5AD}
+.fitbox .ctas{margin:20px 0 12px}.fitbox .btn.alt{color:#fff;border-color:#fff}
+.disclose{border:1px solid var(--line);border-radius:18px;padding:18px 22px;font-size:15px;line-height:1.6;background:#fff}
+.disclose h2{font-size:18px;margin:4px 0 10px}.disclose p{margin:0 0 10px}
+.related{margin-top:56px}.related h2{font-size:28px;margin-bottom:18px}
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.lcard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;text-decoration:none;color:var(--ink);transition:transform .15s,box-shadow .15s}
+.lcard:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.08)}
+.lcard img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block}
+.lc{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.lc h3{font-size:20px;line-height:1.25;margin:2px 0 0}.lc p{margin:0;color:var(--ink2);font-size:15px;line-height:1.5}
+.rt{margin-top:auto;font-size:13px;color:var(--muted);font-weight:700}
+.lcard.big{display:grid;grid-template-columns:1.2fr 1fr}.lcard.big img{height:100%;aspect-ratio:auto}.lcard.big .lc{padding:32px;justify-content:center}.lcard.big h3{font-size:30px}
+.learn{padding-top:8px;padding-bottom:40px}.learn .lead{margin-bottom:22px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none}.chip:hover{border-color:var(--accent);color:var(--accent-dk)}
+.featured{margin-bottom:16px}.lsec{margin-top:40px}.lsec h2{font-size:26px;margin-bottom:16px;scroll-margin-top:20px}
+@media (max-width:920px){.pgrid{grid-template-columns:1fr;gap:18px}.toc{position:static}.toc details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}.toc summary{margin:0}.toc ol{margin-top:10px}.lgrid{grid-template-columns:1fr 1fr}.lcard.big{grid-template-columns:1fr}.lcard.big .lc{padding:22px}.lcard.big h3{font-size:24px}.top .btn.sm{display:none}}
+@media (max-width:620px){.lgrid{grid-template-columns:1fr}.prose{font-size:17px}.prose h2{font-size:24px}.fitbox{padding:22px}.prose .example{padding:4px 16px 8px}}
+button.chip{cursor:pointer;font-family:inherit}.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+#lgrid .lcard.isfeat{display:none}
+.prose .btn{color:#fff;text-decoration:none}.prose .fitbox .btn.alt{color:#fff}.prose .fitbox .fine a{color:#B9B5AD}
 </style>
 <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Service", "name": "Programa de citas y recordatorios para Centros de Bienestar", "provider": {"@type": "Organization", "name": "RetainOS", "url": "https://retainos.co"}, "areaServed": "US", "availableLanguage": ["en", "es"]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Tengo que cambiar mi app de reservas?", "acceptedAnswer": {"@type": "Answer", "text": "No. Clientes Fieles funciona junto con la que ya usas. Agenda Llena agrega nuestras reservas si las quieres, y pasamos tus clientes por ti."}}, {"@type": "Question", "name": "¿Se quedan con un porcentaje de mis citas?", "acceptedAnswer": {"@type": "Answer", "text": "Nunca. Un solo precio mensual fijo."}}, {"@type": "Question", "name": "¿Mis clientes pueden recibir mensajes en español?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Cada mensaje llega en español o en inglés."}}, {"@type": "Question", "name": "¿Puedo ofrecer premios?", "acceptedAnswer": {"@type": "Answer", "text": "Los premios por visitas y referidos están desactivados de entrada para servicios relacionados con la salud, porque los regalos ligados a visitas o referidos pueden ir contra las normas de salud. Los servicios de pago directo que no son tratamientos médicos pueden calificar después de revisarlos. Los concursos para tu equipo siempre están disponibles."}}, {"@type": "Question", "name": "¿Los mensajes incluyen detalles del tratamiento?", "acceptedAnswer": {"@type": "Answer", "text": "No. Los recordatorios solo dicen que ya toca reservar, nunca de qué tratamiento se trata."}}, {"@type": "Question", "name": "¿Hay contrato?", "acceptedAnswer": {"@type": "Answer", "text": "[Mes a mes / tus términos]"}}]}]</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSTD5HYECJ"></script>
@@ -280,7 +327,7 @@ document.addEventListener('click',function(ev){var a=ev.target.closest('a.btn,bu
 <div><a class="logo" href="/es" aria-label="RetainOS"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><path d="M79.34 43.76 A30 30 0 1 1 45.82 20.29" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><path d="M60.68 18.20 L44.15 8.41 L47.49 32.18 Z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72.98" cy="30.72" r="11" fill="currentColor"/></svg><span>Retain<b>OS</b></span></a><p>Más clientes fieles. Menos persecución.</p></div>
 <div><h3>Programas automatizados de lealtad y referidos</h3><ul class="two"><li><a href="/es/programa-de-lealtad-para-salones">Salones de Belleza</a></li><li><a href="/es/programa-de-lealtad-para-barberias">Barberías</a></li><li><a href="/es/programa-de-lealtad-para-unas-y-pestanas">Estudios de Uñas y Pestañas</a></li><li><a href="/es/programa-de-lealtad-para-salones-de-trenzas">Salones de Trenzas y Cabello Natural</a></li><li><a href="/es/programa-de-lealtad-para-depilacion-y-cejas">Depilación, Hilo y Cejas</a></li><li><a href="/es/programa-de-lealtad-para-estudios-de-tatuajes">Estudios de Tatuajes y Piercing</a></li><li><a href="/es/programa-de-lealtad-para-spas-y-masajes">Spas y Estudios de Masajes</a></li><li><a href="/es/programa-de-lealtad-para-peluquerias-de-mascotas">Peluquerías de Mascotas</a></li><li><a href="/es/programa-de-lealtad-para-detallado-de-autos">Detallado de Autos y Autolavados</a></li><li><a href="/es/programa-de-lealtad-para-talleres-mecanicos">Talleres Mecánicos y Cambio de Aceite</a></li><li><a href="/es/programa-de-lealtad-para-servicios-del-hogar">Piscinas, Jardinería, Limpieza y Control de Plagas</a></li><li><a href="/es/programa-de-lealtad-para-lavanderias">Lavanderías</a></li><li><a href="/es/programa-de-lealtad-para-floristerias-y-pastelerias">Floristerías y Pastelerías</a></li><li><a href="/es/programa-de-lealtad-para-farmacias">Farmacias Independientes (Tienda)</a></li><li><a href="/es/programa-de-referidos-para-preparadores-de-impuestos">Preparadores de Impuestos y Multiservicios</a></li><li><a href="/es/programa-de-lealtad-para-gimnasios">Gimnasios y Estudios de Fitness</a></li><li><a href="/es/programa-de-lealtad-para-actividades-infantiles">Baile, Artes Marciales, Natación y Tutorías para Niños</a></li><li><a href="/es/programa-de-referidos-para-guarderias">Guarderías y Preescolares</a></li></ul>
 <h3 style="margin-top:18px">Programas de citas y recordatorios</h3><ul><li><a href="/es/programa-de-citas-para-med-spas">Med Spas</a></li><li><a href="/es/programa-de-citas-para-centros-de-bienestar">Centros de Bienestar</a></li></ul></div>
-<div><h3>Empresa</h3><ul><li><a href="/es/premios">Detalles y términos de premios</a></li><li><a href="/es#faq">Preguntas frecuentes</a></li><li><a href="/es/contacto">Contáctanos</a></li><li><a href="/es/privacidad">Política de privacidad</a></li><li><a href="/es/terminos">Términos del servicio</a></li></ul></div>
+<div><h3>Empresa</h3><ul><li><a href="/es/premios">Detalles y términos de premios</a></li><li><a href="/es#faq">Preguntas frecuentes</a></li><li><a href="/learn">Centro de aprendizaje (en inglés)</a></li><li><a href="/es/contacto">Contáctanos</a></li><li><a href="/es/privacidad">Política de privacidad</a></li><li><a href="/es/terminos">Términos del servicio</a></li></ul></div>
 </div><div class="wrap fbase"><span>© 2026 305LocalConnect. RetainOS es un servicio de 305LocalConnect.</span><span>Precios y términos sujetos a confirmación.</span></div></footer><a class="fab" href="/es/contacto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>¿Preguntas?</span></a>
 </body>
 </html>
