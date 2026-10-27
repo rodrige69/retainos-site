@@ -18,9 +18,9 @@ import legal
 
 DOMAIN = "https://retainos.co"
 VOTEL_FORMS = {  # Votel form slugs (ai.clientcontactpro.com/f/<slug>)
-    "signup": {"en": "YVQW", "es": "4aTp"},
     "contact": {"en": "mmAo", "es": "6Pbo"},
 }
+BOOKING = {"en": "retainos-revenue-recovery-call1", "es": "retainos-llamada-inicial"}  # Votel bookable slugs (sign-up = book the kickoff call)
 GA_ID = "G-YSTD5HYECJ"  # Google Analytics 4 (same property as the old retainos.co pages)
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -180,7 +180,7 @@ def hero(v, eyebrow, pill, h1, sub, cta, fine=None):
 <div class="eyebrow">{T(*eyebrow)}{pill_html}</div>
 {T(*h1, "h1")}
 {T(*sub, "p", "sub")}
-<div class="ctas"><a class="btn" href="#claim">{T(*cta)}</a><a class="btn alt" href="#how">{T("See how it works", "Mira cómo funciona")}</a></div>
+<div class="ctas"><a class="btn" href="{start_href()}">{T(*cta)}</a><a class="btn alt" href="#how">{T("See how it works", "Mira cómo funciona")}</a></div>
 {fine_html}
 </div>
 <div>{phone(v)}</div>
@@ -446,14 +446,26 @@ def votel(kind):
     return T(tag(f["en"]), tag(f["es"]), "div")
 
 
+def start_href():
+    return url("/start", "/es/empezar") if LANG else "#claim"
+
+
 def claim(h, sub):
+    if LANG:
+        go = f'<a class="btn big" href="{start_href()}">{L("Claim my pilot spot", "Quiero mi lugar")} &rarr;</a>'
+        ask = f'<a class="ask" href="{url("/contact", "/es/contacto")}">{L("Have a question first? Contact us", "¿Tienes preguntas? Escríbenos")}</a>'
+    else:
+        go = T('<a class="btn big" href="/start">Claim my pilot spot &rarr;</a>', '<a class="btn big" href="/es/empezar">Quiero mi lugar &rarr;</a>', "div")
+        ask = T('<a class="ask" href="/contact">Have a question first? Contact us</a>', '<a class="ask" href="/es/contacto">¿Tienes preguntas? Escríbenos</a>', "div")
+    steps = "".join(f"<li>{T(a, b)}</li>" for a, b in [
+        ("Pick a time for a 15-minute Google Meet call.", "Elige un horario para una llamada de 15 minutos por Google Meet."),
+        ("Tell us about your business. It takes a minute.", "Cuéntanos sobre tu negocio. Toma un minuto."),
+        ("We set everything up. You're live in days.", "Nosotros lo configuramos todo. Estás funcionando en días."),
+    ])
     return f"""<section id="claim" style="padding-top:0"><div class="wrap"><div class="claim">
 <div>{T(*h, "h2")}{T(*sub, "p", "lead")}</div>
-<div class="formcol"><div class="embed live">
-<!-- Votel form: RetainOS Pilot Sign-up (EN/ES). Slugs in VOTEL_FORMS. -->
-{votel("signup")}
-</div>
-{T(f'Your information stays private. See our <a href="{url("/privacy", "/es/privacidad")}">Privacy Policy</a> and <a href="{url("/terms", "/es/terminos")}">Terms</a>. Reply STOP to any text to opt out.', f'Tu información es privada. Lee nuestra <a href="{url("/privacy", "/es/privacidad")}">Política de privacidad</a> y nuestros <a href="{url("/terms", "/es/terminos")}">Términos</a>. Responde STOP a cualquier mensaje para dejar de recibirlos.', "p", "fine formnote")}</div>
+<div class="claimbox"><ol class="csteps">{steps}</ol>{go}{ask}
+{T(f'Your information stays private. See our <a href="{url("/privacy", "/es/privacidad")}">Privacy Policy</a> and <a href="{url("/terms", "/es/terminos")}">Terms</a>.', f'Tu información es privada. Lee nuestra <a href="{url("/privacy", "/es/privacidad")}">Política de privacidad</a> y nuestros <a href="{url("/terms", "/es/terminos")}">Términos</a>.', "p", "fine formnote")}</div>
 </div></div></section>"""
 
 
@@ -498,8 +510,17 @@ def footer():
 </div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is a service of", "RetainOS es un servicio de")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
 
 
-def end(swap=False):
-    return (f"<script>{JS_SWAP}</script>" if swap else "") + "\n</body>\n</html>"
+FAB_ICON = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+
+
+def end(swap=False, fab=True):
+    f = ""
+    if fab:
+        if LANG:
+            f = f'<a class="fab" href="{url("/contact", "/es/contacto")}">{FAB_ICON}<span>{L("Questions?", "¿Preguntas?")}</span></a>'
+        else:
+            f = T(f'<a class="fab" href="/contact">{FAB_ICON}<span>Questions?</span></a>', f'<a class="fab" href="/es/contacto">{FAB_ICON}<span>¿Preguntas?</span></a>', "div")
+    return f + (f"<script>{JS_SWAP}</script>" if swap else "") + "\n</body>\n</html>"
 
 
 # ---------------------------------------------------------------------------
@@ -667,6 +688,24 @@ def legal_page(kind):
         "</div></section></main>", footer(), end()])
 
 
+def start_page():
+    alt = ("/start", "/es/empezar")
+    slug = BOOKING[LANG]
+    return "".join([
+        head("Claim Your Pilot Spot | RetainOS", "Reserva tu lugar en el piloto | RetainOS",
+             "Pick a time for a 15-minute kickoff call and claim your RetainOS pilot spot. Setup fee waived.",
+             "Elige un horario para tu llamada de 15 minutos y reserva tu lugar en el piloto de RetainOS. Sin costo de instalación.", alt=alt),
+        topbar(alt, nav=False), '<main id="top"><section><div class="wrap startp">',
+        T("Pilot sign-up", "Inscripción al piloto", "div", "kicker"), T("Claim your pilot spot", "Reserva tu lugar en el piloto", "h1", "h1-sm"),
+        T("Pick a time for a quick 15-minute Google Meet, then add your details. That's it. Setup fee waived.",
+          "Elige un horario para una llamada rápida de 15 minutos por Google Meet y luego agrega tus datos. Eso es todo. Sin costo de instalación.", "p", "lead"),
+        f'<div class="bookbox"><div id="booking-widget" data-slug="{slug}" data-mode="inline" data-api-url="https://ai.clientcontactpro.com"></div></div>',
+        '<script type="module" src="https://ai.clientcontactpro.com/booking-widget/booking.js"></script>',
+        T(f'Have a question first? <a href="/contact">Contact us</a>. Your information stays private: <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a>.',
+          f'¿Tienes preguntas? <a href="/es/contacto">Escríbenos</a>. Tu información es privada: <a href="/es/privacidad">Política de privacidad</a> · <a href="/es/terminos">Términos</a>.', "p", "note"),
+        "</div></section></main>", footer(), end()])
+
+
 def contact_page():
     alt = ("/contact", "/es/contacto")
     return "".join([
@@ -684,7 +723,7 @@ def contact_page():
         f'<li>{T(f"To see, correct or delete your information, send us a message here.", "Para ver, corregir o borrar tu información, envíanos un mensaje aquí.")}</li>',
         "</ul></div>",
         T(f'{legal.COMPANY} · Florida · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a>', f'{legal.COMPANY} · Florida · <a href="/es/privacidad">Política de privacidad</a> · <a href="/es/terminos">Términos</a>', "p", "note"),
-        "</div></section></main>", footer(), end()])
+        "</div></section></main>", footer(), end(fab=False)])
 
 
 def promo_page(v):
@@ -726,6 +765,8 @@ def main():
         for kind, en_s, es_s in (("privacy", "privacy", "privacidad"), ("terms", "terms", "terminos")):
             sl = en_s if lang == "en" else es_s
             write(pre + sl + ".html", legal_page(kind)); urls.append("/" + pre + sl)
+        st = "start" if lang == "en" else "empezar"
+        write(pre + st + ".html", start_page()); urls.append("/" + pre + st)
         cs = "contact" if lang == "en" else "contacto"
         write(pre + cs + ".html", contact_page()); urls.append("/" + pre + cs)
     LANG = None
