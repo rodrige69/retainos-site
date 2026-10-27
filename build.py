@@ -17,6 +17,10 @@ from verticals import VERTICALS, GROUPS
 import legal
 
 DOMAIN = "https://retainos.co"
+VOTEL_FORMS = {  # Votel form slugs (ai.clientcontactpro.com/f/<slug>)
+    "signup": {"en": "YVQW", "es": "4aTp"},
+    "contact": {"en": "mmAo", "es": "6Pbo"},
+}
 GA_ID = "G-YSTD5HYECJ"  # Google Analytics 4 (same property as the old retainos.co pages)
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -434,12 +438,20 @@ def faq_jsonld(items):
         {"@type": "Question", "name": L(qe, qs), "acceptedAnswer": {"@type": "Answer", "text": L(ae, as_)}} for qe, ae, qs, as_ in items]}
 
 
+def votel(kind):
+    tag = lambda slug: f'<script src="https://ai.clientcontactpro.com/form-embed/v1.js" data-form-id="{slug}" data-transparent="1"></script>'
+    f = VOTEL_FORMS[kind]
+    if LANG:
+        return tag(f[LANG])
+    return T(tag(f["en"]), tag(f["es"]), "div")
+
+
 def claim(h, sub):
     return f"""<section id="claim" style="padding-top:0"><div class="wrap"><div class="claim">
 <div>{T(*h, "h2")}{T(*sub, "p", "lead")}</div>
-<div class="formcol"><div class="embed">
-<!-- VOTEL FORM: paste the Votel form embed code here, replacing this placeholder div's content -->
-<div>{T("Sign-up form goes here", "Aquí va el formulario", "strong")}{T("Paste the Votel form embed code. After submitting, send them to the 15-minute kickoff calendar.", "Pega el código del formulario de Votel. Al enviarlo, llévalos al calendario de la llamada de 15 minutos.", "span")}</div>
+<div class="formcol"><div class="embed live">
+<!-- Votel form: RetainOS Pilot Sign-up (EN/ES). Slugs in VOTEL_FORMS. -->
+{votel("signup")}
 </div>
 {T(f'Your information stays private. See our <a href="{url("/privacy", "/es/privacidad")}">Privacy Policy</a> and <a href="{url("/terms", "/es/terminos")}">Terms</a>. Reply STOP to any text to opt out.', f'Tu información es privada. Lee nuestra <a href="{url("/privacy", "/es/privacidad")}">Política de privacidad</a> y nuestros <a href="{url("/terms", "/es/terminos")}">Términos</a>. Responde STOP a cualquier mensaje para dejar de recibirlos.', "p", "fine formnote")}</div>
 </div></div></section>"""
@@ -665,10 +677,7 @@ def contact_page():
         T("Contact", "Contacto", "div", "kicker"), T("Get in touch", "Escríbenos", "h1", "h1-sm"),
         T("Questions about RetainOS, your program or your information? Send us a message and we'll get back to you.",
           "¿Preguntas sobre RetainOS, tu programa o tu información? Envíanos un mensaje y te responderemos.", "p", "lead"),
-        '<div class="embed light">\n<!-- VOTEL CONTACT FORM: paste the Votel contact form embed code here, replacing this placeholder div\'s content -->\n<div>'
-        + T("Contact form goes here", "Aquí va el formulario de contacto", "strong")
-        + T("Paste the Votel contact form embed code. Fields: name, email, phone (optional), message.", "Pega el código del formulario de contacto de Votel. Campos: nombre, correo, teléfono (opcional), mensaje.", "span")
-        + "</div>\n</div>",
+        '<div class="embed light live">' + votel("contact") + '</div>',
         '<div class="tbox">', T("Already getting our texts?", "¿Ya recibes nuestros mensajes?", "h3"), "<ul>",
         f'<li>{T("Reply <strong>STOP</strong> to stop messages, or <strong>HELP</strong> for help.", "Responde <strong>STOP</strong> para dejar de recibir mensajes, o <strong>HELP</strong> para pedir ayuda.")}</li>',
         f'<li>{T("Questions about a reward? The terms that came with it explain how to use it. You can also ask the business that gave it to you.", "¿Preguntas sobre un premio? Los términos que venían con él explican cómo usarlo. También puedes preguntarle al negocio que te lo dio.")}</li>',
