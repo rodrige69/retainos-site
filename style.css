@@ -177,3 +177,12 @@ footer.big{background:#fff;border-top:1px solid var(--line);padding-top:48px}
 .pbtn{margin-top:18px;width:100%;min-height:50px;font-size:16px}
 .plan.hi .pbtn{background:var(--accent)}
 .plan .pbtn.alt{color:var(--ink);border-color:var(--ink)}
+.legal{max-width:780px}
+.legal h2{font-size:24px;margin:34px 0 10px}
+.legal p,.legal li{color:var(--ink2)}
+.legal ul{padding-left:20px;display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.legal a,.contact a,.formnote a,footer .flinks a{color:var(--accent-dk)}
+.claim .formnote{color:#C9C6BF}.claim .formnote a{color:#fff}
+.contact{max-width:780px}
+.embed.light{margin-top:28px;min-height:260px}
+footer .flinks{display:inline-flex;gap:6px}

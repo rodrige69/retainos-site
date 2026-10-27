@@ -14,8 +14,10 @@ Output in ./site:
 import html, io, json, os
 import segno
 from verticals import VERTICALS, GROUPS
+import legal
 
 DOMAIN = "https://retainos.co"
+GA_ID = "G-YSTD5HYECJ"  # Google Analytics 4 (same property as the old retainos.co pages)
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # ---------------------------------------------------------------------------
@@ -123,6 +125,9 @@ def head(title_en, title_es, desc_en, desc_es, noindex=False, alt=None, jsonld=N
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>{CSS}</style>
 {ld}
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{GA_ID}');
+document.addEventListener('click',function(ev){{var a=ev.target.closest('a.btn,button.btn,[data-setlang]');if(!a)return;var l=a.hasAttribute('data-setlang')?'lang_'+a.getAttribute('data-setlang'):(a.textContent||'').trim().slice(0,60);gtag('event',a.hasAttribute('data-setlang')?'language_switch':'cta_click',{{label:l,page:location.pathname}});}});</script>
 </head>
 <body>"""
 
@@ -432,10 +437,12 @@ def faq_jsonld(items):
 def claim(h, sub):
     return f"""<section id="claim" style="padding-top:0"><div class="wrap"><div class="claim">
 <div>{T(*h, "h2")}{T(*sub, "p", "lead")}</div>
-<div class="embed">
+<div class="formcol"><div class="embed">
 <!-- VOTEL FORM: paste the Votel form embed code here, replacing this placeholder div's content -->
 <div>{T("Sign-up form goes here", "Aquí va el formulario", "strong")}{T("Paste the Votel form embed code. After submitting, send them to the 15-minute kickoff calendar.", "Pega el código del formulario de Votel. Al enviarlo, llévalos al calendario de la llamada de 15 minutos.", "span")}</div>
-</div></div></div></section>"""
+</div>
+{T(f'Your information stays private. See our <a href="{url("/privacy", "/es/privacidad")}">Privacy Policy</a> and <a href="{url("/terms", "/es/terminos")}">Terms</a>. Reply STOP to any text to opt out.', f'Tu información es privada. Lee nuestra <a href="{url("/privacy", "/es/privacidad")}">Política de privacidad</a> y nuestros <a href="{url("/terms", "/es/terminos")}">Términos</a>. Responde STOP a cualquier mensaje para dejar de recibirlos.', "p", "fine formnote")}</div>
+</div></div></section>"""
 
 
 def industries():
@@ -465,7 +472,9 @@ def why(v=None):
 
 def footer():
     if not LANG:
-        return f'<footer><div class="wrap"><span>© RetainOS</span>{T("Concept preview. Prices and terms subject to confirmation.", "Vista previa. Precios y términos sujetos a confirmación.")}</div></footer>'
+        return (f'<footer><div class="wrap"><span>© 2026 {legal.COMPANY}. RetainOS</span>'
+                + T('<a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>', '<a href="/es/contacto">Contacto</a> · <a href="/es/privacidad">Privacidad</a> · <a href="/es/terminos">Términos</a>', "span", "flinks")
+                + T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.") + '</div></footer>')
     loyal = [v for v in VERTICALS if mode(v) != "care"]
     care = [v for v in VERTICALS if mode(v) == "care"]
     li = lambda vs: "".join(f'<li><a href="{vurl(v)}">{L(v["ind_en"], v["ind_es"])}</a></li>' for v in vs)
@@ -473,8 +482,8 @@ def footer():
 <div><a class="logo" href="{url('/', '/es')}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>{T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "p")}</div>
 <div>{T("Automated Loyalty &amp; Referral Programs", "Programas automatizados de lealtad y referidos", "h3")}<ul class="two">{li(loyal)}</ul>
 {T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul></div>
-<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li>{L("Privacy policy [link]", "Política de privacidad [enlace]")}</li><li>{L("Terms of service [link]", "Términos del servicio [enlace]")}</li></ul></div>
-</div><div class="wrap fbase"><span>© RetainOS</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
+<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
+</div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is a service of", "RetainOS es un servicio de")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
 
 
 def end(swap=False):
@@ -605,6 +614,70 @@ def rewards_page():
         "</div></section>", faq_section(citems, ("Questions clients ask", "Preguntas de los clientes")), "</main>", footer(), end()])
 
 
+def legal_body(sections):
+    out = []
+    for h_en, h_es, paras in sections:
+        out.append(T(h_en, h_es, "h2"))
+        items, plain = [], []
+        for en, es in paras:
+            if en.startswith("• "):
+                items.append(f"<li>{T(en[2:], es[2:])}</li>")
+            else:
+                if items:
+                    out.append("<ul>" + "".join(items) + "</ul>"); items = []
+                out.append(T(en, es, "p"))
+        if items:
+            out.append("<ul>" + "".join(items) + "</ul>")
+    return "".join(out)
+
+
+def legal_page(kind):
+    if kind == "privacy":
+        alt, sections = ("/privacy", "/es/privacidad"), legal.PRIVACY
+        h = ("Privacy Policy", "Política de privacidad")
+        title = ("Privacy Policy | RetainOS", "Política de privacidad | RetainOS")
+        desc = ("How RetainOS collects, uses and protects information, including text messaging.", "Cómo RetainOS recopila, usa y protege la información, incluidos los mensajes de texto.")
+    else:
+        alt, sections = ("/terms", "/es/terminos"), legal.TERMS
+        h = ("Terms of Service", "Términos del servicio")
+        title = ("Terms of Service | RetainOS", "Términos del servicio | RetainOS")
+        desc = ("Terms for using retainos.co and RetainOS services, including our text message program.", "Términos para usar retainos.co y los servicios de RetainOS, incluido nuestro programa de mensajes de texto.")
+    other = ("/terms", "/es/terminos") if kind == "privacy" else ("/privacy", "/es/privacidad")
+    other_l = ("Terms of Service", "Términos del servicio") if kind == "privacy" else ("Privacy Policy", "Política de privacidad")
+    return "".join([
+        head(*title, *desc, alt=alt), topbar(alt, nav=False), '<main id="top"><section><div class="wrap legal">',
+        T("Legal", "Legal", "div", "kicker"), T(*h, "h1", "h1-sm"),
+        T(f"Last updated: {legal.UPDATED_EN}", f"Última actualización: {legal.UPDATED_ES}", "p", "fine"),
+        legal_body(sections),
+        T("Questions", "Preguntas", "h2"),
+        T(f'Send us a message through our <a href="/contact">contact page</a>. {legal.COMPANY}, Florida. See also our <a href="{other[0]}">{other_l[0]}</a>.',
+          f'Escríbenos a través de nuestra <a href="/es/contacto">página de contacto</a>. {legal.COMPANY}, Florida. Consulta también nuestra página de <a href="{other[1]}">{other_l[1]}</a>.', "p"),
+        "</div></section></main>", footer(), end()])
+
+
+def contact_page():
+    alt = ("/contact", "/es/contacto")
+    return "".join([
+        head("Contact Us | RetainOS", "Contáctanos | RetainOS",
+             "Questions about RetainOS, your program or your information? Send us a message.",
+             "¿Preguntas sobre RetainOS, tu programa o tu información? Envíanos un mensaje.", alt=alt),
+        topbar(alt, nav=False), '<main id="top"><section><div class="wrap contact">',
+        T("Contact", "Contacto", "div", "kicker"), T("Get in touch", "Escríbenos", "h1", "h1-sm"),
+        T("Questions about RetainOS, your program or your information? Send us a message and we'll get back to you.",
+          "¿Preguntas sobre RetainOS, tu programa o tu información? Envíanos un mensaje y te responderemos.", "p", "lead"),
+        '<div class="embed light">\n<!-- VOTEL CONTACT FORM: paste the Votel contact form embed code here, replacing this placeholder div\'s content -->\n<div>'
+        + T("Contact form goes here", "Aquí va el formulario de contacto", "strong")
+        + T("Paste the Votel contact form embed code. Fields: name, email, phone (optional), message.", "Pega el código del formulario de contacto de Votel. Campos: nombre, correo, teléfono (opcional), mensaje.", "span")
+        + "</div>\n</div>",
+        '<div class="tbox">', T("Already getting our texts?", "¿Ya recibes nuestros mensajes?", "h3"), "<ul>",
+        f'<li>{T("Reply <strong>STOP</strong> to stop messages, or <strong>HELP</strong> for help.", "Responde <strong>STOP</strong> para dejar de recibir mensajes, o <strong>HELP</strong> para pedir ayuda.")}</li>',
+        f'<li>{T("Questions about a reward? The terms that came with it explain how to use it. You can also ask the business that gave it to you.", "¿Preguntas sobre un premio? Los términos que venían con él explican cómo usarlo. También puedes preguntarle al negocio que te lo dio.")}</li>',
+        f'<li>{T(f"To see, correct or delete your information, send us a message here.", "Para ver, corregir o borrar tu información, envíanos un mensaje aquí.")}</li>',
+        "</ul></div>",
+        T(f'{legal.COMPANY} · Florida · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a>', f'{legal.COMPANY} · Florida · <a href="/es/privacidad">Política de privacidad</a> · <a href="/es/terminos">Términos</a>', "p", "note"),
+        "</div></section></main>", footer(), end()])
+
+
 def promo_page(v):
     O = OFFER
     items = faq_owner(v)
@@ -641,6 +714,11 @@ def main():
             write(pre + slug + ".html", vertical_page(v)); urls.append("/" + pre + slug)
         rp = "rewards" if lang == "en" else "premios"
         write(pre + rp + ".html", rewards_page()); urls.append("/" + pre + rp)
+        for kind, en_s, es_s in (("privacy", "privacy", "privacidad"), ("terms", "terms", "terminos")):
+            sl = en_s if lang == "en" else es_s
+            write(pre + sl + ".html", legal_page(kind)); urls.append("/" + pre + sl)
+        cs = "contact" if lang == "en" else "contacto"
+        write(pre + cs + ".html", contact_page()); urls.append("/" + pre + cs)
     LANG = None
     for v in VERTICALS:
         if v.get("promo"):
