@@ -11,7 +11,7 @@ Output in ./site:
   go/<promo>/index.html                      hidden $0-setup promo pages (noindex)
   sitemap.xml, robots.txt
 """
-import html, io, json, os
+import html, io, json, os, sys
 import segno
 from verticals import VERTICALS, GROUPS
 import legal
@@ -506,7 +506,7 @@ def footer():
 <div><a class="logo" href="{url('/', '/es')}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>{T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "p")}</div>
 <div>{T("Automated Loyalty &amp; Referral Programs", "Programas automatizados de lealtad y referidos", "h3")}<ul class="two">{li(loyal)}</ul>
 {T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul></div>
-<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
+<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="/learn">{L("Learning Center", "Centro de aprendizaje (en inglés)")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
 </div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is a service of", "RetainOS es un servicio de")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
 
 
@@ -773,6 +773,8 @@ def main():
     for v in VERTICALS:
         if v.get("promo"):
             write(f"go/{v['promo']}/index.html", promo_page(v))
+    import learn
+    urls += learn.build(sys.modules[__name__])
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
           + "".join(f"<url><loc>{DOMAIN}{u}</loc></url>" for u in urls) + "</urlset>")
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
