@@ -520,6 +520,7 @@ def why(v=None):
 # Icons are generic (camera, play button), not the platforms' logos.
 SOCIAL = [
     ("Instagram", "https://www.instagram.com/retainos.co/", '<rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/>'),
+    ("Facebook", "https://www.facebook.com/retainos", '<path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.2A8.5 8.5 0 1 1 21 11.5z"/>'),
     ("YouTube", "https://www.youtube.com/@retainos", '<rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z" fill="currentColor"/>'),
 ]
 
