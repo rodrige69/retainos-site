@@ -3,7 +3,12 @@ Each section: (heading_en, heading_es, [(paragraph_en, paragraph_es), ...]).
 Paragraphs starting with "• " render as list items. Edit here, then run build.py.
 """
 
-COMPANY = "305LocalConnect"
+COMPANY = "305 Connect"
+PHONE = "305-857-5863"
+PHONE_TEL = "+13058575863"
+ADDRESS_LINE = "18117 Biscayne Blvd, Ste 4292"
+CITY_ZIP = "Miami, FL 33160"
+ADDRESS = f"{ADDRESS_LINE}, {CITY_ZIP}"
 UPDATED_EN = "October 27, 2026"
 UPDATED_ES = "27 de octubre de 2026"
 

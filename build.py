@@ -686,8 +686,8 @@ def legal_page(kind):
         T(f"Last updated: {legal.UPDATED_EN}", f"Última actualización: {legal.UPDATED_ES}", "p", "fine"),
         legal_body(sections),
         T("Questions", "Preguntas", "h2"),
-        T(f'Send us a message through our <a href="/contact">contact page</a>. {legal.COMPANY}, Florida. See also our <a href="{other[0]}">{other_l[0]}</a>.',
-          f'Escríbenos a través de nuestra <a href="/es/contacto">página de contacto</a>. {legal.COMPANY}, Florida. Consulta también nuestra página de <a href="{other[1]}">{other_l[1]}</a>.', "p"),
+        T(f'Send us a message through our <a href="/contact">contact page</a> or call {legal.COMPANY} at <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a>. Mail: {legal.COMPANY}, {legal.ADDRESS}. See also our <a href="{other[0]}">{other_l[0]}</a>.',
+          f'Escríbenos a través de nuestra <a href="/es/contacto">página de contacto</a> o llama a {legal.COMPANY} al <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a>. Correo postal: {legal.COMPANY}, {legal.ADDRESS}. Consulta también nuestra página de <a href="{other[1]}">{other_l[1]}</a>.', "p"),
         "</div></section></main>", footer(), end()])
 
 
@@ -719,13 +719,14 @@ def contact_page():
         T("Contact", "Contacto", "div", "kicker"), T("Get in touch", "Escríbenos", "h1", "h1-sm"),
         T("Questions about RetainOS, your program or your information? Send us a message and we'll get back to you.",
           "¿Preguntas sobre RetainOS, tu programa o tu información? Envíanos un mensaje y te responderemos.", "p", "lead"),
+        T(f'Prefer to call? <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a>', f'¿Prefieres llamar? <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a>', "p", "phoneline"),
         '<div class="embed light live">' + votel("contact") + '</div>',
         '<div class="tbox">', T("Already getting our texts?", "¿Ya recibes nuestros mensajes?", "h3"), "<ul>",
         f'<li>{T("Reply <strong>STOP</strong> to stop messages, or <strong>HELP</strong> for help.", "Responde <strong>STOP</strong> para dejar de recibir mensajes, o <strong>HELP</strong> para pedir ayuda.")}</li>',
         f'<li>{T("Questions about a reward? The terms that came with it explain how to use it. You can also ask the business that gave it to you.", "¿Preguntas sobre un premio? Los términos que venían con él explican cómo usarlo. También puedes preguntarle al negocio que te lo dio.")}</li>',
         f'<li>{T(f"To see, correct or delete your information, send us a message here.", "Para ver, corregir o borrar tu información, envíanos un mensaje aquí.")}</li>',
         "</ul></div>",
-        T(f'{legal.COMPANY} · Florida · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a>', f'{legal.COMPANY} · Florida · <a href="/es/privacidad">Política de privacidad</a> · <a href="/es/terminos">Términos</a>', "p", "note"),
+        T(f'{legal.COMPANY} · {legal.ADDRESS} · Phone: <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a> · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a>', f'{legal.COMPANY} · {legal.ADDRESS} · Teléfono: <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a> · <a href="/es/privacidad">Política de privacidad</a> · <a href="/es/terminos">Términos</a>', "p", "note"),
         "</div></section></main>", footer(), end(fab=False)])
 
 
