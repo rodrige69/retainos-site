@@ -250,3 +250,17 @@ button.chip{cursor:pointer;font-family:inherit}.chip.on{background:var(--ink);co
 #lgrid .lcard.isfeat{display:none}
 .prose .btn{color:#fff;text-decoration:none}.prose .fitbox .btn.alt{color:#fff}.prose .fitbox .fine a{color:#B9B5AD}
 .phoneline{font-weight:700;margin-top:10px}.phoneline a{color:var(--accent-dk)}
+
+.social{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.social a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;background:#fff}
+.social a:hover{border-color:var(--accent);color:var(--accent)}
+.linksp{min-height:100vh;display:flex;justify-content:center;padding:48px 16px}
+.lwrap{width:100%;max-width:480px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.lwrap .logo{font-size:26px;margin-bottom:18px}
+.lwrap h1{font-size:30px;margin:0 0 8px}
+.lwrap .lead{margin:0 0 24px}
+.lbtns,.lsoc{display:flex;flex-direction:column;gap:12px;width:100%}
+.lsoc{flex-direction:row;margin-top:18px}
+.lsoc .btn{flex:1;gap:8px;min-height:48px;font-size:16px}
+.lbtns .btn{width:100%}
+.lswitch{margin-top:26px;color:var(--muted);font-weight:600}

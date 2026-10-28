@@ -516,6 +516,24 @@ def why(v=None):
     return f'<section class="tint"><div class="wrap">{T("Why RetainOS", "Por qué RetainOS", "div", "kicker")}{T("More than a punch card.", "Más que una tarjeta de sellos.", "h2")}<div class="gets g4">{cards}</div></div></section>'
 
 
+# Social profiles: shown in the footer, on /links and in the homepage Organization schema.
+# Icons are generic (camera, play button), not the platforms' logos.
+SOCIAL = [
+    ("Instagram", "https://www.instagram.com/retainos.co/", '<rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3.5"/>'),
+    ("YouTube", "https://www.youtube.com/@retainos", '<rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z" fill="currentColor"/>'),
+]
+
+
+def social_icon(d, size=20):
+    return (f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>')
+
+
+def social_row():
+    return '<div class="social">' + "".join(
+        f'<a href="{u}" target="_blank" rel="noopener" aria-label="RetainOS on {n}">{social_icon(d)}<span>{n}</span></a>' for n, u, d in SOCIAL) + "</div>"
+
+
 def footer():
     if not LANG:
         return (f'<footer><div class="wrap"><span>© 2026 {legal.COMPANY}. RetainOS</span>'
@@ -525,7 +543,7 @@ def footer():
     care = [v for v in VERTICALS if mode(v) == "care"]
     li = lambda vs: "".join(f'<li><a href="{vurl(v)}">{L(v["ind_en"], v["ind_es"])}</a></li>' for v in vs)
     return f"""<footer class="big"><div class="wrap fcols">
-<div><a class="logo" href="{url('/', '/es')}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>{T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "p")}</div>
+<div><a class="logo" href="{url('/', '/es')}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>{T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "p")}{social_row()}</div>
 <div>{T("Automated Loyalty &amp; Referral Programs", "Programas automatizados de lealtad y referidos", "h3")}<ul class="two">{li(loyal)}</ul>
 {T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul>
 {T("For Building Owners", "Para dueños de edificios", "h3", "", ' style="margin-top:18px"')}<ul><li><a href="{url('/salon-suite-owner-program', '/es/programa-para-duenos-de-suites-de-salon')}">{L("Salon Suite Owners", "Dueños de Suites de Salón")}</a></li></ul></div>
@@ -563,7 +581,7 @@ def home_page():
     alt = ("/", "/es")
     items = faq_owner()
     ld = [{"@context": "https://schema.org", "@type": "Organization", "name": "RetainOS", "url": DOMAIN,
-           "description": L("Automated loyalty and referral program for local service businesses.", "Programa automatizado de lealtad y referidos para negocios de servicios locales.")}, faq_jsonld(items)]
+           "description": L("Automated loyalty and referral program for local service businesses.", "Programa automatizado de lealtad y referidos para negocios de servicios locales."), "sameAs": [u for _, u, _ in SOCIAL]}, faq_jsonld(items)]
     return "".join([
         head("RetainOS | Automated Loyalty & Referral Program for Local Businesses",
              "RetainOS | Programa automatizado de lealtad y referidos para negocios locales",
@@ -767,6 +785,33 @@ def promo_page(v):
         "</main>", footer(), end(swap=True)])
 
 
+def links_page():
+    alt = ("/links", "/es/enlaces")
+    rows = [
+        (start_href(), ("Claim a pilot spot", "Quiero un lugar en el piloto"), True),
+        (url("/#how", "/es#how"), ("See how it works", "Mira cómo funciona"), False),
+        (url("/#industries", "/es#industries"), ("Find your industry", "Encuentra tu industria"), False),
+        (url("/salon-suite-owner-program", "/es/programa-para-duenos-de-suites-de-salon"), ("For salon suite owners", "Para dueños de suites de salón"), False),
+        (url("/learn", "/es/aprende"), ("Learning Center", "Centro de aprendizaje"), False),
+        (url("/rewards", "/es/premios"), ("Reward details", "Detalles de los premios"), False),
+        (url("/contact", "/es/contacto"), ("Contact us", "Contáctanos"), False),
+    ]
+    btns = "".join(f'<a class="btn{"" if hi else " alt"}" href="{u}">{L(*lab)}</a>' for u, lab, hi in rows)
+    soc = "".join(f'<a class="btn alt" href="{u}" target="_blank" rel="noopener">{social_icon(d)}<span>{n}</span></a>' for n, u, d in SOCIAL)
+    other = f'<a class="lswitch" href="{url("/es/enlaces", "/links")}">{L("Ver en español", "View in English")}</a>'
+    return "".join([
+        head("RetainOS | Links", "RetainOS | Enlaces",
+             "More regulars. Less chasing. Automated loyalty and referral program for local businesses, in English and Spanish.",
+             "Más clientes fieles. Menos persecución. Programa automatizado de lealtad y referidos para negocios locales, en español e inglés.",
+             noindex=True, alt=alt),
+        '<main id="top" class="linksp"><div class="lwrap">',
+        f'<a class="logo" href="{url("/", "/es")}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>',
+        T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "h1"),
+        T("Automated loyalty and referral program for local businesses. English and Spanish.", "Programa automatizado de lealtad y referidos para negocios locales. Español e inglés.", "p", "lead"),
+        f'<div class="lbtns">{btns}</div>', f'<div class="lsoc">{soc}</div>', other,
+        "</div></main>", end(fab=False)])
+
+
 def write(rel, content):
     p = os.path.join(HERE, "site", rel)
     os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -794,6 +839,7 @@ def main():
         import suites
         ss = suites.SLUG if lang == "en" else suites.SLUG_ES
         write(pre + ss + ".html", suites.page(sys.modules[__name__])); urls.append("/" + pre + ss)
+        write(pre + ("links" if lang == "en" else "enlaces") + ".html", links_page())
         cs = "contact" if lang == "en" else "contacto"
         write(pre + cs + ".html", contact_page()); urls.append("/" + pre + cs)
     LANG = None
