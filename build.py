@@ -483,6 +483,7 @@ def industries():
 {T("Built for businesses with regulars.", "Hecho para negocios con clientes fieles.", "h2")}
 {T("If your clients come back on a cycle and love to recommend you, it fits. Pick your industry to see how it works for you.", "Si tus clientes vuelven cada cierto tiempo y les encanta recomendarte, funciona para ti. Elige tu industria para ver cómo.", "p", "lead")}
 <div class="igrid">{blocks}</div>
+<p class="note">{T("Own a salon suite or booth-rental building?", "¿Tienes un edificio de suites de salón o renta de cabinas?")} {T("See the program for building owners →", "Mira el programa para dueños de edificios →", "a", "", href(url("/salon-suite-owner-program", "/es/programa-para-duenos-de-suites-de-salon")))}</p>
 </div></section>"""
 
 
@@ -508,7 +509,8 @@ def footer():
     return f"""<footer class="big"><div class="wrap fcols">
 <div><a class="logo" href="{url('/', '/es')}" aria-label="RetainOS">{LOGO_MARK}<span>Retain<b>OS</b></span></a>{T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "p")}</div>
 <div>{T("Automated Loyalty &amp; Referral Programs", "Programas automatizados de lealtad y referidos", "h3")}<ul class="two">{li(loyal)}</ul>
-{T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul></div>
+{T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul>
+{T("For Building Owners", "Para dueños de edificios", "h3", "", ' style="margin-top:18px"')}<ul><li><a href="{url('/salon-suite-owner-program', '/es/programa-para-duenos-de-suites-de-salon')}">{L("Salon Suite Owners", "Dueños de Suites de Salón")}</a></li></ul></div>
 <div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="{url('/learn', '/es/aprende')}">{L("Learning Center", "Centro de aprendizaje")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
 </div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is a service of", "RetainOS es un servicio de")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
 
@@ -771,6 +773,9 @@ def main():
             write(pre + sl + ".html", legal_page(kind)); urls.append("/" + pre + sl)
         st = "start" if lang == "en" else "empezar"
         write(pre + st + ".html", start_page()); urls.append("/" + pre + st)
+        import suites
+        ss = suites.SLUG if lang == "en" else suites.SLUG_ES
+        write(pre + ss + ".html", suites.page(sys.modules[__name__])); urls.append("/" + pre + ss)
         cs = "contact" if lang == "en" else "contacto"
         write(pre + cs + ".html", contact_page()); urls.append("/" + pre + cs)
     LANG = None

@@ -36,6 +36,11 @@ ARTICLES = [
      "img": "photo-1753164597612-5e71b83fda91", "alt": "Shop owner on the phone while working on a laptop",
      "by": "Vitaly Gariev", "by_url": "https://unsplash.com/@silverkblack", "photo_url": "https://unsplash.com/photos/kk4J92iaSBk",
      "related": ["experience-based-loyalty-rewards", "customer-retention-rate", "salon-barbershop-referral-program"]},
+    {"slug": "fill-salon-suites-keep-renters", "slug_es": "como-llenar-suites-de-salon", "cat_es": "Suites de salón", "alt_es": "Tres sillas de salón negras frente a espejos redondos en una pared oscura", "cat": "Salon suites",
+     "img": "photo-1600948836101-f9ffda59d250", "alt": "Three black salon chairs facing round mirrors on a dark wall",
+     "by": "Greg Trowman", "by_url": "https://unsplash.com/@gregtrow", "photo_url": "https://unsplash.com/photos/jsuWg7IXx1k",
+     "published": "2026-10-28", "date_en": "October 28, 2026", "date_es": "28 de octubre de 2026", "faq_ld": True, "fits": "suites",
+     "related": ["salon-barbershop-referral-program", "experience-based-loyalty-rewards", "customer-retention-rate"]},
 ]
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -141,8 +146,25 @@ def render_body(body):
     return paras("\n\n".join(intro)), short, sections, faq
 
 
-def fits(lang):
+FITS_SUITES = {
+    "en": ("Lease rewards and renter loyalty, done for you",
+           "RetainOS for salon suite owners rewards renters for signing, renewing and referring another pro who signs, with complimentary hotel savings cards and getaway certificates instead of free rent. Every renter can also use RetainOS with their own clients, as an amenity of your building. We set everything up for you, in English and Spanish.",
+           "Lease rewards are earned only after a signed lease and a cleared payment. Rewards are never cash or rent credit.",
+           "See the program for suite owners", "/salon-suite-owner-program"),
+    "es": ("Premios por contrato y lealtad para inquilinos, hechos por nosotros",
+           "RetainOS para dueños de suites de salón premia al inquilino por firmar, renovar y referir a otro profesional que firme, con tarjetas de descuentos en hoteles y certificados de escapada de cortesía en lugar de renta regalada. Además, cada inquilino puede usar RetainOS con sus propios clientes, como un beneficio de tu edificio. Nosotros lo configuramos todo, en español e inglés.",
+           "Los premios por contrato se ganan solo con un contrato firmado y un pago acreditado. Nunca son efectivo ni crédito de renta.",
+           "Ver el programa para dueños de suites", "/es/programa-para-duenos-de-suites-de-salon"),
+}
+
+
+def fits(lang, kind=None):
     t = S[lang]
+    if kind == "suites":
+        h2, p1, p2, l1, u1 = FITS_SUITES[lang]
+        return (f'<div class="fitbox"><div class="kicker">{t["fits"]}</div><h2 id="how-retainos-fits">{h2}</h2><p>{p1}</p><p class="fine">{p2}</p>'
+                f'<div class="ctas"><a class="btn" href="{u1}">{l1}</a><a class="btn alt" href="{t["start"]}">{t["claim"]}</a></div>'
+                f'<p class="fine"><a href="{t["rewards"]}">{"Reward details and terms" if lang == "en" else "Detalles y términos de los premios"}</a></p></div>')
     if lang == "en":
         h2, p1, p2 = ("Loyalty and referrals, done for you",
             "RetainOS is an automated loyalty and referral program for local service businesses. Clients check in with a quick QR scan that your team confirms, get a friendly reminder when they're due back, and earn complimentary rewards. By default, that's a $100 hotel savings card after 5 visits, and one for both people when a referred friend completes a first paid visit. Your prices stay the same. We set everything up for you, in English and Spanish.",
@@ -205,9 +227,11 @@ def article_page(b, a, by_slug, lang):
     body = "".join(f'<section class="{cls}" aria-labelledby="{sid}"><h2 id="{sid}">{x}</h2>{h}</section>' if cls else f'<h2 id="{sid}">{x}</h2>{h}' for sid, x, h, cls in sections)
     faqh = f'<h2 id="faq">{t["faq"]}</h2><div class="faqv">' + "".join(f"<h3>{q}</h3>{ans}" for q, ans in faq) + "</div>" if faq else ""
     rel = "".join(card(by_slug[s], lang) for s in a["related"])
+    pub = a.get("published", PUBLISHED)
+    shown = a.get("date_" + lang, t["date"])
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "BlogPosting", "headline": a["title"], "description": a["meta_description"],
-         "image": [img_url(a, 1200)], "datePublished": PUBLISHED, "dateModified": PUBLISHED,
+         "image": [img_url(a, 1200)], "datePublished": pub, "dateModified": pub,
          "author": {"@type": "Organization", "name": "RetainOS", "url": b.DOMAIN + "/"},
          "publisher": {"@type": "Organization", "name": "RetainOS", "url": b.DOMAIN + "/", "logo": {"@type": "ImageObject", "url": b.DOMAIN + "/apple-touch-icon.png"}},
          "mainEntityOfPage": {"@type": "WebPage", "@id": url}, "inLanguage": t["inlang"], "articleSection": a["cat"], "wordCount": a["words"]},
@@ -215,18 +239,22 @@ def article_page(b, a, by_slug, lang):
             {"@type": "ListItem", "position": 1, "name": t["homel"], "item": b.DOMAIN + t["home"]},
             {"@type": "ListItem", "position": 2, "name": t["lc"], "item": b.DOMAIN + t["base"]},
             {"@type": "ListItem", "position": 3, "name": a["title"], "item": url}]}]}
+    if a.get("faq_ld") and faq:
+        strip = lambda x: re.sub(r"<[^>]+>", "", html.unescape(x)).strip()
+        ld["@graph"].append({"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": strip(q), "acceptedAnswer": {"@type": "Answer", "text": strip(ans)}} for q, ans in faq]})
     h = b.head(a["seo_title"], a["seo_title"], a["meta_description"], a["meta_description"], alt=alt, jsonld=ld)
     h = h.replace('<meta property="og:type" content="website">', '', 1)
     h = h.replace(f'content="{b.DOMAIN}/og-image.png"', f'content="{img_url(a, 1200)}"', 1)
-    h = h.replace("</head>", f'<meta property="og:url" content="{url}"><meta property="og:type" content="article"><meta property="article:published_time" content="{PUBLISHED}"></head>', 1)
+    h = h.replace("</head>", f'<meta property="og:url" content="{url}"><meta property="og:type" content="article"><meta property="article:published_time" content="{pub}"></head>', 1)
     return "".join([h, header(b, lang, alt), '<main id="top"><article class="wrap post">', crumbs(lang, a["title"]),
         f'<div class="phead"><span class="tag">{a["cat"]}</span><h1>{html.escape(a["title"])}</h1>',
-        f'<p class="pmeta">{t["by"]} · <time datetime="{PUBLISHED}">{t["upd"]} {t["date"]}</time> · {a["mins"]} {t["min"]}</p></div>',
+        f'<p class="pmeta">{t["by"]} · <time datetime="{pub}">{t["upd"]} {shown}</time> · {a["mins"]} {t["min"]}</p></div>',
         f'<figure class="hero-img"><img src="{img_url(a, 1400)}" alt="{html.escape(a["alt"])}" width="1400" height="788" fetchpriority="high">'
         f'<figcaption>{t["photo"]} <a href="{a["by_url"]}{UTM}" rel="nofollow">{a["by"]}</a> {t["on"]} <a href="{a["photo_url"]}{UTM}" rel="nofollow">Unsplash</a></figcaption></figure>',
         f'<div class="pgrid"><aside class="toc"><details open><summary>{t["toc"]}</summary><ol>' + toc + '</ol></details></aside><div class="prose">',
         f'<div class="quick"><div class="kicker">{t["quick"]}</div><p>{short}</p></div>' if short else "",
-        intro, body, faqh, fits(lang), disclose(lang), "</div></div>",
+        intro, body, faqh, fits(lang, a.get("fits")), disclose(lang), "</div></div>",
         f'<section class="related"><h2>{t["keep"]}</h2><div class="lgrid">{rel}</div></section>',
         "</article></main>", '<script>if(matchMedia("(max-width:920px)").matches){var d=document.querySelector(".toc details");if(d)d.removeAttribute("open")}</script>',
         b.footer(), b.end()])
