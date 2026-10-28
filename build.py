@@ -472,14 +472,31 @@ def claim(h, sub):
 </div></div></section>"""
 
 
+# Industry card icons: (stroke color, tile background, svg paths)
+IND_ICONS = {
+    "beauty": ("#BE123C", "#FFE4E6", '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/>'),
+    "pets-auto": ("#0369A1", "#E0F2FE", '<circle cx="5.5" cy="10" r="2"/><circle cx="9.5" cy="5.5" r="2"/><circle cx="14.5" cy="5.5" r="2"/><circle cx="18.5" cy="10" r="2"/><path d="M12 11c-3 0-6 4.5-6 7a2.5 2.5 0 0 0 3.5 2.3c.8-.4 1.6-.6 2.5-.6s1.7.2 2.5.6A2.5 2.5 0 0 0 18 18c0-2.5-3-7-6-7z"/>'),
+    "home": ("#15803D", "#DCFCE7", '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'),
+    "family": ("#B45309", "#FEF3C7", '<path d="M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 10c0 5.65-7 10-7 10z"/>'),
+    "care": ("#6D28D9", "#EDE9FE", '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M9 15.5l2 2 4-4"/>'),
+    "owners": ("#C2410C", "#FFEFE3", '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 8h1M14 8h1M9 12h1M14 12h1M10 21v-4h4v4"/>'),
+}
+
+
+def ind_icon(key):
+    c, bg, d = IND_ICONS[key]
+    return (f'<span class="iicon" style="background:{bg};color:{c}" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" '
+            f'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{d}</svg></span>')
+
+
 def industries():
     blocks = ""
     for gkey, gen, ges in GROUPS:
         items = [v for v in VERTICALS if v["group"] == gkey]
         links = "".join(f'<li><a href="{vurl(v)}">{L(v["ind_en"], v["ind_es"])}<span aria-hidden="true">→</span></a></li>' for v in items)
-        blocks += f'<div class="igroup">{T(gen, ges, "h3")}<ul>{links}</ul></div>'
+        blocks += f'<div class="igroup" style="--ic:{IND_ICONS[gkey][0]}"><div class="ihead">{ind_icon(gkey)}{T(gen, ges, "h3")}</div><ul>{links}</ul></div>'
     owner = f'<li><a href="{url("/salon-suite-owner-program", "/es/programa-para-duenos-de-suites-de-salon")}">{L("Salon Suite Owners", "Dueños de Suites de Salón")}<span aria-hidden="true">→</span></a></li>'
-    blocks += f'<div class="igroup">{T("Building owners", "Dueños de edificios", "h3")}<ul>{owner}</ul></div>'
+    blocks += f'<div class="igroup" style="--ic:{IND_ICONS["owners"][0]}"><div class="ihead">{ind_icon("owners")}{T("Building owners", "Dueños de edificios", "h3")}</div><ul>{owner}</ul></div>'
     return f"""<section id="industries"><div class="wrap">
 {T("Industries", "Industrias", "div", "kicker")}
 {T("Built for businesses with regulars.", "Hecho para negocios con clientes fieles.", "h2")}
