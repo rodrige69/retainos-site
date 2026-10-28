@@ -478,12 +478,13 @@ def industries():
         items = [v for v in VERTICALS if v["group"] == gkey]
         links = "".join(f'<li><a href="{vurl(v)}">{L(v["ind_en"], v["ind_es"])}<span aria-hidden="true">→</span></a></li>' for v in items)
         blocks += f'<div class="igroup">{T(gen, ges, "h3")}<ul>{links}</ul></div>'
+    owner = f'<li><a href="{url("/salon-suite-owner-program", "/es/programa-para-duenos-de-suites-de-salon")}">{L("Salon Suite Owners", "Dueños de Suites de Salón")}<span aria-hidden="true">→</span></a></li>'
+    blocks += f'<div class="igroup">{T("Building owners", "Dueños de edificios", "h3")}<ul>{owner}</ul></div>'
     return f"""<section id="industries"><div class="wrap">
 {T("Industries", "Industrias", "div", "kicker")}
 {T("Built for businesses with regulars.", "Hecho para negocios con clientes fieles.", "h2")}
 {T("If your clients come back on a cycle and love to recommend you, it fits. Pick your industry to see how it works for you.", "Si tus clientes vuelven cada cierto tiempo y les encanta recomendarte, funciona para ti. Elige tu industria para ver cómo.", "p", "lead")}
 <div class="igrid">{blocks}</div>
-<p class="note">{T("Own a salon suite or booth-rental building?", "¿Tienes un edificio de suites de salón o renta de cabinas?")} {T("See the program for building owners →", "Mira el programa para dueños de edificios →", "a", "", href(url("/salon-suite-owner-program", "/es/programa-para-duenos-de-suites-de-salon")))}</p>
 </div></section>"""
 
 
