@@ -210,8 +210,19 @@ def problem(v=None, tint=False):
 </div></section>"""
 
 
+# Pages that show the "Full Picture" explainer (English video). Keys: English slug, "go-<promo>" for promo pages.
+EXPLAINER = {"src": "/media/retainos-full-picture-explainer.mp4", "poster": "/media/retainos-explainer-poster.jpg"}
+VIDEO_PAGES = {"hair-salon-loyalty-program", "barbershop-loyalty-program", "nail-lash-loyalty-program",
+               "braiding-salon-loyalty-program", "salon-suite-owner-program", "go-salons", "go-barbershops", "go-nail-lash"}
+
+
 def video(key):
     # key = this page's own video slot (one per page, per language), so each page can get its own video
+    if key in VIDEO_PAGES:
+        return f"""<div class="video has-video" data-video="{key}">
+<video controls playsinline preload="none" poster="{EXPLAINER['poster']}" aria-label="RetainOS: the full picture">
+<source src="{EXPLAINER['src']}" type="video/mp4"></video>
+</div>"""
     return f"""<div class="video" data-video="{key}" role="img" aria-label="{L('Video placeholder', 'Espacio para video')}">
 <!-- VIDEO [{key}]: replace this div's inner content with the YouTube embed iframe for this page -->
 <div><div class="play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div>
@@ -853,6 +864,10 @@ def main():
           + "".join(f"<url><loc>{DOMAIN}{u}</loc></url>" for u in urls) + "</urlset>")
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
     import shutil
+    os.makedirs(os.path.join(HERE, "site", "media"), exist_ok=True)
+    for src, dst in [("reels/retainos-full-picture-explainer-v2.mp4", "media/retainos-full-picture-explainer.mp4"), ("reels/retainos-explainer-poster.jpg", "media/retainos-explainer-poster.jpg")]:
+        if os.path.exists(os.path.join(HERE, src)):
+            shutil.copy(os.path.join(HERE, src), os.path.join(HERE, "site", dst))
     for src, dst in [("brand/svg-loop/favicon.svg", "favicon.svg"), ("brand/apple-touch-icon.png", "apple-touch-icon.png"), ("brand/og-image.png", "og-image.png")]:
         shutil.copy(os.path.join(HERE, src), os.path.join(HERE, "site", dst))
     print(f"built {len(urls)} public pages + {sum(1 for v in VERTICALS if v.get('promo'))} promo pages")
