@@ -217,12 +217,15 @@ VIDEO_PAGES = {"hair-salon-loyalty-program", "barbershop-loyalty-program", "nail
 
 
 HOME_VIDEO = {"src": "/media/retainos-home-video.mp4", "poster": "/media/retainos-home-poster.jpg"}
+EXPLAINER_ES = {"src": "/media/retainos-full-picture-explainer-es.mp4", "poster": "/media/retainos-explainer-poster-es.jpg"}
+VIDEO_PAGES_ES = {"es-programa-de-lealtad-para-salones", "es-programa-de-lealtad-para-barberias", "es-programa-de-lealtad-para-unas-y-pestanas",
+                  "es-programa-de-lealtad-para-salones-de-trenzas", "es-programa-para-duenos-de-suites-de-salon"}
 HOME_VIDEO_ES = {"src": "/media/retainos-home-video-es.mp4", "poster": "/media/retainos-home-poster-es.jpg"}
 
 
 def video(key):
     # key = this page's own video slot (one per page, per language), so each page can get its own video
-    vid = EXPLAINER if key in VIDEO_PAGES else {"home": HOME_VIDEO, "es-home": HOME_VIDEO_ES}.get(key)
+    vid = EXPLAINER if key in VIDEO_PAGES else (EXPLAINER_ES if key in VIDEO_PAGES_ES else {"home": HOME_VIDEO, "es-home": HOME_VIDEO_ES}.get(key))
     if vid:
         return f"""<div class="video has-video" data-video="{key}">
 <video controls playsinline preload="none" poster="{vid['poster']}" aria-label="RetainOS video">
@@ -870,7 +873,7 @@ def main():
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
     import shutil
     os.makedirs(os.path.join(HERE, "site", "media"), exist_ok=True)
-    for src, dst in [("reels/retainos-full-picture-explainer-v2.mp4", "media/retainos-full-picture-explainer.mp4"), ("reels/retainos-explainer-poster.jpg", "media/retainos-explainer-poster.jpg"), ("reels/retainos-home-video.mp4", "media/retainos-home-video.mp4"), ("reels/retainos-home-poster.jpg", "media/retainos-home-poster.jpg"), ("reels/retainos-home-video-es.mp4", "media/retainos-home-video-es.mp4"), ("reels/retainos-home-poster-es.jpg", "media/retainos-home-poster-es.jpg")]:
+    for src, dst in [("reels/retainos-full-picture-explainer-v2.mp4", "media/retainos-full-picture-explainer.mp4"), ("reels/retainos-explainer-poster.jpg", "media/retainos-explainer-poster.jpg"), ("reels/retainos-home-video.mp4", "media/retainos-home-video.mp4"), ("reels/retainos-home-poster.jpg", "media/retainos-home-poster.jpg"), ("reels/retainos-home-video-es.mp4", "media/retainos-home-video-es.mp4"), ("reels/retainos-home-poster-es.jpg", "media/retainos-home-poster-es.jpg"), ("reels/retainos-full-picture-explainer-es.mp4", "media/retainos-full-picture-explainer-es.mp4"), ("reels/retainos-explainer-poster-es.jpg", "media/retainos-explainer-poster-es.jpg")]:
         if os.path.exists(os.path.join(HERE, src)):
             shutil.copy(os.path.join(HERE, src), os.path.join(HERE, "site", dst))
     for src, dst in [("brand/svg-loop/favicon.svg", "favicon.svg"), ("brand/apple-touch-icon.png", "apple-touch-icon.png"), ("brand/og-image.png", "og-image.png")]:
