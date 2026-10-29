@@ -216,12 +216,16 @@ VIDEO_PAGES = {"hair-salon-loyalty-program", "barbershop-loyalty-program", "nail
                "braiding-salon-loyalty-program", "salon-suite-owner-program", "go-salons", "go-barbershops", "go-nail-lash"}
 
 
+HOME_VIDEO = {"src": "/media/retainos-home-video.mp4", "poster": "/media/retainos-home-poster.jpg"}
+
+
 def video(key):
     # key = this page's own video slot (one per page, per language), so each page can get its own video
-    if key in VIDEO_PAGES:
+    vid = EXPLAINER if key in VIDEO_PAGES else (HOME_VIDEO if key == "home" else None)
+    if vid:
         return f"""<div class="video has-video" data-video="{key}">
-<video controls playsinline preload="none" poster="{EXPLAINER['poster']}" aria-label="RetainOS: the full picture">
-<source src="{EXPLAINER['src']}" type="video/mp4"></video>
+<video controls playsinline preload="none" poster="{vid['poster']}" aria-label="RetainOS video">
+<source src="{vid['src']}" type="video/mp4"></video>
 </div>"""
     return f"""<div class="video" data-video="{key}" role="img" aria-label="{L('Video placeholder', 'Espacio para video')}">
 <!-- VIDEO [{key}]: replace this div's inner content with the YouTube embed iframe for this page -->
@@ -865,7 +869,7 @@ def main():
     write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
     import shutil
     os.makedirs(os.path.join(HERE, "site", "media"), exist_ok=True)
-    for src, dst in [("reels/retainos-full-picture-explainer-v2.mp4", "media/retainos-full-picture-explainer.mp4"), ("reels/retainos-explainer-poster.jpg", "media/retainos-explainer-poster.jpg")]:
+    for src, dst in [("reels/retainos-full-picture-explainer-v2.mp4", "media/retainos-full-picture-explainer.mp4"), ("reels/retainos-explainer-poster.jpg", "media/retainos-explainer-poster.jpg"), ("reels/retainos-home-video.mp4", "media/retainos-home-video.mp4"), ("reels/retainos-home-poster.jpg", "media/retainos-home-poster.jpg")]:
         if os.path.exists(os.path.join(HERE, src)):
             shutil.copy(os.path.join(HERE, src), os.path.join(HERE, "site", dst))
     for src, dst in [("brand/svg-loop/favicon.svg", "favicon.svg"), ("brand/apple-touch-icon.png", "apple-touch-icon.png"), ("brand/og-image.png", "og-image.png")]:
