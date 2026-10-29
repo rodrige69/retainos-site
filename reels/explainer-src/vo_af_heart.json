@@ -1,0 +1,176 @@
+[
+ {
+  "sec": "hook",
+  "text": "Whether you cut hair or color it, you know the feeling.",
+  "start": 0.6,
+  "end": 3.245
+ },
+ {
+  "sec": "hook",
+  "text": "You're fully booked one week.",
+  "start": 3.565,
+  "end": 5.016
+ },
+ {
+  "sec": "hook",
+  "text": "The next week, there are empty chairs, and you're wondering where everyone went.",
+  "start": 5.336,
+  "end": 9.347
+ },
+ {
+  "sec": "problem",
+  "text": "Your clients didn't stop liking you.",
+  "start": 10.417,
+  "end": 12.379
+ },
+ {
+  "sec": "problem",
+  "text": "Life got busy, and nobody gave them a reason to come back.",
+  "start": 12.699,
+  "end": 16.027
+ },
+ {
+  "sec": "problem",
+  "text": "The usual fix is a discount, and that only teaches them to wait for the next one.",
+  "start": 16.347,
+  "end": 20.934
+ },
+ {
+  "sec": "how",
+  "text": "Retain O S is simple.",
+  "start": 22.004,
+  "end": 23.519
+ },
+ {
+  "sec": "how",
+  "text": "Clients scan your Q R code at the chair, and every visit counts.",
+  "start": 23.839,
+  "end": 27.551
+ },
+ {
+  "sec": "how",
+  "text": "When it's time for their next cut or color, they get a friendly reminder, in English or Spanish, showing how close they are to a reward.",
+  "start": 27.871,
+  "end": 35.593
+ },
+ {
+  "sec": "how",
+  "text": "When they send a friend who books and pays, they both earn something.",
+  "start": 35.913,
+  "end": 39.391
+ },
+ {
+  "sec": "rewards",
+  "text": "And these aren't punch cards for a free trim.",
+  "start": 40.461,
+  "end": 42.701
+ },
+ {
+  "sec": "rewards",
+  "text": "Your clients earn hotel savings cards, dining rewards, even getaway certificates to places like Canc\u00fan, Orlando, and the Bahamas.",
+  "start": 43.021,
+  "end": 51.874
+ },
+ {
+  "sec": "rewards",
+  "text": "That's the kind of thing people tell their friends about.",
+  "start": 52.194,
+  "end": 54.583
+ },
+ {
+  "sec": "why",
+  "text": "We know what you're thinking.",
+  "start": 55.653,
+  "end": 56.955
+ },
+ {
+  "sec": "why",
+  "text": "How can a barbershop or salon give away vacations?",
+  "start": 57.275,
+  "end": 60.347
+ },
+ {
+  "sec": "why",
+  "text": "Here's the honest answer.",
+  "start": 60.667,
+  "end": 62.075
+ },
+ {
+  "sec": "why",
+  "text": "Hotels and resorts have empty rooms on certain dates, and they'd rather fill them at a wholesale rate than leave them empty, because guests spend money on dining, the spa, and extras.",
+  "start": 62.395,
+  "end": 73.317
+ },
+ {
+  "sec": "why",
+  "text": "Restaurants join to bring in new diners.",
+  "start": 73.637,
+  "end": 75.856
+ },
+ {
+  "sec": "why",
+  "text": "That's why the rewards feel big, without costing you big.",
+  "start": 76.176,
+  "end": 79.205
+ },
+ {
+  "sec": "fine",
+  "text": "We're upfront about the fine print, too.",
+  "start": 80.275,
+  "end": 82.259
+ },
+ {
+  "sec": "fine",
+  "text": "Clients pay the taxes and fees on their stay, they have eighteen months to travel, and there's never a timeshare pitch or a purchase required.",
+  "start": 82.579,
+  "end": 90.515
+ },
+ {
+  "sec": "fine",
+  "text": "Nothing hidden. So your clients trust it, and so do you.",
+  "start": 90.835,
+  "end": 93.907
+ },
+ {
+  "sec": "grow",
+  "text": "Start simple, with rewards that work alongside the booking app you already use.",
+  "start": 94.977,
+  "end": 99.265
+ },
+ {
+  "sec": "grow",
+  "text": "When you're ready, add online booking, deposits, and missed-call text-back.",
+  "start": 99.585,
+  "end": 103.553
+ },
+ {
+  "sec": "grow",
+  "text": "Put rewards under your own name, and add bigger rewards, like dining and getaways.",
+  "start": 103.873,
+  "end": 108.673
+ },
+ {
+  "sec": "grow",
+  "text": "When you're really growing, we run it for you.",
+  "start": 108.993,
+  "end": 111.105
+ },
+ {
+  "sec": "grow",
+  "text": "Win-back campaigns, holiday promos, staff contests, and a monthly report on who came back.",
+  "start": 111.425,
+  "end": 117.228
+ },
+ {
+  "sec": "close",
+  "text": "We set everything up on a fifteen-minute call, and you just keep doing great work.",
+  "start": 118.298,
+  "end": 122.671
+ },
+ {
+  "sec": "close",
+  "text": "Pilot spots are open for barbershops and salons, with the setup fee waived.",
+  "start": 122.991,
+  "end": 127.599
+ }
+]
