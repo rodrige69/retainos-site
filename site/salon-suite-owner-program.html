@@ -112,6 +112,8 @@ section.tint .get{background:var(--bg)}
 .video{margin-top:28px;aspect-ratio:16/9;max-width:860px;border-radius:22px;background:var(--dark);color:#fff;display:grid;place-items:center;text-align:center;overflow:hidden}
 .video .play{width:84px;height:84px;border-radius:99px;background:var(--accent);display:grid;place-items:center;margin:0 auto 14px}
 .video p{margin:0;color:#E4E1DA}
+.video.has-video{display:block;background:#000}
+.video.has-video video{width:100%;height:100%;display:block;object-fit:contain}
 /* industries */
 .inds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:30px}
 .ind{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;text-decoration:none;color:var(--ink);min-height:44px}
@@ -313,11 +315,9 @@ document.addEventListener('click',function(ev){var a=ev.target.closest('a.btn,bu
 <div class="step"><div class="n">2</div><h3>Renters refer renters.</h3><p>Your best leads already work in your building. When a renter refers a pro who signs, both get a reward.</p><div class="visual"><div class="mini"><div class="from"><strong>Palm Row Salon Suites</strong></div><div class="bubble"><span>Know a stylist looking for a suite? If they sign a lease at Palm Row, you both get a complimentary $200 hotel savings card.</span></div></div></div></div>
 <div class="step"><div class="n">3</div><h3>A thank-you for renewing.</h3><p>About 60 days before a lease ends, renters get a friendly reminder and a reward for renewing, in English or Spanish.</p><div class="visual"><div class="mini"><div class="from"><strong>Palm Row Salon Suites</strong></div><div class="bubble"><span>Hi Valeria! Your lease renews May 1. Renew by April 15 and your $300 hotel savings card is on us.</span></div></div></div></div>
 </div>
-<div class="video" data-video="salon-suite-owner-program" role="img" aria-label="Video placeholder">
-<!-- VIDEO [salon-suite-owner-program]: replace this div's inner content with the YouTube embed iframe for this page -->
-<div><div class="play" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></div>
-<p>See how it works in 90 seconds</p>
-<p class="fine">Video coming soon</p></div>
+<div class="video has-video" data-video="salon-suite-owner-program">
+<video controls playsinline preload="none" poster="/media/retainos-explainer-poster.jpg" aria-label="RetainOS: the full picture">
+<source src="/media/retainos-full-picture-explainer.mp4" type="video/mp4"></video>
 </div>
 </div></section><section class="tint" id="amenity"><div class="wrap">
 <div class="kicker">The amenity</div>
