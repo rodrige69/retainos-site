@@ -1,2 +1,5 @@
 *.bak
 __pycache__/
+app/server.log
+app/server.pid
+.libs/

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Join the rewards club</title>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<div class="demo hidden" id="demoNote"></div>
+
+<main class="wrap narrow" style="padding-top:26px">
+  <div class="card">
+    <div id="shopHead" style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <span id="badge" style="width:44px;height:44px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:'Bricolage Grotesque';font-weight:800;font-size:19px">·</span>
+      <div><b id="shopName" style="font-size:18px">&nbsp;</b><br><small id="shopMeta" class="hint"></small></div>
+    </div>
+
+    <div id="form">
+      <h1 id="h1" style="font-size:25px;margin-top:10px"></h1>
+      <p class="hint" id="sub"></p>
+      <label class="label" id="lPhone" for="phone"></label>
+      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(305) 555-0142">
+      <label class="consent"><input type="checkbox" id="consent"><span id="consentText"></span></label>
+      <button class="btn block" id="join"></button>
+      <p class="hint" id="fine"></p>
+      <div class="msg hidden" id="msg"></div>
+    </div>
+
+    <div id="card" class="hidden">
+      <h1 id="cardHi" style="font-size:25px;margin-top:8px"></h1>
+      <p class="hint" id="cardSub"></p>
+      <div class="stamps" id="stampRow"></div>
+      <p class="hint" id="cardNext"></p>
+      <p class="hint" id="cardNote" style="margin-top:16px"></p>
+    </div>
+
+    <div id="broken" class="hidden">
+      <h1 style="font-size:23px" id="brokenH"></h1>
+      <p class="hint" id="brokenP"></p>
+    </div>
+  </div>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="join.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Log a visit · RetainOS</title>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<div class="demo hidden" id="demoNote"></div>
+<header class="top">
+  <span class="logo">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M79.34 43.76 A30 30 0 1 1 45.82 20.29" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><path d="M60.68 18.20 L44.15 8.41 L47.49 32.18 Z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72.98" cy="30.72" r="11" fill="currentColor"/></svg>
+    <span>Retain<b>OS</b></span>
+  </span>
+  <span class="chip" id="shopChip">·</span>
+</header>
+
+<main class="wrap narrow">
+  <div class="card">
+    <h1 id="h1" style="font-size:26px"></h1>
+    <p class="hint" id="sub"></p>
+
+    <div id="shopPick" class="hidden">
+      <label class="label" id="lShop" for="shopSel"></label>
+      <select id="shopSel"></select>
+    </div>
+
+    <div id="form">
+      <label class="label" id="lPin"></label>
+      <div class="slots" id="slots"><i></i><i></i><i></i><i></i></div>
+      <div class="pinpad" id="pad"></div>
+
+      <label class="label" id="lPhone" for="phone"></label>
+      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="3055551234">
+      <p class="hint" id="phoneHint"></p>
+
+      <label class="label" id="lType"></label>
+      <div id="types" style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="chip" data-type="appointment" aria-pressed="true"></span>
+        <span class="chip" data-type="walk_in" aria-pressed="false"></span>
+        <span class="chip" data-type="product" aria-pressed="false"></span>
+        <span class="chip" data-type="other" aria-pressed="false"></span>
+      </div>
+
+      <button class="btn block" id="submit"></button>
+      <p class="hint" id="weekNote"></p>
+      <div class="msg hidden" id="msg"></div>
+    </div>
+
+    <div id="done" class="hidden">
+      <h1 id="doneH" style="font-size:24px"></h1>
+      <p class="hint" id="doneSub"></p>
+      <div class="stamps" id="doneStamps"></div>
+      <p class="hint" id="doneReward"></p>
+      <button class="btn block" id="again"></button>
+    </div>
+  </div>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="staff.js"></script>
+</body>
+</html>
