@@ -1,10 +1,10 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     { "source": "/onboard", "destination": "/onboard.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/staff", "destination": "/staff.html" },
     { "source": "/signin", "destination": "/signin.html" },
+    { "source": "/join", "destination": "/join.html" },
     { "source": "/:shop", "destination": "/join.html?shop=:shop" }
   ]
 }
