@@ -66,13 +66,20 @@
     },
     /* Invite email for a new shop owner. create_user true makes the account and
        the shop_owners link in the same breath, and the SMTP configured in
-       Supabase delivers the link. */
+       Supabase delivers the link.
+
+       The link is pointed at the password page so the owner's first click ends
+       with a password they can reuse instead of a one-off session. If that URL
+       is not on the project's redirect allow list Supabase refuses the whole
+       request, so fall back to a plain invite rather than a failed onboarding. */
     inviteOwner: function (email) {
       if (this.demo) return Promise.resolve({ demo: true });
-      return call("/auth/v1/otp", {
-        method: "POST",
-        body: { email: email, create_user: true },
-        auth: false
+      var here = /^https?:/.test(location.origin || "") ? location.origin + "/password.html" : "";
+      var body = { email: email, create_user: true };
+      if (here) body.redirect_to = here;
+      return call("/auth/v1/otp", { method: "POST", body: body, auth: false }).catch(function (e) {
+        if (!here || !e || e.status !== 400) throw e;
+        return call("/auth/v1/otp", { method: "POST", body: { email: email, create_user: true }, auth: false });
       });
     },
     sendRecovery: function (email) {
@@ -114,7 +121,14 @@
   if (window.SB.captureRedirect()) {
     var recovery = false;
     try { recovery = localStorage.getItem("ros.recover") === "1"; } catch (e) {}
-    if (recovery) location.replace("password.html");
-    else if (!/\/dashboard(\.html)?$/.test(location.pathname)) location.replace("dashboard.html");
+    var onPassword = /\/password(\.html)?$/.test(location.pathname);
+    if (onPassword) {
+      /* The invite link sends owners here on purpose: stay put so they can
+         choose a password while the session from the link is still fresh. */
+    } else if (recovery) {
+      location.replace("password.html");
+    } else if (!/\/dashboard(\.html)?$/.test(location.pathname)) {
+      location.replace("dashboard.html");
+    }
   }
 })();
