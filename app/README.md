@@ -67,3 +67,24 @@ them only if you ever need to point the function at a different project.
 
 Without them the route answers 501 and the setup screen says the contact is
 pending, so a Votel problem never costs a signup.
+
+## Votel endpoints
+
+Votel never gets a database key. Anything that can send an HTTP POST calls these
+three with `Authorization: Bearer $VOTEL_API_TOKEN`:
+
+| Endpoint | Body | Does |
+|---|---|---|
+| `POST /api/votel/visit` | `{shop, phone, pin, visit_type?}` | `log_visit` — adds one stamp, keeps the 7-day lock, issues the reward at the milestone |
+| `POST /api/votel/card` | `{token}` | `get_card` — reads a stamp card by its token |
+| `POST /api/votel/member` | `{shop, phone, consent, first?, last?, email?, language?}` | `join_shop` — puts a client on the card |
+
+Add `VOTEL_API_TOKEN` in Vercel → Environment Variables (any long random string),
+and use the same string in the Votel workflow's API step. Rotating it in Vercel
+revokes every caller at once. Without it the endpoints answer 501.
+
+In Votel these map to the `api_lookup` (read) and `webhook` (write) workflow
+steps. A visit needs a real staff PIN for that shop — the PIN, not the token, is
+what authorises the stamp. Errors come back as HTTP 200 with
+`{ok: false, error}` (`bad_pin`, `too_soon`, `not_member`, `unknown_shop`) so a
+workflow can branch without parsing status codes.
