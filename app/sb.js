@@ -85,4 +85,11 @@
     },
     signOut: function () { setSession(null); location.replace("signin.html"); }
   };
+
+  /* A magic link or password-reset email lands on whichever page Supabase is
+     configured to send it to, so pick the session up wherever we arrive
+     instead of only on the sign-in page. */
+  if (window.SB.captureRedirect()) {
+    if (!/\/dashboard(\.html)?$/.test(location.pathname)) location.replace("dashboard.html");
+  }
 })();
