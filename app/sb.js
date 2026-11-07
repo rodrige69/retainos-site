@@ -21,9 +21,9 @@
     opts = opts || {};
     var headers = {
       apikey: key,
-      Authorization: "Bearer " + token(),
       "Content-Type": "application/json"
     };
+    if (opts.auth !== false) headers.Authorization = "Bearer " + token();
     if (opts.prefer) headers.Prefer = opts.prefer;
     return fetch(url + path, {
       method: opts.method || "GET",
@@ -63,6 +63,17 @@
     sendMagicLink: function (email) {
       if (this.demo) return Promise.resolve({ demo: true });
       return call("/auth/v1/otp", { method: "POST", body: { email: email, create_user: false } });
+    },
+    /* Invite email for a new shop owner. create_user true makes the account and
+       the shop_owners link in the same breath, and the SMTP configured in
+       Supabase delivers the link. */
+    inviteOwner: function (email) {
+      if (this.demo) return Promise.resolve({ demo: true });
+      return call("/auth/v1/otp", {
+        method: "POST",
+        body: { email: email, create_user: true },
+        auth: false
+      });
     },
     verifyCode: function (email, code) {
       if (this.demo) return Promise.resolve({ demo: true });

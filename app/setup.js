@@ -46,6 +46,10 @@ var T = {
     join: "Join link",
     staffN: "staff added",
     invN: "owner invited",
+    invSending: "Sending the invite email to {n}…",
+    invSent: "Invite email sent to {n}.",
+    invFail: "Shop is created, but the email to {n} didn't go out.",
+    invRetry: "Try the invite again in a minute.",
     cadence: "usually every {n} days",
     // errors
     auth_required: "Your session expired. Sign in again.",
@@ -100,6 +104,10 @@ var T = {
     join: "Enlace de registro",
     staffN: "personas agregadas",
     invN: "dueño invitado",
+    invSending: "Enviando la invitación a {n}…",
+    invSent: "Invitación enviada a {n}.",
+    invFail: "El negocio está creado, pero el correo a {n} no salió.",
+    invRetry: "Reintenta la invitación en un minuto.",
     cadence: "suele venir cada {n} días",
     auth_required: "La sesión caducó. Entra otra vez.",
     not_admin: "Este acceso no puede crear negocios.",
@@ -198,6 +206,31 @@ function say(text, kind) {
   m.className = "msg" + (kind ? " " + kind : "");
 }
 
+/* One email per owner. A failure here never undoes the shop: it already exists,
+   so we report which address did not go out instead of throwing. */
+function inviteOwners(emails) {
+  var note = $("inviteNote");
+  if (!note || !emails.length) return;
+  note.classList.remove("hidden");
+  note.textContent = t("invSending", { n: emails.join(", ") });
+  var sent = [], failed = [];
+  var chain = Promise.resolve();
+  emails.forEach(function (email) {
+    chain = chain.then(function () {
+      return SB.inviteOwner(email).then(
+        function () { sent.push(email); },
+        function () { failed.push(email); }
+      );
+    });
+  });
+  chain.then(function () {
+    var lines = [];
+    if (sent.length) lines.push(t("invSent", { n: sent.join(", ") }));
+    if (failed.length) lines.push(t("invFail", { n: failed.join(", ") }) + " " + t("invRetry"));
+    note.textContent = lines.join(" ");
+  });
+}
+
 function parseStaff(raw) {
   return raw.split("\n").map(function (line) {
     var parts = line.split(",");
@@ -283,6 +316,7 @@ $("submit").onclick = function () {
         "<div class='row'><span>" + r.invited + "</span><b>" + t("invN") + "</b></div>";
       $("result").classList.remove("hidden");
       $("result").scrollIntoView({ behavior: "smooth", block: "start" });
+      inviteOwners(payload.owners);
     })
     .catch(function (e) {
       $("submit").disabled = false;
