@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17191C">
+<title>You're in · RetainOS</title>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<div class="demo hidden" id="demoNote"></div>
+
+<main class="wrap narrow" style="padding-top:26px">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+      <span id="badge" style="width:44px;height:44px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:'Bricolage Grotesque';font-weight:800;font-size:19px">·</span>
+      <div><b id="shopName" style="font-size:18px">&nbsp;</b><br><small id="shopMeta" class="hint"></small></div>
+    </div>
+
+    <h1 id="h1" style="font-size:26px;margin-top:12px"></h1>
+    <p class="hint" id="sub"></p>
+
+    <div class="stamps" id="stampRow"></div>
+
+    <label class="label" id="linkLbl" for="cardUrl"></label>
+    <div class="linkbox">
+      <input id="cardUrl" type="text" readonly>
+      <button class="btn" id="copy" type="button"></button>
+    </div>
+    <a class="btn block" id="openCard"></a>
+
+    <h2 id="saveH" style="font-size:17px;margin-top:26px"></h2>
+    <div class="steps">
+      <div class="stepline"><span class="stepnum">1</span><span id="step1"></span></div>
+      <div class="stepline"><span class="stepnum">2</span><span id="step2"></span></div>
+      <div class="stepline"><span class="stepnum">3</span><span id="step3"></span></div>
+    </div>
+
+    <h2 id="emailH" style="font-size:17px;margin-top:26px"></h2>
+    <p class="hint" id="emailP"></p>
+    <p class="note" id="emailNote"></p>
+
+    <p class="hint" id="optOut"></p>
+  </div>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="thankyou.js"></script>
+</body>
+</html>

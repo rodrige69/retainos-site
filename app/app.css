@@ -60,6 +60,14 @@ input:focus,select:focus{outline:3px solid var(--accent-bg);border-color:var(--a
 .lang button[aria-pressed=true]{background:var(--ink);color:#fff}
 .consent{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:14px;color:var(--ink2)}
 .consent input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--accent)}
+.row small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+.linkbox{display:flex;gap:8px;margin-top:6px}
+.linkbox input{flex:1;min-width:0;font-size:13.5px}
+.linkbox .btn{min-height:52px;padding:0 16px;font-size:14px;flex:none}
+.steps{display:grid;gap:10px;margin-top:10px}
+.stepnum{width:26px;height:26px;border-radius:999px;background:var(--accent-bg);color:var(--accent-dk);display:grid;place-items:center;font-weight:800;font-size:12.5px;flex:none}
+.stepline{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--ink2)}
+.note{background:var(--accent-bg);border:1px solid #F6D2B6;color:var(--accent-dk);border-radius:12px;padding:12px 14px;font-size:14px;margin:10px 0 0}
 /* dashboard */
 .hero{background:var(--ink);color:#F3F1EC;border-radius:22px;padding:22px 24px;display:grid;grid-template-columns:1.45fr .75fr;gap:20px;margin:6px 0 4px}
 .hero h1{color:#fff;font-size:clamp(24px,3.4vw,32px);margin:2px 0 0}

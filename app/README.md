@@ -11,7 +11,9 @@ Static pages on Vercel, data in Supabase. No build step.
 | `app.retainos.co/onboard` | owner | join link, QR, printable poster |
 | `app.retainos.co/staff?shop=fade-lab` | staff | PIN + phone → `log_visit` |
 | `app.retainos.co/start` | new owner | create account + shop in one step |
-| `app.retainos.co/join.html?shop=fade-lab` | client | join + stamp card |
+| `app.retainos.co/join.html?shop=fade-lab` | client | join (name, phone, email, consent) |
+| `app.retainos.co/thankyou.html` | client | card link + save-to-home-screen steps |
+| `app.retainos.co/join.html?shop=fade-lab&t=<token>` | client | the card itself, on any phone |
 
 The join page is the only public surface. Everything else under `app.` requires
 a signed-in owner, except `/staff` (the 4-digit PIN is the credential) and

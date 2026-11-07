@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17191C">
 <title>Join the rewards club</title>
 <link rel="stylesheet" href="app.css">
 <script src="config.js"></script>
@@ -21,9 +22,26 @@
     <div id="form">
       <h1 id="h1" style="font-size:25px;margin-top:10px"></h1>
       <p class="hint" id="sub"></p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label class="label" id="lFirst" for="first"></label>
+          <input id="first" type="text" autocomplete="given-name" placeholder="David">
+        </div>
+        <div>
+          <label class="label" id="lLast" for="last"></label>
+          <input id="last" type="text" autocomplete="family-name" placeholder="Ross">
+        </div>
+      </div>
+
       <label class="label" id="lPhone" for="phone"></label>
       <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(305) 555-0142">
+
+      <label class="label" id="lEmail" for="email"></label>
+      <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com">
+
       <label class="consent"><input type="checkbox" id="consent"><span id="consentText"></span></label>
+      <p class="hint" id="startNote"></p>
       <button class="btn block" id="join"></button>
       <p class="hint" id="fine"></p>
       <div class="msg hidden" id="msg"></div>
@@ -34,7 +52,12 @@
       <p class="hint" id="cardSub"></p>
       <div class="stamps" id="stampRow"></div>
       <p class="hint" id="cardNext"></p>
-      <p class="hint" id="cardNote" style="margin-top:16px"></p>
+      <label class="label" id="linkLbl" for="cardUrl"></label>
+      <div class="linkbox">
+        <input id="cardUrl" type="text" readonly>
+        <button class="btn" id="copy" type="button"></button>
+      </div>
+      <p class="hint" id="cardNote"></p>
     </div>
 
     <div id="broken" class="hidden">
