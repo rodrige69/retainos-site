@@ -14,6 +14,10 @@ Static pages on Vercel, data in Supabase. No build step.
 | `app.retainos.co/join.html?shop=fade-lab` | client | join (name, phone, email, consent) |
 | `app.retainos.co/thankyou.html` | client | card link + save-to-home-screen steps |
 | `app.retainos.co/join.html?shop=fade-lab&t=<token>` | client | the card itself, on any phone |
+| `app.retainos.co/claim?code=<voucher>` | client | a reward: ready to use, already used, or expired |
+
+`/claim` also accepts the code as `/claim/<code>`. Without a code it shows a
+field to type one, which is what the "reply to this text" path needs.
 
 The join page is the only public surface. Everything else under `app.` requires
 a signed-in owner, except `/staff` (the 4-digit PIN is the credential) and
@@ -78,10 +82,30 @@ three with `Authorization: Bearer $VOTEL_API_TOKEN`:
 | `POST /api/votel/visit` | `{shop, phone, pin, visit_type?}` | `log_visit` — adds one stamp, keeps the 7-day lock, issues the reward at the milestone |
 | `POST /api/votel/card` | `{token}` | `get_card` — reads a stamp card by its token |
 | `POST /api/votel/member` | `{shop, phone, consent, first?, last?, email?, language?}` | `join_shop` — puts a client on the card |
+| `POST /api/votel/welcome` | `{token}` | emails the card link to the member's email. Browser-facing, so it takes the card token instead of `VOTEL_API_TOKEN` |
 
 Add `VOTEL_API_TOKEN` in Vercel → Environment Variables (any long random string),
 and use the same string in the Votel workflow's API step. Rotating it in Vercel
 revokes every caller at once. Without it the endpoints answer 501.
+
+`/api/votel/welcome` is called by the join page itself (not by Votel) right
+after a client signs up, and sends through Votel from `support@retainos.co`.
+It needs `VOTEL_API_KEY`, not `VOTEL_API_TOKEN`; `VOTEL_EMAIL_FROM` overrides
+the sender. Without `VOTEL_API_KEY` it answers 503 and the client simply does
+not get mail — the signup still succeeds.
+
+### The milestone message
+
+When a client reaches the card, `log_visit` returns the reward with its
+`voucher_code`. The message Votel sends should link to
+
+```
+https://app.retainos.co/claim?code=<voucher_code>
+```
+
+Do not use `join.retainos.co/claim`: that host serves Votel's own page, which
+knows nothing about a shop's rewards, so a client arriving from it has nothing
+to show at the counter.
 
 In Votel these map to the `api_lookup` (read) and `webhook` (write) workflow
 steps. A visit needs a real staff PIN for that shop — the PIN, not the token, is
