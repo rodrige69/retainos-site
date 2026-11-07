@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/onboard", "destination": "/onboard.html" },
+    { "source": "/setup", "destination": "/setup.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/staff", "destination": "/staff.html" },
     { "source": "/signin", "destination": "/signin.html" },
