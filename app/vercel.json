@@ -5,6 +5,7 @@
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/staff", "destination": "/staff.html" },
     { "source": "/signin", "destination": "/signin.html" },
+    { "source": "/password", "destination": "/password.html" },
     { "source": "/join", "destination": "/join.html" },
     { "source": "/:shop", "destination": "/join.html?shop=:shop" }
   ]

@@ -7,6 +7,9 @@ var T = {
     signin: "Sign in",
     toLink: "Email me a link instead",
     notePw: "Forgot it? Ask for a reset and we'll send a new one.",
+    forgot: "Forgot your password?",
+    resetSent: "Check your inbox — the reset link is on its way.",
+    resetFail: "That didn't send. Try again in a minute.",
     send: "Send me a link",
     lCode: "Or type the 6-digit code from the email",
     verify: "Sign in with the code",
@@ -27,6 +30,9 @@ var T = {
     signin: "Entrar",
     toLink: "Mejor mándame un enlace",
     notePw: "¿La olvidaste? Pide un cambio y te mandamos una nueva.",
+    forgot: "¿Olvidaste tu contraseña?",
+    resetSent: "Revisa tu correo: el enlace para cambiarla va en camino.",
+    resetFail: "No se envió. Inténtalo en un minuto.",
     send: "Enviarme el enlace",
     lCode: "O escribe el código de 6 dígitos del email",
     verify: "Entrar con el código",
@@ -53,6 +59,7 @@ function apply() {
   document.getElementById("lPw").textContent = t("lPw");
   document.getElementById("signinBtn").textContent = t("signin");
   document.getElementById("toLink").textContent = t("toLink");
+  document.getElementById("forgot").textContent = t("forgot");
   document.getElementById("notePw").textContent = t("notePw");
   document.getElementById("send").textContent = t("send");
   document.getElementById("lCode").textContent = t("lCode");
@@ -91,6 +98,18 @@ document.getElementById("signinBtn").onclick = function () {
     say(t("badCreds"), "bad");
   }).catch(function (err) {
     say(err.status === 429 ? t("rate") : t("badCreds"), "bad");
+  }).then(function () { btn.disabled = false; });
+};
+
+document.getElementById("forgot").onclick = function () {
+  var email = document.getElementById("email").value.trim();
+  if (!email) { document.getElementById("email").focus(); return say(t("need"), "bad"); }
+  var btn = this;
+  btn.disabled = true;
+  SB.sendRecovery(email).then(function () {
+    say(t("resetSent"));
+  }).catch(function (err) {
+    say(err.status === 429 ? t("rate") : t("resetFail"), "bad");
   }).then(function () { btn.disabled = false; });
 };
 

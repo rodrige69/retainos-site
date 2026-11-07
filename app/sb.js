@@ -75,6 +75,14 @@
         auth: false
       });
     },
+    sendRecovery: function (email) {
+      if (this.demo) return Promise.resolve({ demo: true });
+      return call("/auth/v1/recover", { method: "POST", body: { email: email }, auth: false });
+    },
+    updatePassword: function (password) {
+      if (this.demo) return Promise.resolve({ demo: true });
+      return call("/auth/v1/user", { method: "PUT", body: { password: password } });
+    },
     verifyCode: function (email, code) {
       if (this.demo) return Promise.resolve({ demo: true });
       return call("/auth/v1/verify", { method: "POST", body: { type: "email", email: email, token: code } })
@@ -86,6 +94,9 @@
       var p = new URLSearchParams(h);
       var at = p.get("access_token");
       if (!at) return false;
+      /* Remember what kind of link this was: a reset link should land on the
+         password form, everything else heads for the dashboard. */
+      try { localStorage.setItem("ros.recover", p.get("type") === "recovery" ? "1" : "0"); } catch (e) {}
       setSession({
         access_token: at,
         refresh_token: p.get("refresh_token"),
@@ -101,6 +112,9 @@
      configured to send it to, so pick the session up wherever we arrive
      instead of only on the sign-in page. */
   if (window.SB.captureRedirect()) {
-    if (!/\/dashboard(\.html)?$/.test(location.pathname)) location.replace("dashboard.html");
+    var recovery = false;
+    try { recovery = localStorage.getItem("ros.recover") === "1"; } catch (e) {}
+    if (recovery) location.replace("password.html");
+    else if (!/\/dashboard(\.html)?$/.test(location.pathname)) location.replace("dashboard.html");
   }
 })();
