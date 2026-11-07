@@ -3,3 +3,6 @@ __pycache__/
 app/server.log
 app/server.pid
 .libs/
+
+# MCP server config — may contain API keys, never commit
+.agents/mcp.json
