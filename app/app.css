@@ -18,6 +18,7 @@ a{color:var(--accent-dk)}
 input[type=text],input[type=email],input[type=tel],input[type=password],select{width:100%;min-height:52px;padding:0 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;background:#fff;color:var(--ink)}
 input:focus,select:focus{outline:3px solid var(--accent-bg);border-color:var(--accent)}
 .hint{color:var(--muted);font-size:13.5px;margin:8px 0 0}
+.hint.good{color:var(--ok)}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 24px;border-radius:14px;background:var(--accent);color:#fff;font-weight:800;font-size:17px;border:0;cursor:pointer;text-decoration:none;font-family:inherit}
 .btn:hover{background:var(--accent-dk)}
 .btn.block{width:100%;margin-top:18px}

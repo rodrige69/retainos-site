@@ -37,3 +37,31 @@ a signed-in owner, except `/staff` (the 4-digit PIN is the credential) and
 `qr/<shop>.svg` is generated from `https://app.retainos.co/join.html?shop=<shop>`
 once per shop (`make-qr.py`). Printing a poster never changes the URL, so QRs
 stay valid.
+
+## Votel sync
+
+Creating a shop also puts it into Votel as a contact, so every business has a
+home there and its staff and clients hang under `ros-shop:<slug>`. The tags match
+the shop-owner contacts that already exist:
+
+| Tag | Meaning |
+|---|---|
+| `ros-shop-owner` | this contact is a shop, not a client |
+| `ros-shop:<slug>` | which shop — everything for that shop groups under it |
+| `ros-niche:<business_type>` | barbershop, hair_salon, braiding … |
+| `ros-industry:<group>` | beauty, wellness |
+| `ros-plan:<plan>` | the plan key on the shop row |
+
+`POST /api/votel-shop` (`app/api/votel-shop.js`) does the work server-side: the
+browser sends only the shop id and the owner's access token, the function checks
+ownership through row-level security, then calls Votel's MCP `create_contact`
+and records the id through `set_shop_votel_contact`.
+
+Vercel → Settings → Environment Variables:
+
+- `VOTEL_API_KEY` — the Votel MCP token (server only, never in `config.js`)
+- `SUPABASE_URL` — `https://<project-ref>.supabase.co`
+- `SUPABASE_ANON_KEY` — the same public anon key the browser uses
+
+Without them the route answers 501 and the setup screen says the contact is
+pending, so a Votel problem never costs a signup.

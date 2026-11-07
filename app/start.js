@@ -42,7 +42,11 @@ var T = {
     bad_milestone: "Stamps to the card must be between 2 and 12.",
     bad_start: "Stamps at join must be lower than the card total.",
     auth_required: "Your session expired. Sign in again.",
-    demo: "Demo mode — no Supabase key in config.js."
+    demo: "Demo mode — no Supabase key in config.js.",
+    votelWait: "Adding this shop to Votel…",
+    votelOk: "Added to Votel as a shop — its staff and its clients sit under {slug}.",
+    votelLater: "Your shop is live. The Votel contact is waiting on its key, so RetainOS finishes that one step.",
+    votelFail: "Your shop is live. The Votel contact didn't go through — tell RetainOS and we'll add it."
   },
   es: {
     h1: "Configura tu negocio",
@@ -83,7 +87,11 @@ var T = {
     bad_milestone: "Los sellos para la tarjeta deben ser entre 2 y 12.",
     bad_start: "Los sellos al unirse deben ser menos que el total.",
     auth_required: "La sesión caducó. Entra otra vez.",
-    demo: "Modo demo: no hay clave de Supabase en config.js."
+    demo: "Modo demo: no hay clave de Supabase en config.js.",
+    votelWait: "Agregando este negocio a Votel…",
+    votelOk: "Agregado a Votel como negocio: su equipo y sus clientes quedan bajo {slug}.",
+    votelLater: "Tu negocio ya está activo. El contacto en Votel espera su clave, así que RetainOS termina ese paso.",
+    votelFail: "Tu negocio ya está activo. El contacto en Votel no se creó: avísale a RetainOS y lo agregamos."
   }
 };
 
@@ -222,6 +230,7 @@ $("createBtn").onclick = function () {
     hide("shopBlock");
     hide("signupBlock");
     show("doneBlock");
+    syncVotel(r.shop_id);
   }).catch(function (e) {
     btn.disabled = false;
     btn.textContent = t("createBtn");
@@ -229,6 +238,36 @@ $("createBtn").onclick = function () {
     say((e && e.message) || t("signupFail"), "bad");
   });
 };
+
+/* The shop already exists in Supabase at this point; the Votel contact is a
+   second, best-effort step so a Votel outage never loses a signup. */
+function syncVotel(shopId) {
+  var note = $("votelNote");
+  var s = SB.session();
+  if (!note || !s || !s.access_token) return;
+  note.textContent = t("votelWait");
+  fetch("api/votel-shop", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + s.access_token
+    },
+    body: JSON.stringify({ shop_id: shopId })
+  }).then(function (r) {
+    return r.json().catch(function () { return {}; });
+  }).then(function (j) {
+    if (j && j.ok) {
+      note.textContent = t("votelOk", { slug: shopId });
+      note.className = "hint good";
+    } else if (j && j.error === "not_configured") {
+      note.textContent = t("votelLater");
+    } else {
+      note.textContent = t("votelFail");
+    }
+  }).catch(function () {
+    note.textContent = t("votelFail");
+  });
+}
 
 $("copy").onclick = function () {
   var input = $("joinUrl");
