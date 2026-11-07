@@ -32,7 +32,7 @@ var T = {
     daysOut: "{n} days out",
     lastVisit: "Last visit {d}",
     cadence: "usually every {n} days",
-    qr: "QR & links", out: "Sign out",
+    qr: "QR & links", promo: "Announcement", out: "Sign out",
     empty: "No shop on this login yet.",
     emptyCta: "Set up your shop →",
     demo: "Demo mode — no Supabase key in config.js.",
@@ -67,7 +67,7 @@ var T = {
     daysOut: "{n} días",
     lastVisit: "Última visita {d}",
     cadence: "suele venir cada {n} días",
-    qr: "QR y enlaces", out: "Salir",
+    qr: "QR y enlaces", promo: "Anuncio", out: "Salir",
     empty: "Este acceso aún no tiene negocio.",
     emptyCta: "Configura tu negocio →",
     demo: "Modo demo: no hay clave de Supabase en config.js.",
@@ -121,6 +121,7 @@ $("insightH").textContent = t("insightH");
 $("insightSub").textContent = t("insightSub");
 $("rewardsH").textContent = t("rewardsH");
 $("recentH").textContent = t("recentH");
+$("promoLink").textContent = t("promo");
 $("btnEn").setAttribute("aria-pressed", String(lang === "en"));
 $("btnEs").setAttribute("aria-pressed", String(lang === "es"));
 $("btnEn").onclick = function () { localStorage.setItem("ros.lang", "en"); location.reload(); };

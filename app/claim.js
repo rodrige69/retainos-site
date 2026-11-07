@@ -123,6 +123,7 @@ function renderOk(r) {
   if (r.shop_id) {
     $("badge").textContent = (r.shop || "·").charAt(0).toUpperCase();
     $("shopName").textContent = r.shop || "";
+    if (window.ROS) ROS.promo($("promo"), r.shop_id);
   }
 }
 

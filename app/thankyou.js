@@ -120,6 +120,7 @@ if (SB.demo) {
       .then(function (rows) {
         var shop = rows && rows[0];
         if (shop) paint(shop);
+        if (window.ROS && shop) ROS.promo($("promo"), shop.id);
         return shop;
       })
       .catch(function () {});

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17191C">
+<title>Announcement · RetainOS</title>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<div class="demo hidden" id="demoNote"></div>
+
+<main class="wrap narrow" style="padding-top:24px">
+  <div class="topline" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <a class="btn ghost" id="back" href="dashboard.html" style="text-decoration:none"></a>
+    <div style="display:flex;gap:6px">
+      <button class="btn ghost" data-lang="en" type="button">EN</button>
+      <button class="btn ghost" data-lang="es" type="button">ES</button>
+    </div>
+  </div>
+
+  <h1 id="h1" style="font-size:26px;margin-top:18px"></h1>
+  <p class="hint" id="sub"></p>
+
+  <div class="card" style="margin-top:16px">
+    <label class="consent" style="margin-top:0">
+      <input type="checkbox" id="on">
+      <span id="onLbl"></span>
+    </label>
+
+    <label class="label" id="lTitle" for="title"></label>
+    <input id="title" type="text" maxlength="80" placeholder="">
+
+    <label class="label" id="lBody" for="body"></label>
+    <textarea id="body" rows="3" maxlength="280" placeholder=""></textarea>
+
+    <label class="label" id="lImage" for="image"></label>
+    <input id="image" type="url" inputmode="url" placeholder="https://…">
+    <p class="hint" id="hintImage"></p>
+
+    <label class="label" id="lLink" for="link"></label>
+    <input id="link" type="url" inputmode="url" placeholder="https://…">
+
+    <label class="label" id="lLabel" for="label"></label>
+    <input id="label" type="text" maxlength="40" placeholder="">
+
+    <button class="btn block" id="save" type="button"></button>
+    <div class="msg hidden" id="msg"></div>
+  </div>
+
+  <h2 class="sec" id="previewH" style="margin-top:24px"></h2>
+  <div id="preview"></div>
+  <p class="hint" id="previewEmpty"></p>
+
+  <p class="note" id="where"></p>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="promo-widget.js"></script>
+<script src="promo.js"></script>
+</body>
+</html>

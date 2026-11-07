@@ -112,3 +112,15 @@ steps. A visit needs a real staff PIN for that shop — the PIN, not the token, 
 what authorises the stamp. Errors come back as HTTP 200 with
 `{ok: false, error}` (`bad_pin`, `too_soon`, `not_member`, `unknown_shop`) so a
 workflow can branch without parsing status codes.
+
+## Announcement (`/promo`)
+
+One owner-written message shown to clients on their card, on the reward claim
+page, and on the thank-you page. Fields live on `shops.promo_*`; clients read
+them through `get_shop_promo`, and the owner writes them through
+`set_shop_promo`, which checks ownership against `shop_owners` inside the
+database instead of trusting the page. Image and link must be `http(s)` URLs —
+there is no upload yet, and `promo-widget.js` escapes every field, so an owner
+cannot inject markup into a client page.
+
+The dashboard links to it from the chip next to QR & links.

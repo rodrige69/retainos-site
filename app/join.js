@@ -170,6 +170,7 @@ function loadCard(token) {
     if (!c || !c.ok) { localStorage.removeItem(tokenKey); broken(); return false; }
     localStorage.setItem(tokenKey, token);
     drawCard(c, token);
+    if (window.ROS && shop) ROS.promo($("promo"), shop.id);
     return true;
   });
 }
