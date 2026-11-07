@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Set up your shop · RetainOS</title>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<div class="demo hidden" id="demoNote"></div>
+<header class="top">
+  <a class="logo" href="signin.html">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M79.34 43.76 A30 30 0 1 1 45.82 20.29" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><path d="M60.68 18.20 L44.15 8.41 L47.49 32.18 Z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72.98" cy="30.72" r="11" fill="currentColor"/></svg>
+    <span>Retain<b>OS</b></span>
+  </a>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button>
+  </div>
+</header>
+
+<main class="wrap narrow">
+  <div class="card">
+    <h1 id="h1" style="font-size:26px"></h1>
+    <p class="hint" id="sub"></p>
+
+    <!-- 1 · account, only when nobody is signed in -->
+    <div id="signupBlock" class="hidden">
+      <h2 id="signupH" style="font-size:18px;margin:18px 0 2px"></h2>
+      <p class="hint" id="signupSub"></p>
+      <label class="label" id="lEmail" for="email"></label>
+      <input id="email" type="email" inputmode="email" autocomplete="username" placeholder="you@yourshop.com">
+      <label class="label" id="lPw" for="password"></label>
+      <input id="password" type="password" autocomplete="new-password" placeholder="••••••••">
+      <button class="btn block" id="signupBtn"></button>
+      <p class="hint" id="haveAcct"></p>
+    </div>
+
+    <!-- 2 · the shop, once there is a session -->
+    <div id="shopBlock" class="hidden">
+      <h2 id="shopH" style="font-size:18px;margin:18px 0 2px"></h2>
+      <p class="hint" id="shopSub"></p>
+      <label class="label" id="lName" for="name"></label>
+      <input id="name" type="text" autocomplete="organization" placeholder="Fade Lab Barbershop">
+      <label class="label" id="lType" for="type"></label>
+      <select id="type"></select>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label class="label" id="lCity" for="city"></label>
+          <input id="city" type="text" autocomplete="address-level2" placeholder="Miami">
+        </div>
+        <div>
+          <label class="label" id="lPhone" for="phone"></label>
+          <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(305) 555-0142">
+        </div>
+      </div>
+      <label class="label" id="lStaff" for="staff"></label>
+      <textarea id="staff" rows="3" placeholder="Luis&#10;Marco, barber"></textarea>
+      <button class="btn block" id="createBtn"></button>
+      <p class="hint" id="shopNote"></p>
+    </div>
+
+    <!-- 3 · live -->
+    <div id="doneBlock" class="hidden">
+      <h2 id="doneH" style="font-size:20px;margin:14px 0 2px"></h2>
+      <p class="hint" id="doneSub"></p>
+      <label class="label" id="joinLbl" for="joinUrl"></label>
+      <input id="joinUrl" type="text" readonly>
+      <button class="btn block" id="copy"></button>
+      <a class="btn ghost block" id="qr" style="margin-top:10px;text-align:center"></a>
+      <a class="btn ghost block" id="dash" style="margin-top:10px;text-align:center"></a>
+    </div>
+
+    <div class="msg hidden" id="msg"></div>
+  </div>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="start.js"></script>
+</body>
+</html>

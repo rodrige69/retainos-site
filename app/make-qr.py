@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Regenerate app/qr/<shop>.svg from https://join.retainos.co/<shop>."""
+"""Regenerate app/qr/<shop>.svg from https://app.retainos.co/join.html?shop=<shop>."""
 import sys
 from pathlib import Path
 
 import qrcode
 import qrcode.image.svg
 
-BASE = "https://join.retainos.co/"
+BASE = "https://app.retainos.co/join.html?shop="
 
 def main(slugs):
     out = Path(__file__).parent / "qr"

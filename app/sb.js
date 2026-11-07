@@ -60,6 +60,16 @@
         body: { email: email, password: password }
       }).then(function (d) { if (d && d.access_token) setSession(d); return d; });
     },
+    /* Account creation for the self-serve path. With email confirmation on,
+       Supabase answers without a session and mails a link; that link is pointed
+       back at the setup page so the owner lands where they left off. */
+    signUp: function (email, password) {
+      if (this.demo) return Promise.resolve({ demo: true });
+      var body = { email: email, password: password };
+      if (/^https?:/.test(location.origin || "")) body.redirect_to = location.origin + "/start.html";
+      return call("/auth/v1/signup", { method: "POST", body: body, auth: false })
+        .then(function (d) { if (d && d.access_token) setSession(d); return d; });
+    },
     sendMagicLink: function (email) {
       if (this.demo) return Promise.resolve({ demo: true });
       return call("/auth/v1/otp", { method: "POST", body: { email: email, create_user: false } });

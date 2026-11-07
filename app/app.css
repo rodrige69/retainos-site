@@ -60,4 +60,27 @@ input:focus,select:focus{outline:3px solid var(--accent-bg);border-color:var(--a
 .lang button[aria-pressed=true]{background:var(--ink);color:#fff}
 .consent{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:14px;color:var(--ink2)}
 .consent input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--accent)}
+/* dashboard */
+.hero{background:var(--ink);color:#F3F1EC;border-radius:22px;padding:22px 24px;display:grid;grid-template-columns:1.45fr .75fr;gap:20px;margin:6px 0 4px}
+.hero h1{color:#fff;font-size:clamp(24px,3.4vw,32px);margin:2px 0 0}
+.heroDate{color:#B9BDC4;font-size:13.5px;margin:0;letter-spacing:.02em;text-transform:uppercase}
+.heroPlan{color:#D9DCE1;font-size:14px;margin:8px 0 0}
+.heroBig{display:flex;align-items:baseline;gap:10px;margin-top:16px;flex-wrap:wrap}
+.heroBig b{font-family:"Bricolage Grotesque",sans-serif;font-size:46px;line-height:.95;color:#fff}
+.heroBig span{color:#D9DCE1;font-size:14.5px;max-width:230px}
+.heroSide{border-left:1px solid #2A2D31;padding-left:20px;display:flex;flex-direction:column;justify-content:center}
+.meterLabel{color:#D9DCE1;font-size:13.5px;font-weight:700;margin:0}
+.meter{height:10px;border-radius:999px;background:#2A2D31;overflow:hidden;margin:9px 0 7px}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+.meterNote{color:#B9BDC4;font-size:13px;margin:0}
+.cols{display:grid;grid-template-columns:1.3fr .7fr;gap:20px;margin-top:26px;align-items:start}
+.sec{font-size:19px;margin:0 0 2px}
+.who{display:flex;align-items:center;gap:10px;min-width:0}
+.who b{font-size:15px}
+.who small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+.init{width:34px;height:34px;border-radius:999px;background:var(--accent-bg);color:var(--accent-dk);display:grid;place-items:center;font-weight:800;font-size:12.5px;flex:none}
+.row .meta{color:var(--accent-dk);font-weight:800;font-size:14px;white-space:nowrap;align-self:center}
+.insight{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--line);font-size:14.5px}
+.insight:first-child{border-top:0}
+@media(max-width:780px){.hero{grid-template-columns:1fr}.heroSide{border-left:0;border-top:1px solid #2A2D31;padding:16px 0 0}.cols{grid-template-columns:1fr}}
 @media print{.top,.demo,.foot,.btn,.noprint{display:none!important}body{background:#fff}.poster{border:0}}

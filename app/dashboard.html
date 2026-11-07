@@ -15,21 +15,52 @@
     <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M79.34 43.76 A30 30 0 1 1 45.82 20.29" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><path d="M60.68 18.20 L44.15 8.41 L47.49 32.18 Z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72.98" cy="30.72" r="11" fill="currentColor"/></svg>
     <span>Retain<b>OS</b></span>
   </span>
-  <div style="display:flex;gap:10px;align-items:center">
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="btnEn">EN</button><button type="button" id="btnEs">ES</button>
+    </div>
     <a class="chip" href="onboard.html" id="qrLink"></a>
     <button class="chip" id="signout"></button>
   </div>
 </header>
 
 <main class="wrap">
-  <h1 id="greet" style="font-size:30px;margin:8px 0 2px"></h1>
-  <p class="hint" id="plan"></p>
+  <section class="hero">
+    <div>
+      <p class="heroDate" id="today"></p>
+      <h1 id="greet"></h1>
+      <p class="heroPlan" id="plan"></p>
+      <div class="heroBig">
+        <b id="heroDue">0</b>
+        <span id="heroDueK"></span>
+      </div>
+    </div>
+    <div class="heroSide">
+      <p class="meterLabel" id="meterLabel"></p>
+      <div class="meter"><i id="meterFill" style="width:0%"></i></div>
+      <p class="meterNote" id="meterNote"></p>
+    </div>
+  </section>
 
   <div class="kpis" id="kpis"></div>
 
-  <h2 style="font-size:19px;margin:26px 0 4px" id="dueH"></h2>
-  <p class="hint" id="dueSub"></p>
-  <div class="list" id="dueList"></div>
+  <div class="cols">
+    <section>
+      <h2 class="sec" id="dueH"></h2>
+      <p class="hint" id="dueSub"></p>
+      <div class="list" id="dueList"></div>
+    </section>
+    <aside>
+      <h2 class="sec" id="insightH"></h2>
+      <p class="hint" id="insightSub"></p>
+      <div class="list" id="insights"></div>
+      <h2 class="sec" id="rewardsH" style="margin-top:24px"></h2>
+      <div class="list" id="rewardList"></div>
+    </aside>
+  </div>
+
+  <h2 class="sec" id="recentH" style="margin-top:26px"></h2>
+  <div class="list" id="recentList"></div>
 
   <div class="msg hidden" id="msg"></div>
 </main>

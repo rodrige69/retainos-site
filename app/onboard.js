@@ -38,7 +38,7 @@ var T = {
 };
 
 var lang = localStorage.getItem("ros.lang") || "en";
-var JOIN_BASE = "https://join.retainos.co/";
+var JOIN_BASE = "https://app.retainos.co/join.html?shop=";
 var shops = [];
 
 function t(k, vars) {
