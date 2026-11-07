@@ -57,11 +57,13 @@ browser sends only the shop id and the owner's access token, the function checks
 ownership through row-level security, then calls Votel's MCP `create_contact`
 and records the id through `set_shop_votel_contact`.
 
-Vercel → Settings → Environment Variables:
+Vercel → Settings → Environment Variables: add one,
 
 - `VOTEL_API_KEY` — the Votel MCP token (server only, never in `config.js`)
-- `SUPABASE_URL` — `https://<project-ref>.supabase.co`
-- `SUPABASE_ANON_KEY` — the same public anon key the browser uses
+
+The Supabase URL and anon key are public and already in `config.js`, so the
+function reads them from there. `SUPABASE_URL` / `SUPABASE_ANON_KEY` override
+them only if you ever need to point the function at a different project.
 
 Without them the route answers 501 and the setup screen says the contact is
 pending, so a Votel problem never costs a signup.

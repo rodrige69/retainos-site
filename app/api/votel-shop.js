@@ -9,10 +9,28 @@
  * owner email as the contact email, and the ros-* tags that group shops
  * (ros-shop:<slug> is what puts every one of a shop's people under it).
  *
- * Env: VOTEL_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY.
+ * Only VOTEL_API_KEY has to be configured. The Supabase URL and anon key are
+ * public (the same values every browser loads from config.js), so they are read
+ * from there; SUPABASE_URL / SUPABASE_ANON_KEY still win if they are set.
  */
 
 const MCP_URL = "https://ai.clientcontactpro.com/mcp";
+
+let publicConfig = {};
+try {
+  const hadWindow = Object.prototype.hasOwnProperty.call(global, "window");
+  const previous = global.window;
+  global.window = global.window || {};
+  require("../config.js");
+  publicConfig = global.window.RETAINOS_CONFIG || {};
+  if (hadWindow) global.window = previous;
+  else delete global.window;
+} catch (e) {
+  publicConfig = {};
+}
+
+const SUPA_URL = (process.env.SUPABASE_URL || publicConfig.url || "").replace(/\/$/, "");
+const SUPA_KEY = process.env.SUPABASE_ANON_KEY || publicConfig.anonKey || "";
 
 const INDUSTRY_GROUP = {
   barbershop: "beauty",
@@ -79,10 +97,10 @@ function contactIdFrom(out) {
 }
 
 async function supa(path, token, init) {
-  const res = await fetch(process.env.SUPABASE_URL.replace(/\/$/, "") + path, {
+  const res = await fetch(SUPA_URL + path, {
     ...init,
     headers: {
-      apikey: process.env.SUPABASE_ANON_KEY,
+      apikey: SUPA_KEY,
       Authorization: "Bearer " + token,
       "Content-Type": "application/json",
       ...((init && init.headers) || {})
@@ -97,7 +115,7 @@ module.exports = async (req, res) => {
     res.status(405).json({ ok: false, error: "method" });
     return;
   }
-  if (!process.env.VOTEL_API_KEY || !process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+  if (!process.env.VOTEL_API_KEY || !SUPA_URL || !SUPA_KEY) {
     res.status(501).json({ ok: false, error: "not_configured" });
     return;
   }
