@@ -15,7 +15,15 @@ var T = {
     short: "Use at least 8 characters.",
     mismatch: "The two passwords don't match.",
     fail: "That didn't save. Try again.",
-    noSession: "Open the link from your email to set a password. You can ask for a new one on the sign-in page.",
+    noSession: "Open the link from your email to set a password, or ask for a new one below.",
+    expired: "That link was already used or has expired. Get a fresh one below.",
+    linkBad: "That link didn't work. Get a fresh one below.",
+    lEmail: "Your email",
+    resend: "Send me a new link",
+    resent: "Check your inbox — a fresh link is on its way.",
+    needEmail: "Type your email first.",
+    resendFail: "That didn't send. Try again in a minute.",
+    rate: "A link was just sent. Wait a minute before asking again.",
     toSignin: "Back to sign in",
     foot: "Powered by RetainOS"
   },
@@ -31,7 +39,15 @@ var T = {
     short: "Usa al menos 8 caracteres.",
     mismatch: "Las dos contraseñas no coinciden.",
     fail: "No se guardó. Inténtalo otra vez.",
-    noSession: "Abre el enlace de tu correo para crear la contraseña. Puedes pedir otro en la página de entrada.",
+    noSession: "Abre el enlace de tu correo para crear la contraseña, o pide otro abajo.",
+    expired: "Ese enlace ya se usó o caducó. Pide uno nuevo abajo.",
+    linkBad: "Ese enlace no funcionó. Pide uno nuevo abajo.",
+    lEmail: "Tu correo",
+    resend: "Mándame un enlace nuevo",
+    resent: "Revisa tu correo: el enlace nuevo va en camino.",
+    needEmail: "Escribe tu correo primero.",
+    resendFail: "No se envió. Inténtalo en un minuto.",
+    rate: "Ya se envió un enlace. Espera un minuto antes de pedir otro.",
     toSignin: "Volver a entrar",
     foot: "Con tecnología de RetainOS"
   }
@@ -43,7 +59,7 @@ function $(id) { return document.getElementById(id); }
 
 function paint() {
   document.documentElement.lang = lang;
-  ["h1", "sub", "lPw", "lPw2", "save", "foot", "toSignin"].forEach(function (id) {
+  ["h1", "sub", "lPw", "lPw2", "save", "foot", "toSignin", "lEmail", "resend"].forEach(function (id) {
     if ($(id)) $(id).textContent = t(id);
   });
   $("btnEn").setAttribute("aria-pressed", String(lang === "en"));
@@ -61,10 +77,27 @@ $("btnEs").onclick = function () { lang = "es"; localStorage.setItem("ros.lang",
 
 paint();
 
+/* The link carried an error: a used, expired or rejected token. */
+var linkError = null;
+try { linkError = localStorage.getItem("ros.linkError"); localStorage.removeItem("ros.linkError"); } catch (e) {}
+
 if (!SB.session() && !SB.demo) {
   $("formBlock").classList.add("hidden");
-  say(t("noSession"), "bad");
+  $("resendBlock").classList.remove("hidden");
+  say(t(linkError ? (linkError.indexOf("expired") >= 0 ? "expired" : "linkBad") : "noSession"), "bad");
   $("toSignin").classList.remove("hidden");
+
+  $("resend").onclick = function () {
+    var email = $("email").value.trim();
+    if (!email) { $("email").focus(); return say(t("needEmail"), "bad"); }
+    var btn = this;
+    btn.disabled = true;
+    SB.sendRecovery(email).then(function () {
+      say(t("resent"), "good");
+    }).catch(function (e) {
+      say(e && e.status === 429 ? t("rate") : t("resendFail"), "bad");
+    }).then(function () { btn.disabled = false; });
+  };
 } else {
   $("save").onclick = function () {
     var pw = $("pw").value;

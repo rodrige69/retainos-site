@@ -7,7 +7,9 @@
 <script>
 (function () {
   var join = location.hostname.indexOf("join.") === 0;
-  location.replace(join ? "join.html" : "signin.html");
+  /* Keep the fragment: an email link that failed arrives as #error=..., and
+     dropping it left people on the sign-in form with no explanation. */
+  location.replace((join ? "join.html" : "signin.html") + (location.hash || ""));
 })();
 </script>
 </head>

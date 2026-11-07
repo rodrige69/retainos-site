@@ -10,6 +10,8 @@ var T = {
     forgot: "Forgot your password?",
     resetSent: "Check your inbox — the reset link is on its way.",
     resetFail: "That didn't send. Try again in a minute.",
+    expired: "That link was already used or has expired. Press “Forgot your password?” for a fresh one.",
+    linkBad: "That link didn't work. Press “Forgot your password?” for a fresh one.",
     send: "Send me a link",
     lCode: "Or type the 6-digit code from the email",
     verify: "Sign in with the code",
@@ -33,6 +35,8 @@ var T = {
     forgot: "¿Olvidaste tu contraseña?",
     resetSent: "Revisa tu correo: el enlace para cambiarla va en camino.",
     resetFail: "No se envió. Inténtalo en un minuto.",
+    expired: "Ese enlace ya se usó o caducó. Pulsa “¿Olvidaste tu contraseña?” para pedir otro.",
+    linkBad: "Ese enlace no funcionó. Pulsa “¿Olvidaste tu contraseña?” para pedir otro.",
     send: "Enviarme el enlace",
     lCode: "O escribe el código de 6 dígitos del email",
     verify: "Entrar con el código",
@@ -156,5 +160,13 @@ document.getElementById("password").addEventListener("keydown", function (e) {
   if (e.key === "Enter") document.getElementById("signinBtn").click();
 });
 
+/* An error left behind by a used or expired email link. */
+var linkError = null;
+try { linkError = localStorage.getItem("ros.linkError"); localStorage.removeItem("ros.linkError"); } catch (e) {}
+
 if (SB.captureRedirect()) location.replace("dashboard.html");
 apply();
+
+if (linkError) {
+  say(t(linkError.indexOf("expired") >= 0 ? "expired" : "linkBad"), "bad");
+}

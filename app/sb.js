@@ -84,7 +84,13 @@
     },
     sendRecovery: function (email) {
       if (this.demo) return Promise.resolve({ demo: true });
-      return call("/auth/v1/recover", { method: "POST", body: { email: email }, auth: false });
+      var here = /^https?:/.test(location.origin || "") ? location.origin + "/password.html" : "";
+      var body = { email: email };
+      if (here) body.redirect_to = here;
+      return call("/auth/v1/recover", { method: "POST", body: body, auth: false }).catch(function (e) {
+        if (!here || !e || e.status !== 400) throw e;
+        return call("/auth/v1/recover", { method: "POST", body: { email: email }, auth: false });
+      });
     },
     updatePassword: function (password) {
       if (this.demo) return Promise.resolve({ demo: true });
@@ -100,7 +106,19 @@
       if (!h) return false;
       var p = new URLSearchParams(h);
       var at = p.get("access_token");
-      if (!at) return false;
+      /* A used, expired or rejected link comes back as an error in the hash.
+         Keep it so a page can explain what happened instead of silently
+         dropping the visitor on a sign-in form. */
+      if (!at) {
+        var code = p.get("error_code") || p.get("error");
+        if (code) {
+          try {
+            localStorage.setItem("ros.linkError", code + "|" + (p.get("error_description") || ""));
+          } catch (e) {}
+          history.replaceState({}, "", location.pathname + location.search);
+        }
+        return false;
+      }
       /* Remember what kind of link this was: a reset link should land on the
          password form, everything else heads for the dashboard. */
       try { localStorage.setItem("ros.recover", p.get("type") === "recovery" ? "1" : "0"); } catch (e) {}
