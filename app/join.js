@@ -243,6 +243,16 @@ $("join").onclick = function () {
       return say(t(res && res.error) || "Error", "bad");
     }
     localStorage.setItem(tokenKey, res.token);
+    /* keepalive so the request survives the redirect to the thank-you page,
+       which is the page that tells them to check their email. */
+    try {
+      fetch("api/votel/welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: res.token }),
+        keepalive: true
+      }).catch(function () {});
+    } catch (e) {}
     if (res.returning) {
       drawCard({ returning: true, first_name: res.first_name, stamps: res.stamps, milestone: res.milestone }, res.token);
       return;

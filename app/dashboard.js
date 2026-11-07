@@ -1,6 +1,6 @@
 /* Owner dashboard · app.retainos.co/dashboard.html
    Read-only. Every number comes from rows the owner can already see under RLS:
-   shops, v_shop_dashboard, v_due_back, visits, rewards_issued, messages. */
+   shops, v_shop_dashboard, v_due_back, rewards_issued, members, messages. */
 
 var T = {
   en: {
@@ -16,7 +16,7 @@ var T = {
     due: "Due back", rewards: "Rewards issued",
     dueH: "Due back", dueSub: "Clients past their usual gap for this shop.",
     insightH: "What to do today", insightSub: "Read off your own numbers.",
-    rewardsH: "Rewards issued", recentH: "Recent visits",
+    rewardsH: "Rewards waiting", recentH: "Newest clients",
     none: "Nobody is overdue right now.",
     insReady: "{n} one visit from a reward",
     insDue: "{n} past their usual gap — worth a personal nudge",
@@ -24,7 +24,11 @@ var T = {
     insAllGood: "Everyone is inside their usual rhythm. Nothing to chase today.",
     insEmpty: "No clients yet. Share the join link and the first one starts the card.",
     noRewards: "No rewards issued yet.",
-    noVisits: "No visits logged yet.",
+    noClients: "No clients yet — share your join link.",
+    joined: "Joined {d}",
+    stampsNow: "{n} of {total} stamps",
+    atGoal: "Reward ready",
+    useBy: "Use by {d}",
     daysOut: "{n} days out",
     lastVisit: "Last visit {d}",
     cadence: "usually every {n} days",
@@ -47,7 +51,7 @@ var T = {
     due: "Por volver", rewards: "Premios emitidos",
     dueH: "Por volver", dueSub: "Clientes pasados de su ritmo habitual en este negocio.",
     insightH: "Qué hacer hoy", insightSub: "Leído de tus propios números.",
-    rewardsH: "Premios emitidos", recentH: "Visitas recientes",
+    rewardsH: "Premios por usar", recentH: "Clientes nuevos",
     none: "Ahora mismo nadie está atrasado.",
     insReady: "{n} a una visita de un premio",
     insDue: "{n} pasados de su ritmo — vale un mensaje personal",
@@ -55,7 +59,11 @@ var T = {
     insAllGood: "Todos están dentro de su ritmo. Nada que perseguir hoy.",
     insEmpty: "Aún no hay clientes. Comparte el enlace y el primero empieza la tarjeta.",
     noRewards: "Todavía no hay premios emitidos.",
-    noVisits: "Todavía no hay visitas registradas.",
+    noClients: "Aún no hay clientes: comparte tu enlace.",
+    joined: "Se unió {d}",
+    stampsNow: "{n} de {total} sellos",
+    atGoal: "Premio listo",
+    useBy: "Úsalo antes del {d}",
     daysOut: "{n} días",
     lastVisit: "Última visita {d}",
     cadence: "suele venir cada {n} días",
@@ -158,9 +166,8 @@ function emptyRow(text) {
       SB.rest("shops?select=name,texts_included,milestone,stamps_at_join&id=eq." + shopId),
       SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId),
       SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6"),
-      SB.rest("visits?select=member_id,occurred_at,visit_type&" + s + "&voided_at=is.null&order=occurred_at.desc&limit=6"),
-      SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&order=issued_at.desc&limit=4"),
-      SB.rest("members?select=id,first_name&" + s + "&limit=500"),
+      SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4"),
+      SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits&" + s + "&order=joined_at.desc&limit=500"),
       SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1")
     ]);
   })
@@ -169,13 +176,15 @@ function emptyRow(text) {
     var shop = out[0][0] || {};
     var dash = out[1][0] || {};
     var due = out[2] || [];
-    var visits = out[3] || [];
-    var rewards = out[4] || [];
-    var members = out[5] || [];
-    var lastMsg = out[6][0];
+    var rewards = out[3] || [];
+    var members = out[4] || [];
+    var lastMsg = out[5][0];
+    var newest = members.slice(0, 5);
 
     var names = {};
-    members.forEach(function (m) { names[m.id] = m.first_name; });
+    members.forEach(function (m) {
+      names[m.id] = [m.first_name, m.last_name].filter(Boolean).join(" ") || m.first_name;
+    });
     function nameOf(id) { return names[id] || null; }
 
     var membersN = dash.members || 0;
@@ -254,22 +263,27 @@ function emptyRow(text) {
         rw.appendChild(row(
           "<span><b>" + esc(nameOf(r.member_id) || "—") + "</b><small>" +
           esc(r.voucher_code || r.status || "") + "</small></span>" +
-          '<span class="meta">' + esc(day(r.expires_at)) + "</span>"
+          '<span class="meta">' + esc(r.expires_at ? t("useBy", { d: day(r.expires_at) }) : "") + "</span>"
         ));
       });
     }
 
+    /* Newest clients, not raw visits: a brand-new signup is the thing an owner
+       wants to see, and it is the only row that proves the join link is working. */
     var rec = $("recentList");
     rec.innerHTML = "";
-    if (!visits.length) {
-      rec.appendChild(emptyRow(t("noVisits")));
+    var goal = shop.milestone || 5;
+    if (!newest.length) {
+      rec.appendChild(emptyRow(t("noClients")));
     } else {
-      visits.forEach(function (v) {
+      newest.forEach(function (m) {
+        var stamps = m.cycle_visits || 0;
         rec.appendChild(row(
-          '<div class="who"><span class="init">' + esc(initials(nameOf(v.member_id))) + "</span>" +
-          "<span><b>" + esc(nameOf(v.member_id) || "—") + "</b><small>" +
-          esc(v.visit_type || "") + "</small></span></div>" +
-          '<span class="meta">' + esc(day(v.occurred_at)) + "</span>"
+          '<div class="who"><span class="init">' + esc(initials(m.first_name)) + "</span>" +
+          "<span><b>" + esc(nameOf(m.id) || "—") + "</b><small>" +
+          t("joined", { d: day(m.joined_at) }) + " · " +
+          t("stampsNow", { n: stamps, total: goal }) + "</small></span></div>" +
+          '<span class="meta">' + esc(stamps >= goal ? t("atGoal") : "") + "</span>"
         ));
       });
     }
