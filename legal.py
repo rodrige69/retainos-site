@@ -41,6 +41,8 @@ PRIVACY = [
          "Solo enviamos mensajes de texto a personas que aceptaron recibirlos. Puedes responder <strong>STOP</strong> (o ALTO) a cualquier mensaje para dejar de recibirlos y <strong>HELP</strong> (o AYUDA) para pedir ayuda. Pueden aplicar tarifas de mensajes y datos."),
         ("<strong>We do not sell, rent or share mobile phone numbers or text messaging consent with third parties or affiliates for their marketing or promotional purposes.</strong> Mobile information is shared only with the service providers that help us deliver messages, and only for that purpose.",
          "<strong>No vendemos, alquilamos ni compartimos números de celular ni el consentimiento para mensajes de texto con terceros o afiliados para sus fines de mercadeo o promoción.</strong> La información móvil solo se comparte con los proveedores que nos ayudan a entregar los mensajes, y solo para ese fin."),
+        ("<strong>Text messaging originator opt-in data and consent are not shared with any third parties for purposes unrelated to providing the text messaging services you opted into.</strong>",
+         "<strong>Los datos de aceptación (opt-in) y el consentimiento para recibir mensajes de texto no se comparten con terceros para fines ajenos a brindarte el servicio de mensajes de texto al que te suscribiste.</strong>"),
     ]),
     ("Health-related businesses", "Negocios relacionados con la salud", [
         ("RetainOS is not built to store medical records. For med spas, wellness centers and similar businesses, messages never include treatment details, and visit and referral rewards stay off by default.",
@@ -98,6 +100,8 @@ TERMS = [
          "<strong>Quién recibe mensajes:</strong> los dueños de negocios que piden información o se inscriben en RetainOS reciben mensajes sobre su solicitud, la configuración, citas y novedades del servicio. Los clientes de negocios que usan RetainOS reciben mensajes de ese negocio, como recordatorios de visita, avisos de premios, invitaciones para referir y solicitudes de reseñas."),
         ("<strong>Frequency:</strong> message frequency varies. <strong>Cost:</strong> message and data rates may apply.",
          "<strong>Frecuencia:</strong> la cantidad de mensajes varía. <strong>Costo:</strong> pueden aplicar tarifas de mensajes y datos."),
+        ("Messages may be sent using automated technology, including an autodialer, automated system or automatic telephone dialing system. Your consent to receive automated messages is not required to work with us, and you may always ask to be contacted a different way.",
+         "Los mensajes pueden enviarse mediante tecnología automatizada, incluido un marcador automático o un sistema de llamadas/mensajes automáticos. Tu consentimiento para recibir mensajes automáticos no es un requisito para trabajar con nosotros, y siempre puedes pedir que te contactemos de otra forma."),
         ("<strong>Opt out:</strong> reply STOP to any message to cancel. You'll get one message confirming you're unsubscribed. <strong>Help:</strong> reply HELP, or use our contact page.",
          "<strong>Cancelar:</strong> responde STOP (o ALTO) a cualquier mensaje. Recibirás un mensaje confirmando que te diste de baja. <strong>Ayuda:</strong> responde HELP (o AYUDA), o usa nuestra página de contacto."),
         ("Consent to receive texts is not a condition of any purchase. Carriers are not liable for delayed or undelivered messages.",
