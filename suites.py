@@ -119,7 +119,7 @@ def page(b):
     rewards = f"""<section id="rewards"><div class="wrap">
 {T("The rewards", "Los premios", "div", "kicker")}
 {T("Feels bigger than a discount. Costs less than a month of rent.", "Se siente más grande que un descuento. Cuesta menos que un mes de renta.", "h2")}
-{b.rewards_cards().replace(b.T("Every plan", "Todos los planes"), b.T("Lease rewards", "Premios por contrato")).replace(b.T("Add-on · Full Book &amp; Hands-Off", "Complemento · Agenda Llena y Sin Complicaciones"), b.T("Lease rewards", "Premios por contrato")).replace("<strong>Client pays:</strong>", "<strong>Renter pays:</strong>").replace("<strong>El cliente paga:</strong>", "<strong>El inquilino paga:</strong>")}
+{b.rewards_cards().replace(b.T("Every plan", "Todos los planes"), b.T("Lease rewards", "Premios por contrato")).replace(b.T("Booked Solid &amp; Day Off", "Agenda Llena y Día Libre"), b.T("Lease rewards", "Premios por contrato")).replace("<strong>Client pays:</strong>", "<strong>Renter pays:</strong>").replace("<strong>El cliente paga:</strong>", "<strong>El inquilino paga:</strong>")}
 <p class="note">{T("Lease rewards are earned only after a signed lease and a cleared payment. Not cash, rent credit or gift cards. Getaways have conditions, like one per household every 12 months and living at least 100 miles from the resort. Terms apply.", "Los premios por contrato se ganan solo con un contrato firmado y un pago acreditado. No son efectivo, crédito de renta ni tarjetas de regalo. Las escapadas tienen condiciones, como una por hogar cada 12 meses y vivir a más de 100 millas del resort. Aplican términos.")} {T("See full reward details", "Ver todos los detalles de los premios", "a", "", b.href(url("/rewards", "/es/premios")))}</p>
 </div></section>"""
 
@@ -138,5 +138,5 @@ def page(b):
         b.head(*title, *desc, alt=alt, jsonld=ld), b.topbar(alt), '<main id="top">',
         hero, summary, problem, how, amenity, rewards, plans, b.after(), b.faq_section(items),
         b.claim(("Empty suites cost you every week. Let's fill them.", "Cada semana con una suite vacía te cuesta. Vamos a llenarlas."),
-                ("Pilot spots are open for salon suite buildings. Setup fee waived.", "Hay lugares abiertos en el piloto para edificios de suites de salón. Sin costo de instalación.")),
+                ("Pick your plan and check out in a minute. Setup fee waived for Black Friday.", "Elige tu plan y paga en un minuto. Sin costo de instalación por Black Friday.")),
         "</main>", b.footer(), b.end()])

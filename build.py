@@ -35,10 +35,21 @@ OFFER = {
 
 # Votel checkout links (one order-form page per plan). Leave "" until Votel gives you the URL;
 # empty buttons scroll to the sign-up form instead. Promo links should apply the $0 setup.
-CHECKOUT = {
-    "regulars": "", "full-book": "", "hands-off": "",
-    "promo-regulars": "", "promo-full-book": "", "promo-hands-off": "",
+# Votel sales funnels (separate Votel sites, so editing this site never changes them).
+# Buy buttons go straight to each funnel's /offer page. Spanish funnels: fill the "es" URLs once published
+# (until then the Spanish site sends buyers to the English funnel).
+FUNNELS = {
+    "en": {"come-back": "https://retainos-come-back-11112220-cb257563.b-cdn.net/offer",
+           "booked-solid": "https://retainos-booked-solid-11112244-70f50fe0.b-cdn.net/offer",
+           "right-hand": "https://retainos-right-hand-11112315-0f189214.b-cdn.net/offer"},
+    "es": {"come-back": "https://retainos-regresa-es-11112333-8fa98bda.b-cdn.net/offer",
+           "booked-solid": "https://retainos-agenda-llena-es-11112333-df31b1c4.b-cdn.net/offer",
+           "right-hand": "https://retainos-mano-derecha-es-11112333-28b93a51.b-cdn.net/offer"},
 }
+
+
+def funnel(key, lang):
+    return FUNNELS[lang].get(key) or FUNNELS["en"][key]
 
 # Reward wording. Destinations and fees change: no exact getaway amounts on the site,
 # only one labeled example. Confirm the example with the rewards partner before launch.
@@ -293,10 +304,10 @@ def rewards_cards():
 <div class="rwc"><div class="tag">{T("Every plan", "Todos los planes")}</div>{T("Hotel savings cards", "Tarjetas de descuentos en hoteles", "h3")}
 {T("$100 to $500 in credits or discounts on eligible hotel bookings, through our rewards partner's booking site.", "De $100 a $500 en créditos o descuentos en reservas de hotel elegibles, en el sitio de reservas de nuestro socio de premios.", "p")}
 <div class="pay">{T("<strong>Client pays:</strong> the discounted price of the stay they choose.", "<strong>El cliente paga:</strong> el precio con descuento de la estadía que elija.")}</div></div>
-<div class="rwc"><div class="tag alt">{T("Add-on · Full Book &amp; Hands-Off", "Complemento · Agenda Llena y Sin Complicaciones")}</div>{T("Dining rewards", "Premios de restaurantes", "h3")}
+<div class="rwc"><div class="tag alt">{T("Booked Solid &amp; Day Off", "Agenda Llena y Día Libre")}</div>{T("Dining rewards", "Premios de restaurantes", "h3")}
 {T("Discount offers of up to 50% off at more than 100,000 participating restaurants in the US and Canada.", "Ofertas de hasta 50% de descuento en más de 100,000 restaurantes participantes en EE. UU. y Canadá.", "p")}
 <div class="pay">{T("<strong>Client pays:</strong> a small activation fee, unless you cover it.", "<strong>El cliente paga:</strong> un pequeño cargo de activación, a menos que tú lo cubras.")}</div></div>
-<div class="rwc"><div class="tag alt">{T("Add-on · Full Book &amp; Hands-Off", "Complemento · Agenda Llena y Sin Complicaciones")}</div>{T("Getaway certificates", "Certificados de escapada", "h3")}
+<div class="rwc"><div class="tag alt">{T("Booked Solid &amp; Day Off", "Agenda Llena y Día Libre")}</div>{T("Getaway certificates", "Certificados de escapada", "h3")}
 {T(f"Promotional resort stays in {R['dest_en']}, {R['nights_en']}. Some destinations offer all-inclusive resorts.", f"Estadías promocionales en resorts en {R['dest_es']}, {R['nights_es']}. Algunos destinos ofrecen resorts todo incluido.", "p")}
 <div class="pay">{T("<strong>Client pays:</strong> taxes and fees for each night when activating, resort fees where they apply, and the meal plan at all-inclusive resorts. Flights not included. Terms apply.", "<strong>El cliente paga:</strong> impuestos y cargos por noche al activar, cargos del resort cuando apliquen y el plan de comidas en resorts todo incluido. No incluye vuelos. Aplican términos.")}</div></div>
 </div>"""
@@ -322,65 +333,96 @@ def gets(v):
 <div class="gets">
 <div class="get">{T("After 5 visits", "Después de 5 visitas", "div", "big")}{T("A complimentary $100 hotel savings card. Included in every plan.", "Una tarjeta de descuentos en hoteles de $100, de cortesía. Incluida en todos los planes.", "p")}</div>
 <div class="get">{T("Refer a friend", "Recomienda a alguien", "div", "big")}{T("When the friend books and pays, you both get one.", "Cuando tu amistad reserva y paga, los dos reciben una.", "p")}</div>
-<div class="get">{T("Your own perk", "Tu propio beneficio", "div", "big")}{T(f"On Full Book and up, add something of yours, like {v['perk_en']}.", f"Desde Agenda Llena, agrega algo tuyo, como {v['perk_es']}.", "p")}</div>
+<div class="get">{T("Your own perk", "Tu propio beneficio", "div", "big")}{T(f"On Booked Solid and up, add something of yours, like {v['perk_en']}.", f"Desde Agenda Llena, agrega algo tuyo, como {v['perk_es']}.", "p")}</div>
 </div>
 {rewards_cards()}
 <p class="note">{T("Rewards are earned only for completed, paid visits and qualifying referrals. Never for reviews. Not cash or gift cards. Terms apply.", "Los premios se ganan solo por visitas completadas y pagadas y por referidos que califican. Nunca por reseñas. No son efectivo ni tarjetas de regalo. Aplican términos.")} {link}</p>
 </div></section>"""
 
 
-def plan(name, price, setup, for_, feats, promo, hi=False, key=""):
+def buy(key, label_en, label_es, hi):
+    cls = f'btn pbtn{" alt" if not hi else ""}'
+    if LANG:
+        return f'<a class="{cls}" href="{funnel(key, LANG)}">{L(label_en, label_es)}</a>'
+    return T(f'<a class="{cls}" href="{funnel(key, "en")}">{label_en}</a>', f'<a class="{cls}" href="{funnel(key, "es")}">{label_es}</a>', "div")
+
+
+def plan(name, price, setup_line, for_, feats, key, label, hi=False, link=None):
     lis = "".join(f"<li>{CHECK}<span>{T(a, b)}</span></li>" for a, b in feats)
     badge = f'<span class="badge">{T("Recommended", "Recomendado")}</span>' if hi else ""
-    s = (f'{T("Setup:", "Instalación:")} <s>${setup}</s> $0' if promo
-         else T(f"${setup} one-time setup · waived for pilot businesses", f"${setup} de instalación única · sin costo para negocios piloto"))
-    link = CHECKOUT.get(("promo-" if promo else "") + key) or "#claim"
-    btn = f'<a class="btn pbtn{" alt" if not hi else ""}" href="{link}">{T("Start with " + name[0].title(), "Empezar con " + name[1].title())}</a>'
+    if link:
+        btn = f'<a class="btn pbtn{" alt" if not hi else ""}" href="{link[0]}">{T(label[0], label[1])}</a>' if LANG else \
+            T(f'<a class="btn pbtn alt" href="{link[0]}">{label[0]}</a>', f'<a class="btn pbtn alt" href="{link[1]}">{label[1]}</a>', "div")
+    else:
+        btn = buy(key, label[0], label[1], hi)
     return f"""<div class="plan{' hi' if hi else ''}"><div class="nm">{T(*name)}{badge}</div>
 <div class="pr">${price}<span>{T("/month", "/mes")}</span></div><div class="for">{T(*for_)}</div>
-<div class="setup">{s}</div><ul>{lis}</ul>{btn}</div>"""
+<div class="setup">{setup_line}</div><ul>{lis}</ul>{btn}</div>"""
+
+
+def setup_waived(amount):
+    return (f'<s>${amount} {T("one-time setup", "de instalación única")}</s> '
+            f'<span class="bf">{T("Waived for Black Friday", "Sin costo por Black Friday")}</span>')
 
 
 def plans(v, promo):
     care = mode(v) == "care"
-    reg_feats = [("Keep your booking app", "Quédate con tu app de reservas"),
-                 ("Visit rewards with a QR check-in", "Premios por visita con registro por QR"),
-                 ("Complimentary hotel savings cards", "Tarjetas de descuentos en hoteles de cortesía"),
-                 ("Referral tracking and automatic referral asks", "Seguimiento de referidos y solicitudes automáticas"),
-                 ("Time-to-come-back reminders", "Recordatorios de cuándo volver"),
-                 ("100 texts per month", "100 mensajes de texto al mes")]
-    if care:
-        reg_feats = [("Keep your booking app", "Quédate con tu app de reservas"),
-                     ("Time-to-come-back reminders", "Recordatorios de cuándo volver"),
-                     ("Review requests after every visit", "Solicitudes de reseña después de cada visita"),
-                     ("Rewards off by default", "Premios desactivados de entrada"),
-                     ("100 texts per month", "100 mensajes de texto al mes")]
-    fb = [("Everything in Regulars", "Todo lo de Clientes Fieles"),
-          ("Online booking, reminders and deposits", "Reservas en línea, recordatorios y depósitos"),
-          ("Missed-call text-back", "Respuesta por texto a llamadas perdidas")]
+    cb = [("Up to 250 active members", "Hasta 250 miembros activos"),
+          ("Automatic follow-up when it's time to come back", "Seguimiento automático cuando toca volver"),
+          ("Keep your booking app", "Quédate con tu app de reservas")]
     if not care:
-        fb += [("Rewards under your business name", "Premios con el nombre de tu negocio"),
-               (f"Add a perk of your own, like {v['perk_en']}", f"Agrega un beneficio propio, como {v['perk_es']}"),
-               ("Option to add dining &amp; getaway rewards", "Opción de agregar premios de restaurantes y escapadas")]
-    fb += [("We move your clients over", "Pasamos tus clientes por ti"), ("300 texts per month", "300 mensajes de texto al mes")]
-    ho = [("Everything in Full Book", "Todo lo de Agenda Llena"),
-          ("Win-back campaigns", "Campañas para recuperar clientes"),
-          ("Done-for-you holiday promos", "Promociones de temporada hechas por nosotros"),
-          ("Staff contests", "Concursos para tu equipo"),
-          ("Monthly check-in and report", "Revisión y reporte mensual"),
-          ("750 texts per month", "750 mensajes de texto al mes")]
-    cards = (plan(("REGULARS", "CLIENTES FIELES"), 39, 99, ("Bring clients back", "Haz que vuelvan"), reg_feats, promo, key="regulars")
-             + plan(("FULL BOOK", "AGENDA LLENA"), 79, 149, ("Fill the calendar", "Llena tu agenda"), fb, promo, hi=True, key="full-book")
-             + plan(("HANDS-OFF", "SIN COMPLICACIONES"), 149, 249, ("Have it run for you", "Que funcione por ti"), ho, promo, key="hands-off"))
-    h = ("Pick your plan. Setup is on us.", "Elige tu plan. La instalación corre por nuestra cuenta.") if promo else ("Simple plans. No commission. Ever.", "Planes simples. Sin comisiones. Nunca.")
-    extra = ("Extra texts: $10 per 100." , "Mensajes extra: $10 por cada 100.") if care else (
-        "Extra texts: $10 per 100. Dining &amp; getaway rewards: +$39/month on Full Book and Hands-Off.",
-        "Mensajes extra: $10 por cada 100. Premios de restaurantes y escapadas: +$39/mes en Agenda Llena y Sin Complicaciones.")
+        cb += [("Automatic referral asks, tracked to the client who sent them", "Solicitudes de referidos automáticas, con seguimiento de quién recomendó"),
+               ("Visit rewards with a QR check-in", "Premios por visita con registro por QR"),
+               ("Complimentary hotel savings cards", "Tarjetas de descuentos en hoteles de cortesía")]
+    bs = [("Everything in Come Back", "Todo lo de Regresa"),
+          ("Up to 750 active members", "Hasta 750 miembros activos")]
+    if not care:
+        bs += [(f"Clients earn your own perk, like {v['perk_en']}", f"Tus clientes ganan un beneficio tuyo, como {v['perk_es']}"),
+               ("Rewards under your business name", "Premios con el nombre de tu negocio")]
+    bs += [("Automatically invite clients to leave an honest review after a completed visit", "Invita automáticamente a tus clientes a dejar una reseña honesta después de cada visita"),
+           ("Keep your own booking platform, or use our online booking and reminders", "Quédate con tu plataforma de reservas, o usa nuestras reservas en línea y recordatorios"),
+           ("Collect deposits through your own Stripe or PayPal", "Cobra depósitos con tu propio Stripe o PayPal"),
+           ("Switching to ours? We move your client list over", "¿Te pasas a la nuestra? Pasamos tu lista de clientes")]
+    if not care:
+        bs += [("$100 dining rewards", "Premios de restaurantes de $100"),
+               ("Bonus: domestic getaway certificates", "Bono: certificados de escapada nacionales")]
+    do = [("Everything in Booked Solid", "Todo lo de Agenda Llena"),
+          ("Up to 2,000 active members", "Hasta 2,000 miembros activos")]
+    if not care:
+        do += [("International getaway certificates", "Certificados de escapada internacionales")]
+    do += [("Online profile management: posts, photos and review replies", "Manejo de tu perfil en línea: publicaciones, fotos y respuestas a reseñas"),
+           ("Win-back campaigns", "Campañas para recuperar clientes"),
+           ("Done-for-you holiday promos", "Promociones de temporada hechas por nosotros"),
+           ("Staff contests", "Concursos para tu equipo"),
+           ("Monthly check-in and report", "Revisión y reporte mensual")]
+    call = (url("/start", "/es/empezar"), "/es/empezar")
+    cards = (plan(("COME BACK", "REGRESA"), 39, setup_waived(99), ("Turn one-time clients into regulars", "Convierte clientes de una vez en clientes fieles"), cb, "come-back",
+                  ("Start with Come Back", "Empezar con Regresa"))
+             + plan(("BOOKED SOLID", "AGENDA LLENA"), 79, setup_waived(99), ("Fill the calendar", "Llena tu agenda"), bs, "booked-solid",
+                    ("Start with Booked Solid", "Empezar con Agenda Llena"), hi=True)
+             + plan(("DAY OFF", "DÍA LIBRE"), 149, T("$249 one-time setup", "$249 de instalación única"), ("We run it. You take the day off.", "Lo manejamos nosotros. Tú descansas."), do, "day-off",
+                    ("Talk to us about Day Off", "Habla con nosotros sobre Día Libre"), link=("/start", "/es/empezar")))
+    h = ("Simple plans. No commission. Ever.", "Planes simples. Sin comisiones. Nunca.")
+    ra = [("Answers questions about your services, prices and hours", "Responde preguntas sobre tus servicios, precios y horarios"),
+          ("Works on Instagram, WhatsApp and your website chat, in English and Spanish", "Funciona en Instagram, WhatsApp y el chat de tu sitio, en español e inglés"),
+          ("Answers your phone when you can't: books a call or takes a message and emails it to you", "Contesta tu teléfono cuando no puedes: agenda una llamada o toma un mensaje y te lo envía por correo"),
+          ("Sends your booking link, or books directly if you use our booking", "Envía tu enlace de reservas, o agenda directo si usas nuestras reservas"),
+          ("Up to 300 client conversations a month", "Hasta 300 conversaciones con clientes al mes")]
+    ra_li = "".join(f"<li>{CHECK}<span>{T(a, b)}</span></li>" for a, b in ra)
+    addon = f"""<div class="addon"><div><div class="tag alt">{T("Works with any plan, or on its own", "Funciona con cualquier plan, o por sí solo")}</div>
+{T("Right Hand", "Mano Derecha", "h3")}
+{T("Your AI front desk. It answers while your hands are busy.", "Tu recepción con IA. Contesta mientras tienes las manos ocupadas.", "p", "addsub")}
+<ul>{ra_li}</ul></div>
+<div class="addbuy"><div class="pr">$49<span>{T("/month", "/mes")}</span></div>
+{T("A part-time receptionist runs over $1,000 a month. Right Hand is $49. Month to month.", "Una recepcionista de medio tiempo cuesta más de $1,000 al mes. Mano Derecha cuesta $49. Mes a mes.", "p")}
+{buy("right-hand", "Start Right Hand", "Empezar con Mano Derecha", True)}</div></div>"""
     return f"""<section id="plans"><div class="wrap">
 {T("Plans", "Planes", "div", "kicker")}{T(*h, "h2")}
+{T("Black Friday: setup fees waived on Come Back and Booked Solid.", "Black Friday: sin costo de instalación en Regresa y Agenda Llena.", "p", "bfnote")}
 <div class="plans">{cards}</div>
-{T("No commission on your clients. Ever.", "Nunca cobramos comisión por tus clientes.", "p", "nocomm")}
-{T(*extra, "p", "note")}
+{T("Month to month. No long-term contracts. No commission on your clients. Ever.", "Mes a mes. Sin contratos a largo plazo. Nunca cobramos comisión por tus clientes.", "p", "nocomm")}
+{addon}
+{T("Terms and conditions apply.", "Aplican términos y condiciones.", "p", "note")}
 </div></section>"""
 
 
@@ -399,8 +441,8 @@ def after():
 def faq_owner(v=None):
     O, R = OFFER, REWARDS
     base = [
-        ("Do I have to switch booking apps?", "No. Regulars works alongside the one you use now. Full Book adds our booking if you want it, and we move your clients over.",
-         "¿Tengo que cambiar mi app de reservas?", "No. Clientes Fieles funciona junto con la que ya usas. Agenda Llena agrega nuestras reservas si las quieres, y pasamos tus clientes por ti."),
+        ("Do I have to switch booking apps?", "No. Come Back works alongside the one you use now. Booked Solid lets you use our booking if you want it, and we move your clients over.",
+         "¿Tengo que cambiar mi app de reservas?", "No. Regresa funciona junto con la que ya usas. Agenda Llena te deja usar nuestras reservas si las quieres, y pasamos tus clientes por ti."),
         ("Do you take a cut of my bookings?", "Never. One flat monthly price.", "¿Se quedan con un porcentaje de mis citas?", "Nunca. Un solo precio mensual fijo."),
         ("Can my clients get messages in Spanish?", "Yes. Every message comes in English or Spanish.", "¿Mis clientes pueden recibir mensajes en español?", "Sí. Cada mensaje llega en español o en inglés."),
     ]
@@ -415,8 +457,8 @@ def faq_owner(v=None):
         base += [
             ("How can you offer hotel stays and dining rewards?", "Our rewards partner works with hotels and resorts that have empty rooms on certain dates. Hotels would rather fill a room at a wholesale rate than leave it empty, because guests spend on dining, spa and extras. Restaurants join to bring in new diners. That's why rewards can feel big without costing you big.",
              "¿Cómo pueden ofrecer estadías de hotel y premios de restaurantes?", "Nuestro socio de premios trabaja con hoteles y resorts que tienen habitaciones vacías en ciertas fechas. Prefieren llenarlas a precio de mayorista antes que dejarlas vacías, porque los huéspedes gastan en comida, spa y extras. Los restaurantes participan para atraer comensales nuevos. Por eso los premios se sienten grandes sin costarte mucho."),
-            ("What rewards come with each plan?", "Every plan includes complimentary hotel savings cards. On Full Book and Hands-Off you can add a perk of your own, and for $39/month add dining rewards and getaway certificates.",
-             "¿Qué premios incluye cada plan?", "Todos los planes incluyen tarjetas de descuentos en hoteles de cortesía. En Agenda Llena y Sin Complicaciones puedes agregar un beneficio propio y, por $39/mes, premios de restaurantes y certificados de escapada."),
+            ("What rewards come with each plan?", "Every plan includes complimentary hotel savings cards. Booked Solid adds your own perk, $100 dining rewards and domestic getaway certificates. Day Off adds international getaways.",
+             "¿Qué premios incluye cada plan?", "Todos los planes incluyen tarjetas de descuentos en hoteles de cortesía. Agenda Llena agrega un beneficio propio, premios de restaurantes de $100 y certificados de escapada nacionales. Día Libre agrega escapadas internacionales."),
             ("Where can clients travel?", f"Getaways cover {R['dest_en']}, {R['nights_en']}. Some resorts are all-inclusive. You can pick the destinations you offer, or let clients choose.",
              "¿A dónde pueden viajar los clientes?", f"Las escapadas incluyen {R['dest_es']}, {R['nights_es']}. Algunos resorts son todo incluido. Puedes elegir los destinos que ofreces o dejar que el cliente escoja."),
             ("Do clients pay anything for a getaway?", f"Yes, and we say so upfront. The stay is complimentary, but the client pays taxes and fees for each night when activating, plus resort fees where they apply. At all-inclusive resorts, the meal-and-drink plan is charged per person. Amounts vary by destination and are shown before they activate. {R['example_en']} Flights are not included. You can choose to cover the taxes and fees as an extra thank-you.",
@@ -469,19 +511,19 @@ def votel(kind):
 
 
 def start_href():
-    return url("/start", "/es/empezar") if LANG else "#claim"
+    return "#plans"
 
 
 def claim(h, sub):
     if LANG:
-        go = f'<a class="btn big" href="{start_href()}">{L("Claim my pilot spot", "Quiero mi lugar")} &rarr;</a>'
+        go = f'<a class="btn big" href="{start_href()}">{L("Claim your spot", "Reserva tu lugar")} &rarr;</a>'
         ask = f'<a class="ask" href="{url("/contact", "/es/contacto")}">{L("Have a question first? Contact us", "¿Tienes preguntas? Escríbenos")}</a>'
     else:
-        go = T('<a class="btn big" href="/start">Claim my pilot spot &rarr;</a>', '<a class="btn big" href="/es/empezar">Quiero mi lugar &rarr;</a>', "div")
+        go = T('<a class="btn big" href="#plans">Claim your spot &rarr;</a>', '<a class="btn big" href="#plans">Reserva tu lugar &rarr;</a>', "div")
         ask = T('<a class="ask" href="/contact">Have a question first? Contact us</a>', '<a class="ask" href="/es/contacto">¿Tienes preguntas? Escríbenos</a>', "div")
     steps = "".join(f"<li>{T(a, b)}</li>" for a, b in [
-        ("Pick a time for a 15-minute Google Meet call.", "Elige un horario para una llamada de 15 minutos por Google Meet."),
-        ("Tell us about your business. It takes a minute.", "Cuéntanos sobre tu negocio. Toma un minuto."),
+        ("Pick your plan.", "Elige tu plan."),
+        ("Check out in about a minute.", "Paga en aproximadamente un minuto."),
         ("We set everything up. You're live in days.", "Nosotros lo configuramos todo. Estás funcionando en días."),
     ])
     return f"""<section id="claim" style="padding-top:0"><div class="wrap"><div class="claim">
@@ -525,7 +567,7 @@ def industries():
 
 
 def why(v=None):
-    first = ("Fewer no-shows", "Deposits, reminders and missed-call text-back keep your calendar full.", "Menos citas perdidas", "Depósitos, recordatorios y respuesta a llamadas perdidas mantienen tu agenda llena.") if v and mode(v) == "care" else \
+    first = ("Fewer no-shows", "Easy booking, reminders and honest review requests keep your calendar full.", "Menos citas perdidas", "Reservas fáciles, recordatorios y solicitudes de reseñas honestas mantienen tu agenda llena.") if v and mode(v) == "care" else \
         ("Rewards without discounts", "Clients earn hotel, dining and getaway rewards. Your prices stay where they are.", "Premios sin descuentos", "Tus clientes ganan premios de hoteles, restaurantes y escapadas. Tus precios no se tocan.")
     items = [first,
              ("Done for you", "We set everything up on a 15-minute call. No software to learn.", "Hecho por nosotros", "Configuramos todo en una llamada de 15 minutos. Sin programas que aprender."),
@@ -593,8 +635,8 @@ HOME = {"biz": "Rosa Hair Studio", "client": "Maria", "scan_en": "at the front d
         "msg_en": VERTICALS[0]["msg_en"], "msg_es": VERTICALS[0]["msg_es"]}
 
 CLAIM_H = ("Your regulars already love you. Give them a reason to keep coming back.", "Tus clientes fieles ya te quieren. Dales una razón para seguir volviendo.")
-CTA = ("Claim a pilot spot", "Quiero un lugar en el piloto")
-FINE = ("Setup fee waived for pilot businesses · English and Spanish", "Sin costo de instalación para negocios piloto · Español e inglés")
+CTA = ("Claim your spot", "Reserva tu lugar")
+FINE = ("Black Friday: setup fee waived · English and Spanish", "Black Friday: sin costo de instalación · Español e inglés")
 
 
 def home_page():
@@ -614,7 +656,7 @@ def home_page():
              ("Reward your regulars without cutting your prices. Clients earn complimentary rewards for coming back and referring friends. We set it up. It runs itself.",
               "Premia a tus clientes fieles sin bajar tus precios. Ganan premios de cortesía por volver y por recomendarte. Nosotros lo configuramos. Funciona solo."), CTA, FINE),
         problem(tint=True), how(HOME, L("home", "es-home")), industries(), gets(HOME), why(), plans(HOME, False), after(), faq_section(items),
-        claim(CLAIM_H, ("Pilot spots are open now. Setup fee waived.", "Hay lugares abiertos en el piloto. Sin costo de instalación.")),
+        claim(CLAIM_H, ("Pick your plan and check out in a minute. Setup fee waived for Black Friday.", "Elige tu plan y paga en un minuto. Sin costo de instalación por Black Friday.")),
         "</main>", footer(), end()])
 
 
@@ -650,7 +692,7 @@ def vertical_page(v):
         hero(v, label, None, (v["h1_en"], v["h1_es"]), sub, CTA, FINE),
         summary_block(*summary), problem(v), how(v, L(v["slug"], "es-" + v["slug_es"])), gets(v), why(v), plans(v, False), after(), faq_section(items),
         claim(CLAIM_H if not care else ("Your clients already trust you. Make the next visit easy.", "Tus clientes ya confían en ti. Facilita su próxima visita."),
-              (f"Pilot spots are open for {v['short_en']}. Setup fee waived.", f"Hay lugares abiertos en el piloto para {v['short_es']}. Sin costo de instalación.")),
+              (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday.")),
         "</main>", footer(), end()])
 
 
@@ -671,12 +713,12 @@ def rewards_page():
         ("The client pays the discounted price of the stay they choose.", "El cliente paga el precio con descuento de la estadía que elija."),
         ("Not cash, not a gift card, and not a guaranteed saving on any one stay.", "No es efectivo, no es tarjeta de regalo y no garantiza un ahorro específico en una estadía."),
     ])
-    dining = block(("Dining rewards · add-on for Full Book and Hands-Off", "Premios de restaurantes · complemento para Agenda Llena y Sin Complicaciones"), [
+    dining = block(("Dining rewards · Booked Solid and Day Off", "Premios de restaurantes · Agenda Llena y Día Libre"), [
         ("Discount offers of up to 50% off at more than 100,000 participating restaurants in the US and Canada, local and national, all cuisines.", "Ofertas de hasta 50% de descuento en más de 100,000 restaurantes participantes en EE. UU. y Canadá, locales y nacionales, de todo tipo de comida."),
         ("A \"$100 dining reward\" is a value made up of discount offers. It is not $100 to spend and doesn't pay for a full meal.", "Un \"premio de restaurantes de $100\" es un valor formado por ofertas de descuento. No son $100 para gastar ni cubre una comida completa."),
         ("The client pays a small activation fee, unless the business covers it.", "El cliente paga un pequeño cargo de activación, a menos que el negocio lo cubra."),
     ])
-    getaway = block(("Getaway certificates · add-on for Full Book and Hands-Off", "Certificados de escapada · complemento para Agenda Llena y Sin Complicaciones"), [
+    getaway = block(("Getaway certificates · domestic on Booked Solid, international on Day Off", "Certificados de escapada · nacionales en Agenda Llena, internacionales en Día Libre"), [
         (f"Promotional resort and hotel stays in {R['dest_en']}, {R['nights_en']}.", f"Estadías promocionales en resorts y hoteles en {R['dest_es']}, {R['nights_es']}."),
         ("Most stays are room-only. Some destinations, like select resorts in the Dominican Republic, offer all-inclusive stays where the meal-and-drink plan is charged per person.", "La mayoría de las estadías incluyen solo la habitación. Algunos destinos, como ciertos resorts en República Dominicana, ofrecen estadías todo incluido, donde el plan de comidas y bebidas se cobra por persona."),
         (f"<strong>What the client pays:</strong> taxes and fees for each night, paid in US dollars when activating, plus resort fees at check-in where they apply. Amounts vary by destination and are shown before activating. {R['example_en']}", f"<strong>Lo que paga el cliente:</strong> impuestos y cargos por cada noche, pagados en dólares al activar, más los cargos del resort al llegar cuando apliquen. Los montos varían según el destino y se muestran antes de activar. {R['example_es']}"),
@@ -753,13 +795,13 @@ def start_page():
     alt = ("/start", "/es/empezar")
     slug = BOOKING[LANG]
     return "".join([
-        head("Claim Your Pilot Spot | RetainOS", "Reserva tu lugar en el piloto | RetainOS",
-             "Pick a time for a 15-minute kickoff call and claim your RetainOS pilot spot. Setup fee waived.",
-             "Elige un horario para tu llamada de 15 minutos y reserva tu lugar en el piloto de RetainOS. Sin costo de instalación.", alt=alt),
+        head("Book a Kickoff Call | RetainOS", "Agenda una llamada de inicio | RetainOS",
+             "Pick a time for a 15-minute call with RetainOS.",
+             "Elige un horario para una llamada de 15 minutos con RetainOS.", alt=alt),
         topbar(alt, nav=False), '<main id="top"><section><div class="wrap startp">',
-        T("Pilot sign-up", "Inscripción al piloto", "div", "kicker"), T("Claim your pilot spot", "Reserva tu lugar en el piloto", "h1", "h1-sm"),
-        T("Pick a time for a quick 15-minute Google Meet, then add your details. That's it. Setup fee waived.",
-          "Elige un horario para una llamada rápida de 15 minutos por Google Meet y luego agrega tus datos. Eso es todo. Sin costo de instalación.", "p", "lead"),
+        T("Talk to us", "Habla con nosotros", "div", "kicker"), T("Book a kickoff call", "Agenda una llamada de inicio", "h1", "h1-sm"),
+        T("Pick a time for a quick 15-minute Google Meet, then add your details. Best for Day Off or if you have questions first.",
+          "Elige un horario para una llamada rápida de 15 minutos por Google Meet y luego agrega tus datos. Ideal para Día Libre o si tienes preguntas primero.", "p", "lead"),
         f'<div class="bookbox"><div id="booking-widget" data-slug="{slug}" data-mode="inline" data-api-url="https://ai.clientcontactpro.com"></div></div>',
         '<script type="module" src="https://ai.clientcontactpro.com/booking-widget/booking.js"></script>',
         T(f'Have a question first? <a href="/contact">Contact us</a>. Your information stays private: <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a>.',
@@ -808,7 +850,7 @@ def promo_page(v):
 def links_page():
     alt = ("/links", "/es/enlaces")
     rows = [
-        (start_href(), ("Claim a pilot spot", "Quiero un lugar en el piloto"), True),
+        (start_href(), ("Claim your spot", "Reserva tu lugar"), True),
         (url("/#how", "/es#how"), ("See how it works", "Mira cómo funciona"), False),
         (url("/#industries", "/es#industries"), ("Find your industry", "Encuentra tu industria"), False),
         (url("/salon-suite-owner-program", "/es/programa-para-duenos-de-suites-de-salon"), ("For salon suite owners", "Para dueños de suites de salón"), False),
