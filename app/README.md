@@ -145,3 +145,15 @@ deployment is live. The inventory of configured settings (names only, never
 values) requires `Authorization: Bearer <admin session>`, checked by calling
 `is_platform_admin` with that token. `/admin` shows the same list to a signed-in
 platform admin, so nobody has to read it out of a URL.
+
+## Referral links
+
+Every member carries an 8-character `referral_code`, generated on join and
+backfilled for older rows. Their card shows
+`…/join.html?shop=<shop>&ref=<code>`, and the card email carries the same link,
+so the ask travels with the one message every client receives.
+
+`join_shop` resolves the code inside that shop only, ignores unknown codes, and
+never credits a member to themselves. A hit writes one row into `referrals`
+(`referrer_id`, `friend_id`, `status = 'joined'`), which the dashboard reads
+under the existing owner policy and shows as "brought by".
