@@ -69,7 +69,10 @@ async function mcpCall(tool, args) {
   const result = out.result || {};
   const content = Array.isArray(result.content) ? result.content : [];
   const said = content.map((c) => c.text || "").join("\n");
-  return { ok: !result.isError, text: said };
+  /* The tool sometimes reports a refusal as ordinary content rather than
+     isError, so "sent: true" was being returned for mail that never went out. */
+  const refused = /^\s*error\b/i.test(said);
+  return { ok: !result.isError && !refused, text: said };
 }
 
 function emailBody(m) {
