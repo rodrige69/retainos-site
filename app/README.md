@@ -169,3 +169,17 @@ two half-finished cards.
 The reward at five is the $100 hotel card. The ten-visit stop uses
 `plan_top_reward()`: the $100 card on Come Back, the $500 one on Booked Solid
 and Day Off. Change the row for a shop to give something else.
+
+## Share links from the dashboard
+
+The dashboard has a "Send a link" card with two rows: the shop's booking link
+and the owner's own payment link. Both have a Share button that opens the
+phone's share sheet (`navigator.share`) and falls back to copying, so the owner
+can send either link without leaving the page.
+
+The payment link lives in `shop_settings`, one row per shop. Only the shop's
+owner can reach it: `anon` has no grant on the table, `authenticated` has
+select/insert/update, and the RLS policies check `shop_owners` against
+`auth.uid()`. It never appears on the join, thank-you or claim pages.
+`set_shop_payment(p_shop, p_link)` checks ownership and that the value looks
+like an http(s) link, and an empty value clears it.

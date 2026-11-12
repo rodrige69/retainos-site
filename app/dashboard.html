@@ -46,6 +46,30 @@
 
   <div class="kpis" id="kpis"></div>
 
+  <section class="card" id="shareCard" style="margin-top:18px">
+    <h2 class="sec" id="shareH" style="margin-top:0"></h2>
+    <p class="hint" id="shareSub"></p>
+
+    <div id="bookingRow">
+      <label class="label" id="lBooking" for="bookingUrl"></label>
+      <div class="linkbox">
+        <input id="bookingUrl" type="text" readonly>
+        <button class="btn" id="bookingShare" type="button"></button>
+      </div>
+    </div>
+
+    <label class="label" id="lPay" for="payUrl"></label>
+    <div class="linkbox" id="payRow">
+      <input id="payUrl" type="text" readonly>
+      <button class="btn" id="payShare" type="button"></button>
+    </div>
+    <div class="linkbox" id="payEdit">
+      <input id="payInput" type="text" autocapitalize="none" spellcheck="false" placeholder="https://venmo.com/yourname">
+      <button class="btn" id="paySave" type="button"></button>
+    </div>
+    <p class="hint" id="payNote"></p>
+  </section>
+
   <div class="cols">
     <section>
       <h2 class="sec" id="dueH"></h2>

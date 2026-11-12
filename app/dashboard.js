@@ -36,6 +36,13 @@ var T = {
     cadence: "usually every {n} days",
     qr: "QR & links", promo: "Announcement", shops: "Shops", out: "Sign out",
     text: "Text", textAria: "Text {name} from your own phone",
+    shareH: "Send a link",
+    shareSub: "Hand a client your booking link or your payment link straight from your phone.",
+    lBooking: "Booking link", lPay: "Payment link", share: "Share",
+    bookingNone: "No booking link on file yet.",
+    payHint: "Paste the link you use to get paid — Venmo, Cash App, Square, Zelle. Only you can see it.",
+    payNote: "Only you can see this link. It never appears on the client pages.",
+    paySave: "Save", paySaved: "Saved.", bad_link: "That doesn't look like a link. It has to start with https://",
     msgDue: "Hi {name}, it's {shop}. You're about due for your usual — want me to hold a spot this week?",
     msgNew: "Hi {name}, thanks for joining {shop}. When would you like to come in?",
     pendingNote: "This shop is waiting on payment. Clients can't join until it is marked paid on the Shops page.",
@@ -77,6 +84,13 @@ var T = {
     cadence: "suele venir cada {n} días",
     qr: "QR y enlaces", promo: "Anuncio", shops: "Negocios", out: "Salir",
     text: "Mensaje", textAria: "Escribele a {name} desde tu propio teléfono",
+    shareH: "Enviar un enlace",
+    shareSub: "Mándale a un cliente tu enlace de reservas o el de pago desde tu teléfono.",
+    lBooking: "Enlace de reservas", lPay: "Enlace de pago", share: "Compartir",
+    bookingNone: "Todavía no hay enlace de reservas.",
+    payHint: "Pega el enlace con el que cobras: Venmo, Cash App, Square, Zelle. Solo tú lo ves.",
+    payNote: "Solo tú ves este enlace. Nunca aparece en las páginas del cliente.",
+    paySave: "Guardar", paySaved: "Listo.", bad_link: "Eso no parece un enlace. Tiene que empezar con https://",
     msgDue: "Hola {name}, te saluda {shop}. Ya toca tu visita de siempre, ¿te aparto un lugar esta semana?",
     msgNew: "Hola {name}, gracias por unirte a {shop}. ¿Cuándo te gustaría venir?",
     pendingNote: "Este negocio espera el pago. Los clientes no pueden unirse hasta marcarlo como pagado en la página Negocios.",
@@ -97,6 +111,9 @@ function t(k, vars) {
   return s;
 }
 function $(id) { return document.getElementById(id); }
+
+var currentShop = null;
+var settingsRow = {};
 function locale() { return lang === "es" ? "es-US" : "en-US"; }
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"]/g, function (c) {
@@ -132,6 +149,43 @@ function withBooking(line, bookingLink) {
   return bookingLink ? line + " " + bookingLink : line;
 }
 
+function showEl(id) { var e = $(id); if (e) e.classList.remove("hidden"); }
+function hideEl(id) { var e = $(id); if (e) e.classList.add("hidden"); }
+
+/* The phone's own share sheet when it has one, copy otherwise: either way the
+   owner never has to retype a link or find it in a back office. */
+function shareLink(url, label, btn, input) {
+  if (!url) return;
+  if (navigator.share) {
+    navigator.share({ title: label, url: url }).catch(function () {});
+    return;
+  }
+  var done = function () {
+    var old = btn.textContent;
+    btn.textContent = t("copied");
+    setTimeout(function () { btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(done, done);
+    return;
+  }
+  /* Last resort on an older phone: select the link so it can be held and copied. */
+  if (input) { input.focus(); input.select(); }
+}
+
+function renderShare() {
+  if (!currentShop) return;
+  var link = currentShop.booking_link || "";
+  $("bookingUrl").value = link;
+  if (link) showEl("bookingRow"); else hideEl("bookingRow");
+
+  var pay = (settingsRow && settingsRow.payment_link) || "";
+  $("payUrl").value = pay;
+  if (pay) { showEl("payRow"); hideEl("payEdit"); }
+  else { hideEl("payRow"); showEl("payEdit"); }
+  $("payNote").textContent = pay ? t("payNote") : t("payHint");
+}
+
 function row(html) {
   var d = document.createElement("div");
   d.className = "row";
@@ -154,6 +208,13 @@ $("insightSub").textContent = t("insightSub");
 $("rewardsH").textContent = t("rewardsH");
 $("recentH").textContent = t("recentH");
 $("refH").textContent = t("refH");
+$("shareH").textContent = t("shareH");
+$("shareSub").textContent = t("shareSub");
+$("lBooking").textContent = t("lBooking");
+$("lPay").textContent = t("lPay");
+$("bookingShare").textContent = t("share");
+$("payShare").textContent = t("share");
+$("paySave").textContent = t("paySave");
 $("promoLink").textContent = t("promo");
 $("adminLink").textContent = t("shops");
 $("btnEn").setAttribute("aria-pressed", String(lang === "en"));
@@ -161,6 +222,31 @@ $("btnEs").setAttribute("aria-pressed", String(lang === "es"));
 $("btnEn").onclick = function () { localStorage.setItem("ros.lang", "en"); location.reload(); };
 $("btnEs").onclick = function () { localStorage.setItem("ros.lang", "es"); location.reload(); };
 $("signout").onclick = function () { SB.signOut(); };
+
+$("bookingShare").onclick = function () {
+  shareLink(currentShop && currentShop.booking_link, t("lBooking"), this, $("bookingUrl"));
+};
+$("payShare").onclick = function () {
+  shareLink(settingsRow && settingsRow.payment_link, t("lPay"), this, $("payUrl"));
+};
+$("paySave").onclick = function () {
+  if (!currentShop) return;
+  var btn = this;
+  var link = $("payInput").value.trim();
+  btn.disabled = true;
+  SB.rpc("set_shop_payment", { p_shop: currentShop.id, p_link: link }).then(function (r) {
+    btn.disabled = false;
+    if (!r || !r.ok) { say(t(r && r.error) || "Error", "bad"); return; }
+    settingsRow = { payment_link: r.payment_link };
+    $("payInput").value = "";
+    renderShare();
+    say(t("paySaved"), "good");
+  }).catch(function (e) {
+    btn.disabled = false;
+    if (e && e.status === 401) { location.replace("signin.html"); return; }
+    say(t(e && e.message) || t("bad_link"), "bad");
+  });
+};
 
 var hour = new Date().getHours();
 var greetKey = hour < 12 ? "greetM" : hour < 18 ? "greetA" : "greetE";
@@ -211,12 +297,16 @@ if (!SB.demo) {
       SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4"),
       SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500"),
       SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1"),
-      SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6")
+      SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6"),
+      SB.rest("shop_settings?select=payment_link&shop_id=eq." + shopId)
     ]);
   })
   .then(function (out) {
     if (!out) return;
     var shop = out[0][0] || {};
+    currentShop = shop;
+    settingsRow = (out[7] || [])[0] || {};
+    renderShare();
     var dash = out[1][0] || {};
     var due = out[2] || [];
     var rewards = out[3] || [];
