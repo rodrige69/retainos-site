@@ -38,6 +38,10 @@ var T = {
     copy: "Copy",
     copied: "Copied",
     note: "Keep this link: it opens your card on any phone. Tap it, then add it to your home screen and it's one tap from now on.",
+    refLbl: "Invite a friend",
+    refNote: "Send this link. Whoever joins with it gets credited to you, and the shop sees who brought them.",
+    refCopy: "Copy",
+    refCopied: "Copied",
     broken: "This code doesn't match a shop",
     brokenP: "Ask the front desk for the shop's code, or scan the QR on their counter.",
     demo: "Demo mode — no Supabase key in config.js, so nothing is saved.",
@@ -75,6 +79,10 @@ var T = {
     copy: "Copiar",
     copied: "Copiado",
     note: "Guarda este enlace: abre tu tarjeta en cualquier teléfono. Tócalo y agrégalo a tu pantalla de inicio para tenerlo a un toque.",
+    refLbl: "Invita a un amigo",
+    refNote: "Comparte este enlace. Quien se una con él queda a tu nombre, y el negocio ve quién lo trajo.",
+    refCopy: "Copiar",
+    refCopied: "Copiado",
     broken: "Este código no corresponde a un negocio",
     brokenP: "Pídele el código al mostrador o escanea el QR de la caja.",
     demo: "Modo demo: no hay clave de Supabase en config.js, así que no se guarda nada.",
@@ -85,6 +93,7 @@ var T = {
 var params = new URLSearchParams(location.search);
 var slug = params.get("shop");
 var incoming = params.get("t");
+var referredBy = params.get("ref");
 if (!slug) {
   var parts = location.pathname.split("/").filter(Boolean);
   slug = parts.length ? parts[parts.length - 1].replace(/\.html$/, "") : "";
@@ -107,7 +116,7 @@ function hide(id) { $(id).classList.add("hidden"); }
 function paint() {
   document.documentElement.lang = lang;
   ["h1", "sub", "lFirst", "lLast", "lPhone", "lEmail", "join", "fine",
-   "foot", "brokenH", "brokenP", "linkLbl", "copy"].forEach(function (id) {
+   "foot", "brokenH", "brokenP", "linkLbl", "copy", "refLbl", "refCopy"].forEach(function (id) {
     $(id).textContent = t(id);
   });
   /* The consent wording is the legal bit: it is stored verbatim with the member. */
@@ -148,6 +157,14 @@ function drawCard(c, token) {
   var left = Math.max((c.milestone || 5) - c.stamps, 0);
   $("cardNext").textContent = left === 0 ? t("ready") : t("next", { left: left, reward: reward.name });
   $("cardUrl").value = cardUrl(token);
+  if (c.ref_code) {
+    $("refUrl").value = location.origin + "/join.html?shop=" + encodeURIComponent(slug) +
+      "&ref=" + encodeURIComponent(c.ref_code);
+    $("refNote").textContent = t("refNote");
+    show("refBox");
+  } else {
+    hide("refBox");
+  }
   $("cardNote").textContent = t("note");
 }
 
@@ -238,7 +255,8 @@ $("join").onclick = function () {
     p_consent: T[lang].consent,
     p_first: first,
     p_last: last,
-    p_email: email
+    p_email: email,
+    p_ref: referredBy || null
   }).then(function (res) {
     if (!res || !res.ok) {
       return say(t(res && res.error) || "Error", "bad");
@@ -255,7 +273,7 @@ $("join").onclick = function () {
       }).catch(function () {});
     } catch (e) {}
     if (res.returning) {
-      drawCard({ returning: true, first_name: res.first_name, stamps: res.stamps, milestone: res.milestone }, res.token);
+      drawCard({ returning: true, first_name: res.first_name, stamps: res.stamps, milestone: res.milestone, ref_code: res.ref_code }, res.token);
       return;
     }
     location.href = "thankyou.html?shop=" + encodeURIComponent(shop.id) +
@@ -264,6 +282,18 @@ $("join").onclick = function () {
   }).catch(function (e) {
     say((e && e.message) || "Error", "bad");
   }).then(function () { btn.disabled = false; });
+};
+
+$("refCopy").onclick = function () {
+  var input = $("refUrl");
+  input.select();
+  var done = function () {
+    var b = $("refCopy");
+    b.textContent = t("refCopied");
+    setTimeout(function () { b.textContent = t("refCopy"); }, 1500);
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(input.value).then(done, done);
+  else { document.execCommand("copy"); done(); }
 };
 
 $("copy").onclick = function () {

@@ -17,6 +17,8 @@ var T = {
     dueH: "Due back", dueSub: "Clients past their usual gap for this shop.",
     insightH: "What to do today", insightSub: "Read off your own numbers.",
     rewardsH: "Rewards waiting", recentH: "Newest clients",
+    refH: "Referrals", refBy: "brought by {who}", refJoined: "joined {d}",
+    noRefs: "No referrals yet. Every client's card has an invite link on it.",
     none: "Nobody is overdue right now.",
     insReady: "{n} one visit from a reward",
     insDue: "{n} past their usual gap — worth a personal nudge",
@@ -53,6 +55,8 @@ var T = {
     dueH: "Por volver", dueSub: "Clientes pasados de su ritmo habitual en este negocio.",
     insightH: "Qué hacer hoy", insightSub: "Leído de tus propios números.",
     rewardsH: "Premios por usar", recentH: "Clientes nuevos",
+    refH: "Referidos", refBy: "traído por {who}", refJoined: "se unió {d}",
+    noRefs: "Aún no hay referidos. La tarjeta de cada cliente lleva su enlace para invitar.",
     none: "Ahora mismo nadie está atrasado.",
     insReady: "{n} a una visita de un premio",
     insDue: "{n} pasados de su ritmo — vale un mensaje personal",
@@ -123,6 +127,7 @@ $("insightH").textContent = t("insightH");
 $("insightSub").textContent = t("insightSub");
 $("rewardsH").textContent = t("rewardsH");
 $("recentH").textContent = t("recentH");
+$("refH").textContent = t("refH");
 $("promoLink").textContent = t("promo");
 $("adminLink").textContent = t("shops");
 $("btnEn").setAttribute("aria-pressed", String(lang === "en"));
@@ -179,7 +184,8 @@ if (!SB.demo) {
       SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6"),
       SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4"),
       SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits&" + s + "&order=joined_at.desc&limit=500"),
-      SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1")
+      SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1"),
+      SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6")
     ]);
   })
   .then(function (out) {
@@ -190,6 +196,7 @@ if (!SB.demo) {
     var rewards = out[3] || [];
     var members = out[4] || [];
     var lastMsg = out[5][0];
+    var referrals = out[6] || [];
     var newest = members.slice(0, 5);
 
     var names = {};
@@ -296,6 +303,25 @@ if (!SB.demo) {
           t("joined", { d: day(m.joined_at) }) + " · " +
           t("stampsNow", { n: stamps, total: goal }) + "</small></span></div>" +
           '<span class="meta">' + esc(stamps >= goal ? t("atGoal") : "") + "</span>"
+        ));
+      });
+    }
+
+    /* Who brought whom: the row is written when the friend joins, so this is
+       attribution from the database, not a guess from timestamps. */
+    var rf = $("refList");
+    rf.innerHTML = "";
+    if (!referrals.length) {
+      rf.appendChild(emptyRow(t("noRefs")));
+    } else {
+      referrals.forEach(function (r) {
+        var friend = nameOf(r.friend_id) || "—";
+        var who = nameOf(r.referrer_id) || "—";
+        rf.appendChild(row(
+          '<div class="who"><span class="init">' + esc(initials(friend)) + "</span>" +
+          "<span><b>" + esc(friend) + "</b><small>" +
+          esc(t("refJoined", { d: day(r.created_at) }) + " · " + t("refBy", { who: who })) +
+          "</small></span></div>"
         ));
       });
     }

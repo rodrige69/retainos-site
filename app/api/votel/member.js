@@ -1,6 +1,7 @@
 /* POST /api/votel/member — put a client on a shop's card.
  *
- * Body: { shop, phone, consent, first?, last?, email?, language? }
+ * Body: { shop, phone, consent, first?, last?, email?, language?, ref? }
+ *   ref       a member's referral code, when the friend arrived through one.
  *   consent   the exact wording the client agreed to. It is stored on the member
  *             row with the timestamp, so it is required, never assumed.
  *
@@ -36,7 +37,8 @@ module.exports = async (req, res) => {
       p_consent: consent,
       p_first: v.text(b.first, 80) || null,
       p_last: v.text(b.last, 80) || null,
-      p_email: v.text(b.email, 160) || null
+      p_email: v.text(b.email, 160) || null,
+      p_ref: v.text(b.ref, 20) || null
     });
     if (!r.ok) {
       res.status(502).json({ ok: false, error: "supabase_error", status: r.status });

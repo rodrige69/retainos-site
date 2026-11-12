@@ -73,7 +73,7 @@ async function mcpCall(tool, args) {
 }
 
 function emailBody(m) {
-  return [
+  var lines = [
     "Hi " + (m.first_name || "there") + ",",
     "",
     "You're in at " + m.shop + ". Your card is here:",
@@ -81,14 +81,29 @@ function emailBody(m) {
     m.card_url,
     "",
     "Open that link and add it to your phone's home screen, so it's one tap at the counter.",
-    "One visit is one stamp. You're at " + (m.stamps || 0) + " of " + (m.milestone || 5) + ".",
+    "One visit is one stamp. You're at " + (m.stamps || 0) + " of " + (m.milestone || 5) + "."
+  ];
+
+  /* The referral ask rides along with the card email: it is the one message
+     every client is guaranteed to receive, so nobody depends on a text. */
+  if (m.ref_url) {
+    lines.push(
+      "",
+      "Know someone who'd like this? Send them your invite link — whoever joins with it gets credited to you:",
+      "",
+      m.ref_url
+    );
+  }
+
+  lines.push(
     "",
     "Lost the link? Reply to this email and ask, or give the shop your phone number.",
     "",
     "Texts are only about your visits and rewards. Reply STOP to opt out, HELP for help.",
     "",
     "— " + m.shop
-  ].join("\n");
+  );
+  return lines.join("\n");
 }
 
 module.exports = async function handler(req, res) {
