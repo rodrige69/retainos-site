@@ -13,15 +13,21 @@ module.exports = (req, res) => {
     return;
   }
 
+  /* config.js parks its values on window. If another module already required it
+     in this same instance, the cached module never runs again and window is
+     gone, so the read would flip between true and false per request. Drop it
+     from the cache first so the answer is the same every time. */
   let publicConfig = {};
   try {
+    const configPath = require.resolve("../config.js");
+    delete require.cache[configPath];
     const hadWindow = Object.prototype.hasOwnProperty.call(global, "window");
     const previous = global.window;
     global.window = global.window || {};
-    require("../config.js");
+    require(configPath);
     publicConfig = global.window.RETAINOS_CONFIG || {};
-    if (hadWindow) global.window = previous;
-    else delete global.window;
+    global.window = hadWindow ? previous : global.window;
+    if (!hadWindow) delete global.window;
   } catch (e) {
     publicConfig = {};
   }
