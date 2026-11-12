@@ -43,6 +43,7 @@ var T = {
     payHint: "Paste the link you use to get paid — Venmo, Cash App, Square, Zelle. Only you can see it.",
     payNote: "Only you can see this link. It never appears on the client pages.",
     payLoadFail: "Couldn't load your payment link just now. Everything else here still works — pull to refresh to try again.",
+    partial: "Some of this page didn't load. Pull to refresh to try again.",
     paySave: "Save", paySaved: "Saved.", bad_link: "That doesn't look like a link. It has to start with https://",
     msgDue: "Hi {name}, it's {shop}. You're about due for your usual — want me to hold a spot this week?",
     msgNew: "Hi {name}, thanks for joining {shop}. When would you like to come in?",
@@ -92,6 +93,7 @@ var T = {
     payHint: "Pega el enlace con el que cobras: Venmo, Cash App, Square, Zelle. Solo tú lo ves.",
     payNote: "Solo tú ves este enlace. Nunca aparece en las páginas del cliente.",
     payLoadFail: "No pudimos cargar tu enlace de pago. Todo lo demás sigue funcionando: recarga para intentarlo otra vez.",
+    partial: "Una parte de esta página no cargó. Recarga para intentarlo otra vez.",
     paySave: "Guardar", paySaved: "Listo.", bad_link: "Eso no parece un enlace. Tiene que empezar con https://",
     msgDue: "Hola {name}, te saluda {shop}. Ya toca tu visita de siempre, ¿te aparto un lugar esta semana?",
     msgNew: "Hola {name}, gracias por unirte a {shop}. ¿Cuándo te gustaría venir?",
@@ -117,6 +119,23 @@ function $(id) { return document.getElementById(id); }
 var currentShop = null;
 var settingsRow = {};
 var settingsFailed = false;
+var partialLoad = false;
+
+/* Each panel on this page loads on its own. A failed request costs that panel
+   and nothing else: the owner still sees their numbers, their clients and
+   their links, and gets one line saying something is missing. */
+function soft(p) {
+  return p.catch(function () { partialLoad = true; return { failed: true }; });
+}
+function arr(v) { return Array.isArray(v) ? v : []; }
+
+function notePartial() {
+  if (!partialLoad) return;
+  var m = $("msg");
+  if (!m || m.textContent.trim()) return;
+  m.className = "msg";
+  m.textContent = t("partial");
+}
 function locale() { return lang === "es" ? "es-US" : "en-US"; }
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"]/g, function (c) {
@@ -289,8 +308,21 @@ if (!SB.demo) {
   }).catch(function () {});
 }
 
-(SB.demo ? Promise.reject({ status: 0, message: t("demo") }) : SB.rest("shop_owners?select=shop_id,role"))
+var ownersFailed = false;
+(SB.demo
+  ? Promise.reject({ status: 0, message: t("demo") })
+  : SB.rest("shop_owners?select=shop_id,role").catch(function (e) {
+      if (e && e.status === 401) throw e;
+      ownersFailed = true;
+      partialLoad = true;
+      return [];
+    }))
   .then(function (owners) {
+    if (ownersFailed) {
+      $("greet").textContent = t(greetKey);
+      notePartial();
+      return null;
+    }
     if (!owners || !owners.length) {
       $("greet").textContent = t(greetKey);
       var m = $("msg");
@@ -301,32 +333,29 @@ if (!SB.demo) {
     var s = "shop_id=eq." + encodeURIComponent(owners[0].shop_id);
     var shopId = encodeURIComponent(owners[0].shop_id);
     return Promise.all([
-      SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId),
-      SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId),
-      SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6"),
-      SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4"),
-      SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500"),
-      SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1"),
-      SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6"),
-      /* Optional: the payment link is the least important thing on this page,
-         so a failure here must never cost the owner their whole dashboard. */
-      SB.rest("shop_settings?select=payment_link&shop_id=eq." + shopId)
-        .catch(function () { return { failed: true }; })
+      soft(SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId)),
+      soft(SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId)),
+      soft(SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6")),
+      soft(SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4")),
+      soft(SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500")),
+      soft(SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1")),
+      soft(SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6")),
+      soft(SB.rest("shop_settings?select=payment_link&shop_id=eq." + shopId))
     ]);
   })
   .then(function (out) {
     if (!out) return;
-    var shop = out[0][0] || {};
+    var shop = arr(out[0])[0] || {};
     currentShop = shop;
     if (out[7] && out[7].failed) settingsFailed = true;
-    else settingsRow = (out[7] || [])[0] || {};
+    else settingsRow = arr(out[7])[0] || {};
     renderShare();
-    var dash = out[1][0] || {};
-    var due = out[2] || [];
-    var rewards = out[3] || [];
-    var members = out[4] || [];
-    var lastMsg = out[5][0];
-    var referrals = out[6] || [];
+    var dash = arr(out[1])[0] || {};
+    var due = arr(out[2]);
+    var rewards = arr(out[3]);
+    var members = arr(out[4]);
+    var lastMsg = arr(out[5])[0];
+    var referrals = arr(out[6]);
     var newest = members.slice(0, 5);
 
     var names = {};
@@ -423,7 +452,7 @@ if (!SB.demo) {
        wants to see, and it is the only row that proves the join link is working. */
     var rec = $("recentList");
     rec.innerHTML = "";
-    var goal = shop.milestone || 5;
+    var goal = shop.milestone || 10;
     if (!newest.length) {
       rec.appendChild(emptyRow(t("noClients")));
     } else {
@@ -443,6 +472,8 @@ if (!SB.demo) {
 
     /* Who brought whom: the row is written when the friend joins, so this is
        attribution from the database, not a guess from timestamps. */
+    notePartial();
+
     var rf = $("refList");
     rf.innerHTML = "";
     if (!referrals.length) {
