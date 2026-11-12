@@ -207,8 +207,7 @@ function shareLink(url, label, btn, input) {
   if (input) { input.focus(); input.select(); }
 }
 
-function renderShare() {
-  if (!currentShop) return;
+function renderBookingLink() {
   var link = currentShop.booking_link || "";
   $("bookingUrl").value = link;
   if (link) {
@@ -223,6 +222,22 @@ function renderShare() {
     showEl("bookingEdit");
     hideEl("bookingChange");
     $("bookingNote").textContent = t("bookingHint");
+  }
+}
+
+function renderShare() {
+  if (!currentShop) return;
+
+  /* Without the shop record we don't know the link, and an empty paste box
+     would claim there isn't one. Say we couldn't load it instead. */
+  if (failedPanel[0]) {
+    $("bookingUrl").value = "";
+    hideEl("bookingView");
+    hideEl("bookingEdit");
+    hideEl("bookingChange");
+    $("bookingNote").textContent = t("cantLoad");
+  } else {
+    renderBookingLink();
   }
 
   if (settingsFailed) {
