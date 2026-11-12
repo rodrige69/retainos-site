@@ -25,7 +25,7 @@ var T = {
     badEmail: "That email doesn't look right.",
     needConsent: "Please tick the box so we're allowed to text you.",
     badPhone: "That number looks short — use 10 digits.",
-    sub5: "The {n}th visit unlocks your {reward}.",
+    sub10: "A stamp every visit. A reward at 5, and a bigger one at 10.",
     subPlain: "Every visit earns a stamp.",
     hi: "You're in, {name}",
     hiReturn: "Welcome back, {name}",
@@ -66,7 +66,7 @@ var T = {
     badEmail: "Ese correo no parece correcto.",
     needConsent: "Marca la casilla para que podamos escribirte.",
     badPhone: "Ese número parece corto: usa 10 dígitos.",
-    sub5: "La visita número {n} desbloquea tu {reward}.",
+    sub10: "Un sello por visita. Un premio a las 5 y uno más grande a las 10.",
     subPlain: "Cada visita gana un sello.",
     hi: "Ya estás dentro, {name}",
     hiReturn: "Bienvenido de nuevo, {name}",
@@ -121,10 +121,7 @@ function paint() {
   });
   /* The consent wording is the legal bit: it is stored verbatim with the member. */
   $("consentText").textContent = t("consent");
-  var sub = shop && shop.milestone
-    ? t("sub5", { n: shop.milestone, reward: reward.name })
-    : t("subPlain");
-  $("sub").textContent = sub;
+  $("sub").textContent = shop && shop.milestone ? t("sub10") : t("subPlain");
   $("startNote").textContent = shop && shop.stamps_at_join
     ? t("startNote", { n: shop.stamps_at_join })
     : t("startNone");
@@ -146,16 +143,28 @@ function drawCard(c, token) {
   var hiKey = c.returning ? (c.first_name ? "hiReturn" : "hiBack") : (c.first_name ? "hi" : "hiPlain");
   $("cardHi").textContent = c.first_name ? t(hiKey, { name: c.first_name }) : t(hiKey);
   $("cardSub").textContent = t("cardSub", { stamps: c.stamps, milestone: c.milestone });
+  var rewards = c.rewards && c.rewards.length ? c.rewards : [{ at: c.milestone || 5, name: reward.name }];
+  var total = c.milestone || 10;
   var row = $("stampRow");
   row.innerHTML = "";
-  for (var i = 0; i < (c.milestone || 5); i++) {
+  for (var i = 0; i < total; i++) {
     var el = document.createElement("i");
+    var stop = rewards.filter(function (r) { return r.at === i + 1; })[0];
     if (i < c.stamps) { el.className = "on"; el.textContent = "✓"; }
-    else { el.textContent = String(i + 1); }
+    else { el.textContent = stop ? "★" : String(i + 1); }
+    if (stop) {
+      el.className = (el.className + " prize").trim();
+      el.setAttribute("title", stop.name || "");
+    }
     row.appendChild(el);
   }
-  var left = Math.max((c.milestone || 5) - c.stamps, 0);
-  $("cardNext").textContent = left === 0 ? t("ready") : t("next", { left: left, reward: reward.name });
+
+  /* The next stop is the only thing a client needs to know: how many visits
+     until the next thing they get. */
+  var next = rewards.filter(function (r) { return r.at > c.stamps; })[0];
+  $("cardNext").textContent = next
+    ? t("next", { left: next.at - c.stamps, reward: next.name || "" })
+    : t("ready");
   $("cardUrl").value = cardUrl(token);
   if (c.ref_code) {
     $("refUrl").value = location.origin + "/join.html?shop=" + encodeURIComponent(slug) +

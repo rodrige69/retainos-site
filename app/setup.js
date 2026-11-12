@@ -30,7 +30,7 @@ var T = {
     lStart: "Stamps at join",
     lMile: "Stamps to the card",
     lTexts: "Texts a month",
-    mileNote: "Two free stamps means the client earns the card in a few visits, not many.",
+    mileNote: "Every card is ten visits: a reward at 5, a bigger one at 10, then it starts over.",
     lTier: "Getaways",
     lTool: "Booking system",
     lLink: "Booking link",
@@ -94,7 +94,7 @@ var T = {
     lStart: "Sellos al unirse",
     lMile: "Sellos para la tarjeta",
     lTexts: "Textos al mes",
-    mileNote: "Dos sellos de regalo hacen que la tarjeta se gane en pocas visitas.",
+    mileNote: "Cada tarjeta son diez visitas: un premio a las 5, uno más grande a las 10, y vuelve a empezar.",
     lTier: "Escapadas",
     lTool: "Sistema de reservas",
     lLink: "Enlace de reservas",
@@ -190,27 +190,24 @@ function paintTypes() {
   sel.value = keep;
 }
 
+/* The card is always ten visits; only the head start changes with how often
+   this kind of business is usually visited. */
 function stampsFor(days) {
-  if (!days || days <= 30) return { milestone: 5, start: 2 };
-  if (days <= 45) return { milestone: 4, start: 1 };
-  return { milestone: 3, start: 1 };
+  return { start: !days || days <= 30 ? 2 : 1 };
 }
 
 function applyTypeDefaults() {
   var bt = types.filter(function (x) { return x.key === $("type").value; })[0];
   if (!bt) return;
   var d = stampsFor(bt.rebook_days);
-  $("milestone").value = d.milestone;
+  $("milestone").value = "10";
   $("start").value = d.start;
   paintMile();
 }
 
 function paintMile() {
-  var m = parseInt(val("milestone"), 10) || 0;
   var s = parseInt(val("start"), 10) || 0;
-  $("mileNote").textContent = m && s >= 0 && m > s
-    ? t("mileNote") + " (" + (m - s) + ")"
-    : t("mileNote");
+  $("mileNote").textContent = t("mileNote") + (s ? " +" + s : "");
 }
 
 function slugify(s) {

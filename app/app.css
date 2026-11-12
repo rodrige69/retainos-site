@@ -76,6 +76,8 @@ input:focus,select:focus{outline:3px solid var(--accent-bg);border-color:var(--a
 .promo b{display:block;font-size:15px;margin-bottom:4px}
 .promo p{margin:0;font-size:14px;line-height:1.45;color:#5B5F66}
 .promo a{display:inline-block;margin-top:10px;font-weight:700;color:var(--accent);text-decoration:none}
+.stamps i.prize{border-color:var(--accent);font-size:13px}
+.stamps i.prize.on{background:var(--accent);border-color:var(--accent)}
 .reach{display:flex;gap:12px;margin-top:6px}
 .reach a{font-size:12px;font-weight:800;letter-spacing:.02em;color:var(--accent);text-decoration:none}
 .reach a:hover{text-decoration:underline}

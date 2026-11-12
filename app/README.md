@@ -157,3 +157,15 @@ so the ask travels with the one message every client receives.
 never credits a member to themselves. A hit writes one row into `referrals`
 (`referrer_id`, `friend_id`, `status = 'joined'`), which the dashboard reads
 under the existing owner policy and shows as "brought by".
+
+## Two rewards per card
+
+A card is ten visits. `shop_milestones` holds the stops for a shop (5 and 10 by
+default, seeded when the shop is created); `log_visit` pays a reward when the
+cycle lands exactly on a stop and resets the card after the last one, so a
+client gets something at five and something bigger at ten without ever holding
+two half-finished cards.
+
+The reward at five is the $100 hotel card. The ten-visit stop uses
+`plan_top_reward()`: the $100 card on Come Back, the $500 one on Booked Solid
+and Day Off. Change the row for a shop to give something else.
