@@ -446,7 +446,9 @@ var ownersFailed = false;
 
     var rw = $("rewardList");
     rw.innerHTML = "";
-    if (failedPanel[3]) {
+    /* The names on these rows come from the member list, so without it these
+       panels can't be filled honestly either. */
+    if (failedPanel[3] || failedPanel[4]) {
       rw.appendChild(emptyRow(t("cantLoad")));
     } else if (!rewards.length) {
       rw.appendChild(emptyRow(t("noRewards")));
@@ -490,7 +492,7 @@ var ownersFailed = false;
 
     var rf = $("refList");
     rf.innerHTML = "";
-    if (failedPanel[6]) {
+    if (failedPanel[6] || failedPanel[4]) {
       rf.appendChild(emptyRow(t("cantLoad")));
     } else if (!referrals.length) {
       rf.appendChild(emptyRow(t("noRefs")));
