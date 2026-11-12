@@ -137,3 +137,11 @@ so the page being reachable is cosmetic, not the gate. Self-serve signups
 Booked Solid and Day Off shops keep their Votel sub-account id on
 `shops.votel_subaccount_id`, pasted in during setup. Come Back shops have none:
 they send from the main account and are grouped there by the `ros-shop:` tag.
+
+## `/api/health`
+
+Publicly it answers `{ok, commit}` and nothing else — enough to tell which
+deployment is live. The inventory of configured settings (names only, never
+values) requires `Authorization: Bearer <admin session>`, checked by calling
+`is_platform_admin` with that token. `/admin` shows the same list to a signed-in
+platform admin, so nobody has to read it out of a URL.

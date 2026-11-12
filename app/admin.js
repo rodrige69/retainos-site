@@ -26,6 +26,9 @@ var T = {
     notAdmin: "This login can't change shop status.",
     signin: "Session expired. Sign in again.",
     err: "That didn't work. Try again.",
+    healthH: "This deployment sees",
+    hSet: "set",
+    hMissing: "missing",
     foot: "Powered by RetainOS"
   },
   es: {
@@ -50,6 +53,9 @@ var T = {
     notAdmin: "Este acceso no puede cambiar el estado de los negocios.",
     signin: "La sesión caducó. Entra otra vez.",
     err: "No funcionó. Inténtalo de nuevo.",
+    healthH: "Este despliegue ve",
+    hSet: "listo",
+    hMissing: "falta",
     foot: "Con tecnología de RetainOS"
   }
 };
@@ -79,6 +85,7 @@ function paint() {
   $("sub").textContent = t("sub");
   $("newShop").textContent = t("newShop");
   $("back").textContent = t("back");
+  $("healthH").textContent = t("healthH");
   $("foot").textContent = t("foot");
   document.querySelectorAll("[data-lang]").forEach(function (b) {
     b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
@@ -153,6 +160,32 @@ function flip(shopId, next, btn) {
     });
 }
 
+/* Settings this deployment can read. The health endpoint answers with names
+   only, and only once it has accepted this admin's token — signed out it
+   returns nothing useful, so the card simply stays hidden. */
+function loadHealth() {
+  var s = SB.session();
+  if (!s || !s.access_token) return;
+  fetch("api/health", { headers: { Authorization: "Bearer " + s.access_token } })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || typeof j.votel_api_token === "undefined") return;
+      var names = ["votel_api_token", "votel_api_key", "supabase_url", "supabase_anon_key", "votel_email_from"];
+      var box = $("healthList");
+      box.innerHTML = "";
+      names.forEach(function (name) {
+        var ok = j[name] === true;
+        box.appendChild(row(
+          "<span><b>" + esc(name) + "</b></span>" +
+          '<span class="meta"><span class="pill ' + (ok ? "on" : "off") + '">' +
+          esc(ok ? t("hSet") : t("hMissing")) + "</span></span>"
+        ));
+      });
+      $("health").classList.remove("hidden");
+    })
+    .catch(function () {});
+}
+
 function load() {
   SB.rest("shops?select=id,name,plan,status,votel_subaccount_id&order=name")
     .then(function (rows) { render(rows || []); })
@@ -171,6 +204,7 @@ if (SB.demo) {
 } else {
   SB.rpc("is_platform_admin").then(function (ok) {
     if (!ok) { say(t("notAdmin"), "bad"); return; }
+    loadHealth();
     load();
   }).catch(function () { say(t("notAdmin"), "bad"); });
 }
