@@ -412,6 +412,10 @@ var ownersFailed = false;
     if (!out) return;
     var shop = arr(out[0])[0] || {};
     currentShop = shop;
+    /* The card names links that belong to a specific shop, so it only appears
+       once we actually have that shop back. Before that, empty boxes with dead
+       Share buttons would be a false-empty state. */
+    if (!failedPanel[0]) showEl("shareCard");
     if (failedPanel[7]) settingsFailed = true;
     else settingsRow = arr(out[7])[0] || {};
     renderShare();
