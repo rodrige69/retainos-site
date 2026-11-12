@@ -48,7 +48,8 @@ var T = {
     payLoadFail: "Couldn't load your payment link just now. Everything else here still works — pull to refresh to try again.",
     partial: "Some of this page didn't load. Pull to refresh to try again.",
     cantLoad: "Couldn't load this — pull to refresh.",
-    paySave: "Save", paySaved: "Saved.", bad_link: "That doesn't look like a link. It has to start with https://",
+    paySave: "Save", paySaved: "Saved.",
+    bad_link: "That doesn't look like a link. Try the address on its own, like booksy.com/yourshop.",
     msgDue: "Hi {name}, it's {shop}. You're about due for your usual — want me to hold a spot this week?",
     msgNew: "Hi {name}, thanks for joining {shop}. When would you like to come in?",
     pendingNote: "This shop is waiting on payment. Clients can't join until it is marked paid on the Shops page.",
@@ -102,7 +103,8 @@ var T = {
     payLoadFail: "No pudimos cargar tu enlace de pago. Todo lo demás sigue funcionando: recarga para intentarlo otra vez.",
     partial: "Una parte de esta página no cargó. Recarga para intentarlo otra vez.",
     cantLoad: "No se pudo cargar esto. Recarga la página.",
-    paySave: "Guardar", paySaved: "Listo.", bad_link: "Eso no parece un enlace. Tiene que empezar con https://",
+    paySave: "Guardar", paySaved: "Listo.",
+    bad_link: "Eso no parece un enlace. Pega solo la dirección, como booksy.com/tunegocio.",
     msgDue: "Hola {name}, te saluda {shop}. Ya toca tu visita de siempre, ¿te aparto un lugar esta semana?",
     msgNew: "Hola {name}, gracias por unirte a {shop}. ¿Cuándo te gustaría venir?",
     pendingNote: "Este negocio espera el pago. Los clientes no pueden unirse hasta marcarlo como pagado en la página Negocios.",
@@ -181,6 +183,16 @@ function reach(phone, name, body) {
 
 function withBooking(line, bookingLink) {
   return bookingLink ? line + " " + bookingLink : line;
+}
+
+/* People paste "booksy.com/yourshop", not "https://booksy.com/yourshop". Add the
+   scheme for them instead of bouncing it back with an error. */
+function fixLink(v) {
+  var s = String(v == null ? "" : v).trim();
+  if (!s) return "";
+  if (/^https?:\/\//i.test(s)) return s;
+  if (/^\/\//.test(s)) return "https:" + s;
+  return "https://" + s;
 }
 
 function showEl(id) { var e = $(id); if (e) e.classList.remove("hidden"); }
@@ -303,7 +315,7 @@ $("bookingChange").onclick = function () {
 $("bookingSave").onclick = function () {
   if (!currentShop) return;
   var btn = this;
-  var link = $("bookingInput").value.trim();
+  var link = fixLink($("bookingInput").value);
   btn.disabled = true;
   SB.rpc("set_shop_booking", { p_shop: currentShop.id, p_link: link }).then(function (r) {
     btn.disabled = false;
@@ -326,7 +338,7 @@ $("payShare").onclick = function () {
 $("paySave").onclick = function () {
   if (!currentShop) return;
   var btn = this;
-  var link = $("payInput").value.trim();
+  var link = fixLink($("payInput").value);
   btn.disabled = true;
   SB.rpc("set_shop_payment", { p_shop: currentShop.id, p_link: link }).then(function (r) {
     btn.disabled = false;

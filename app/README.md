@@ -188,3 +188,8 @@ The booking link can be changed from the same card after setup
 (`set_shop_booking`), which matters because shops switch booking tools. Both
 link writers check ownership and only accept http(s), so the dashboard can't be
 used to store something else there.
+
+Pasted links are normalised rather than rejected: `booksy.com/yourshop` and
+`//square.site/x` both become `https://…` in `set_shop_booking` and
+`set_shop_payment`, and on the dashboard before the save is sent. Anything with
+a non-http scheme, or with spaces, is still refused.
