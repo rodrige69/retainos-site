@@ -169,14 +169,16 @@ two half-finished cards.
 What each plan hands out is decided by `plan_milestone_reward(plan, stop)`,
 which follows what the rewards page sells:
 
-| Plan | 5 visits | 10 visits |
-|---|---|---|
-| Come Back (`regulars`) | Hotel Savings Card - $100 | Hotel Savings Card - $500 |
-| Booked Solid (`full_book`) | Dining Reward - $100 | Domestic Getaway |
-| Day Off (`hands_off`) | Dining Reward - $100 | International Getaway |
+| Plan | 5 visits | 7 visits | 10 visits |
+|---|---|---|---|
+| Come Back (`regulars`) | Hotel Savings Card - $100 | — | Hotel Savings Card - $500 |
+| Booked Solid (`full_book`) | Hotel Savings Card - $100 | Dining Reward - $100 | Domestic Getaway |
+| Day Off (`hands_off`) | Hotel Savings Card - $100 | Dining Reward - $100 | International Getaway |
 
-Every plan includes hotel savings cards, so a Come Back shop still hands out
-`hotel_100`/`hotel_500`. The `rewards.plan_required` column records which plan
+Every plan includes hotel savings cards, so the first stop is a hotel card on
+all of them; the higher plans add a dining stop at seven before their getaway.
+Changing a shop's `plan` re-seeds its stops through a trigger, and stops a plan
+no longer has are removed. The `rewards.plan_required` column records which plan
 a reward belongs to, but nothing filters by it at runtime: the stops come from
 the shop's own `shop_milestones` rows. `get_shop_rewards(shop)` returns them with
 names for the join page, and `join_shop` reports the first stop's reward for the

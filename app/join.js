@@ -26,6 +26,7 @@ var T = {
     needConsent: "Please tick the box so we're allowed to text you.",
     badPhone: "That number looks short — use 10 digits.",
     sub10: "A stamp every visit. A reward at 5, and a bigger one at 10.",
+    subStops: "A stamp every visit. Rewards at {stops}.",
     subPlain: "Every visit earns a stamp.",
     hi: "You're in, {name}",
     hiReturn: "Welcome back, {name}",
@@ -67,6 +68,7 @@ var T = {
     needConsent: "Marca la casilla para que podamos escribirte.",
     badPhone: "Ese número parece corto: usa 10 dígitos.",
     sub10: "Un sello por visita. Un premio a las 5 y uno más grande a las 10.",
+    subStops: "Un sello por visita. Premios a las {stops}.",
     subPlain: "Cada visita gana un sello.",
     hi: "Ya estás dentro, {name}",
     hiReturn: "Bienvenido de nuevo, {name}",
@@ -101,6 +103,7 @@ if (!slug) {
 
 var shop = null;
 var reward = { name: "hotel savings card" };
+var stopsAt = [];
 var lang = "en";
 var tokenKey = "ros.card." + slug;
 
@@ -121,7 +124,9 @@ function paint() {
   });
   /* The consent wording is the legal bit: it is stored verbatim with the member. */
   $("consentText").textContent = t("consent");
-  $("sub").textContent = shop && shop.milestone ? t("sub10") : t("subPlain");
+  $("sub").textContent = stopsAt.length
+    ? t("subStops", { stops: stopsAt.join(", ") })
+    : (shop && shop.milestone ? t("sub10") : t("subPlain"));
   $("startNote").textContent = shop && shop.stamps_at_join
     ? t("startNote", { n: shop.stamps_at_join })
     : t("startNone");
@@ -226,7 +231,10 @@ function boot() {
          for the cheapest plan's card. */
       return SB.rpc("get_shop_rewards", { p_shop: slug })
         .then(function (list) {
-          if (list && list.length) reward = { name: list[0].name };
+          if (list && list.length) {
+            reward = { name: list[0].name };
+            stopsAt = list.map(function (r) { return r.at; });
+          }
           paint();
           var token = incoming || localStorage.getItem(tokenKey);
           if (token) return loadCard(token);
