@@ -97,7 +97,20 @@ not get mail — the signup still succeeds.
 ### The milestone message
 
 When a client reaches the card, `log_visit` returns the reward with its
-`voucher_code`. The message Votel sends should link to
+`voucher_code` and a ready-made `claim_url`, so a workflow does not have to
+build the link itself:
+
+```json
+{ "ok": true, "reward": "hotel_100", "reward_name": "Hotel Savings Card - $100",
+  "reward_id": "…uuid…", "voucher_code": "81AA2C0A2F",
+  "claim_url": "https://app.retainos.co/claim?code=81AA2C0A2F" }
+```
+
+`reward_id` is the internal row id and is **not** a claim code — only
+`voucher_code` / `claim_url` work on the claim page. `voucher_code` and
+`claim_url` are `null` when no reward was issued on that visit.
+
+The message Votel sends should link to
 
 ```
 https://app.retainos.co/claim?code=<voucher_code>

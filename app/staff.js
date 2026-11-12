@@ -167,7 +167,7 @@ function done(r) {
     row.appendChild(el);
   }
   document.getElementById("doneReward").textContent = r.reward
-    ? t("reward", { reward: r.reward_name || r.reward, code: (r.reward_id || "").slice(0, 8).toUpperCase() })
+    ? t("reward", { reward: r.reward_name || r.reward, code: (r.voucher_code || "").toUpperCase() })
     : t("noReward", { left: Math.max(r.milestone - r.cycle, 0) });
 }
 
