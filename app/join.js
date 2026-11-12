@@ -222,9 +222,11 @@ function boot() {
       $("badge").textContent = shop.name.charAt(0).toUpperCase();
       $("shopMeta").textContent = "";
       paint();
-      return SB.rest("rewards?select=name&plan_required=eq.regulars&kind=eq.hotel_card&order=amount_usd&limit=1")
-        .then(function (r) {
-          if (r && r.length) reward = r[0];
+      /* This shop's own reward stops, whatever plan it is on: never a lookup
+         for the cheapest plan's card. */
+      return SB.rpc("get_shop_rewards", { p_shop: slug })
+        .then(function (list) {
+          if (list && list.length) reward = { name: list[0].name };
           paint();
           var token = incoming || localStorage.getItem(tokenKey);
           if (token) return loadCard(token);

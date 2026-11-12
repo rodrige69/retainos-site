@@ -166,9 +166,21 @@ cycle lands exactly on a stop and resets the card after the last one, so a
 client gets something at five and something bigger at ten without ever holding
 two half-finished cards.
 
-The reward at five is the $100 hotel card. The ten-visit stop uses
-`plan_top_reward()`: the $100 card on Come Back, the $500 one on Booked Solid
-and Day Off. Change the row for a shop to give something else.
+What each plan hands out is decided by `plan_milestone_reward(plan, stop)`,
+which follows what the rewards page sells:
+
+| Plan | 5 visits | 10 visits |
+|---|---|---|
+| Come Back (`regulars`) | Hotel Savings Card - $100 | Hotel Savings Card - $500 |
+| Booked Solid (`full_book`) | Dining Reward - $100 | Domestic Getaway |
+| Day Off (`hands_off`) | Dining Reward - $100 | International Getaway |
+
+Every plan includes hotel savings cards, so a Come Back shop still hands out
+`hotel_100`/`hotel_500`. The `rewards.plan_required` column records which plan
+a reward belongs to, but nothing filters by it at runtime: the stops come from
+the shop's own `shop_milestones` rows. `get_shop_rewards(shop)` returns them with
+names for the join page, and `join_shop` reports the first stop's reward for the
+plan the shop is actually on.
 
 ## Share links from the dashboard
 
