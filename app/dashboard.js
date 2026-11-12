@@ -42,6 +42,7 @@ var T = {
     bookingNone: "No booking link on file yet.",
     payHint: "Paste the link you use to get paid — Venmo, Cash App, Square, Zelle. Only you can see it.",
     payNote: "Only you can see this link. It never appears on the client pages.",
+    payLoadFail: "Couldn't load your payment link just now. Everything else here still works — pull to refresh to try again.",
     paySave: "Save", paySaved: "Saved.", bad_link: "That doesn't look like a link. It has to start with https://",
     msgDue: "Hi {name}, it's {shop}. You're about due for your usual — want me to hold a spot this week?",
     msgNew: "Hi {name}, thanks for joining {shop}. When would you like to come in?",
@@ -90,6 +91,7 @@ var T = {
     bookingNone: "Todavía no hay enlace de reservas.",
     payHint: "Pega el enlace con el que cobras: Venmo, Cash App, Square, Zelle. Solo tú lo ves.",
     payNote: "Solo tú ves este enlace. Nunca aparece en las páginas del cliente.",
+    payLoadFail: "No pudimos cargar tu enlace de pago. Todo lo demás sigue funcionando: recarga para intentarlo otra vez.",
     paySave: "Guardar", paySaved: "Listo.", bad_link: "Eso no parece un enlace. Tiene que empezar con https://",
     msgDue: "Hola {name}, te saluda {shop}. Ya toca tu visita de siempre, ¿te aparto un lugar esta semana?",
     msgNew: "Hola {name}, gracias por unirte a {shop}. ¿Cuándo te gustaría venir?",
@@ -114,6 +116,7 @@ function $(id) { return document.getElementById(id); }
 
 var currentShop = null;
 var settingsRow = {};
+var settingsFailed = false;
 function locale() { return lang === "es" ? "es-US" : "en-US"; }
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"]/g, function (c) {
@@ -178,6 +181,13 @@ function renderShare() {
   var link = currentShop.booking_link || "";
   $("bookingUrl").value = link;
   if (link) showEl("bookingRow"); else hideEl("bookingRow");
+
+  if (settingsFailed) {
+    hideEl("payRow");
+    hideEl("payEdit");
+    $("payNote").textContent = t("payLoadFail");
+    return;
+  }
 
   var pay = (settingsRow && settingsRow.payment_link) || "";
   $("payUrl").value = pay;
@@ -298,14 +308,18 @@ if (!SB.demo) {
       SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500"),
       SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1"),
       SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6"),
+      /* Optional: the payment link is the least important thing on this page,
+         so a failure here must never cost the owner their whole dashboard. */
       SB.rest("shop_settings?select=payment_link&shop_id=eq." + shopId)
+        .catch(function () { return { failed: true }; })
     ]);
   })
   .then(function (out) {
     if (!out) return;
     var shop = out[0][0] || {};
     currentShop = shop;
-    settingsRow = (out[7] || [])[0] || {};
+    if (out[7] && out[7].failed) settingsFailed = true;
+    else settingsRow = (out[7] || [])[0] || {};
     renderShare();
     var dash = out[1][0] || {};
     var due = out[2] || [];
