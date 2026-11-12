@@ -311,6 +311,15 @@ button.chip{cursor:pointer;font-family:inherit}.chip.on{background:var(--ink);co
 .fab{transition:opacity .15s}.fab.fab-hide{opacity:0;pointer-events:none}
 footer a{color:inherit;font-weight:700}
 @media (max-width:920px){.cmpgrid{grid-template-columns:1fr}.heroph{display:none}#plans{padding-bottom:96px}}
+
+/* Step visuals: full size on desktop, compact on mobile */
+@media (max-width:920px){
+.steps{gap:14px;margin-top:24px}
+.step{padding:16px}
+.step h3{font-size:19px}
+.visual{min-height:0;padding:10px;max-height:150px;overflow:hidden;border-radius:12px}
+.visual > *{transform:scale(.72);transform-origin:center top;margin-bottom:-60px}
+}
 </style>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSTD5HYECJ"></script>
