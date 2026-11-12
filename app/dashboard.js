@@ -44,6 +44,7 @@ var T = {
     payNote: "Only you can see this link. It never appears on the client pages.",
     payLoadFail: "Couldn't load your payment link just now. Everything else here still works — pull to refresh to try again.",
     partial: "Some of this page didn't load. Pull to refresh to try again.",
+    cantLoad: "Couldn't load this — pull to refresh.",
     paySave: "Save", paySaved: "Saved.", bad_link: "That doesn't look like a link. It has to start with https://",
     msgDue: "Hi {name}, it's {shop}. You're about due for your usual — want me to hold a spot this week?",
     msgNew: "Hi {name}, thanks for joining {shop}. When would you like to come in?",
@@ -94,6 +95,7 @@ var T = {
     payNote: "Solo tú ves este enlace. Nunca aparece en las páginas del cliente.",
     payLoadFail: "No pudimos cargar tu enlace de pago. Todo lo demás sigue funcionando: recarga para intentarlo otra vez.",
     partial: "Una parte de esta página no cargó. Recarga para intentarlo otra vez.",
+    cantLoad: "No se pudo cargar esto. Recarga la página.",
     paySave: "Guardar", paySaved: "Listo.", bad_link: "Eso no parece un enlace. Tiene que empezar con https://",
     msgDue: "Hola {name}, te saluda {shop}. Ya toca tu visita de siempre, ¿te aparto un lugar esta semana?",
     msgNew: "Hola {name}, gracias por unirte a {shop}. ¿Cuándo te gustaría venir?",
@@ -124,17 +126,20 @@ var partialLoad = false;
 /* Each panel on this page loads on its own. A failed request costs that panel
    and nothing else: the owner still sees their numbers, their clients and
    their links, and gets one line saying something is missing. */
-function soft(p) {
-  return p.catch(function () { partialLoad = true; return { failed: true }; });
+var failedPanel = {};
+function soft(i, p) {
+  return p.catch(function () { failedPanel[i] = true; partialLoad = true; return { failed: true }; });
 }
 function arr(v) { return Array.isArray(v) ? v : []; }
 
+/* The load notice has its own slot under the greeting, so it is never hidden
+   behind the pending-payment banner (or whatever else #msg is saying). */
 function notePartial() {
   if (!partialLoad) return;
-  var m = $("msg");
-  if (!m || m.textContent.trim()) return;
-  m.className = "msg";
-  m.textContent = t("partial");
+  var n = $("loadNote");
+  if (!n) return;
+  n.textContent = t("partial");
+  n.classList.remove("hidden");
 }
 function locale() { return lang === "es" ? "es-US" : "en-US"; }
 function esc(v) {
@@ -333,21 +338,21 @@ var ownersFailed = false;
     var s = "shop_id=eq." + encodeURIComponent(owners[0].shop_id);
     var shopId = encodeURIComponent(owners[0].shop_id);
     return Promise.all([
-      soft(SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId)),
-      soft(SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId)),
-      soft(SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6")),
-      soft(SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4")),
-      soft(SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500")),
-      soft(SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1")),
-      soft(SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6")),
-      soft(SB.rest("shop_settings?select=payment_link&shop_id=eq." + shopId))
+      soft(0, SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId)),
+      soft(1, SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId)),
+      soft(2, SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6")),
+      soft(3, SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4")),
+      soft(4, SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500")),
+      soft(5, SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1")),
+      soft(6, SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6")),
+      soft(7, SB.rest("shop_settings?select=payment_link&shop_id=eq." + shopId))
     ]);
   })
   .then(function (out) {
     if (!out) return;
     var shop = arr(out[0])[0] || {};
     currentShop = shop;
-    if (out[7] && out[7].failed) settingsFailed = true;
+    if (failedPanel[7]) settingsFailed = true;
     else settingsRow = arr(out[7])[0] || {};
     renderShare();
     var dash = arr(out[1])[0] || {};
@@ -378,7 +383,7 @@ var ownersFailed = false;
       ? t("prog", { stamps: shop.milestone, start: shop.stamps_at_join || 0 })
       : "";
 
-    $("heroDue").textContent = dueN;
+    $("heroDue").textContent = failedPanel[1] ? "—" : dueN;
     $("heroDueK").textContent = dueN === 1 ? t("heroDueOne") : t("heroDueK");
 
     $("meterLabel").textContent = t("meterLabel");
@@ -391,15 +396,20 @@ var ownersFailed = false;
 
     var box = $("kpis");
     box.innerHTML = "";
-    box.appendChild(kpi(membersN, t("members")));
-    box.appendChild(kpi(visitsN, t("visits")));
-    box.appendChild(kpi(readyN, t("ready")));
-    box.appendChild(kpi(dueN, t("due")));
-    box.appendChild(kpi(rewardsN, t("rewards")));
+    /* A dash, not a zero: a failed count is unknown, and "0 clients" would be
+       the wrong thing to tell an owner with nine of them. */
+    function num(v) { return failedPanel[1] ? "—" : v; }
+    box.appendChild(kpi(num(membersN), t("members")));
+    box.appendChild(kpi(num(visitsN), t("visits")));
+    box.appendChild(kpi(num(readyN), t("ready")));
+    box.appendChild(kpi(num(dueN), t("due")));
+    box.appendChild(kpi(num(rewardsN), t("rewards")));
 
     var dueList = $("dueList");
     dueList.innerHTML = "";
-    if (!due.length) {
+    if (failedPanel[2]) {
+      dueList.appendChild(emptyRow(t("cantLoad")));
+    } else if (!due.length) {
       dueList.appendChild(emptyRow(t("none")));
     } else {
       due.forEach(function (m) {
@@ -436,7 +446,9 @@ var ownersFailed = false;
 
     var rw = $("rewardList");
     rw.innerHTML = "";
-    if (!rewards.length) {
+    if (failedPanel[3]) {
+      rw.appendChild(emptyRow(t("cantLoad")));
+    } else if (!rewards.length) {
       rw.appendChild(emptyRow(t("noRewards")));
     } else {
       rewards.forEach(function (r) {
@@ -453,7 +465,9 @@ var ownersFailed = false;
     var rec = $("recentList");
     rec.innerHTML = "";
     var goal = shop.milestone || 10;
-    if (!newest.length) {
+    if (failedPanel[4]) {
+      rec.appendChild(emptyRow(t("cantLoad")));
+    } else if (!newest.length) {
       rec.appendChild(emptyRow(t("noClients")));
     } else {
       newest.forEach(function (m) {
@@ -476,7 +490,9 @@ var ownersFailed = false;
 
     var rf = $("refList");
     rf.innerHTML = "";
-    if (!referrals.length) {
+    if (failedPanel[6]) {
+      rf.appendChild(emptyRow(t("cantLoad")));
+    } else if (!referrals.length) {
       rf.appendChild(emptyRow(t("noRefs")));
     } else {
       referrals.forEach(function (r) {

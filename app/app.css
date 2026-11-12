@@ -29,6 +29,7 @@ input:focus,select:focus{outline:3px solid var(--accent-bg);border-color:var(--a
 .chip.ok{background:#EAF7EE;border-color:#BFE3CA;color:var(--ok)}
 .chip.warn{background:var(--accent-bg);border-color:#F6D2B6;color:var(--accent-dk)}
 .msg{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:15px;background:var(--accent-bg);border:1px solid #F6D2B6;color:var(--accent-dk)}
+.msg.info{background:#fff;border-color:var(--line);color:var(--ink2)}
 .msg.bad{background:#FDECEC;border-color:#F5C6C6;color:var(--bad)}
 .msg.good{background:#EAF7EE;border-color:#BFE3CA;color:var(--ok)}
 .hidden{display:none!important}
