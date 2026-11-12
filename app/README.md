@@ -124,3 +124,16 @@ there is no upload yet, and `promo-widget.js` escapes every field, so an owner
 cannot inject markup into a client page.
 
 The dashboard links to it from the chip next to QR & links.
+
+## Shops and payment (`/admin`)
+
+A shop is created `pending` and only takes clients once it is `active` —
+`join_shop` ignores any other status. `/admin` lists every shop with its plan
+and status and calls `set_shop_status` to mark an invoice paid, pause a shop or
+turn it back on. The admin check lives in the database (`is_platform_admin`),
+so the page being reachable is cosmetic, not the gate. Self-serve signups
+(`create_my_shop`) stay `pending` until someone marks them paid.
+
+Booked Solid and Day Off shops keep their Votel sub-account id on
+`shops.votel_subaccount_id`, pasted in during setup. Come Back shops have none:
+they send from the main account and are grouped there by the `ros-shop:` tag.

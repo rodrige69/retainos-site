@@ -32,7 +32,8 @@ var T = {
     daysOut: "{n} days out",
     lastVisit: "Last visit {d}",
     cadence: "usually every {n} days",
-    qr: "QR & links", promo: "Announcement", out: "Sign out",
+    qr: "QR & links", promo: "Announcement", shops: "Shops", out: "Sign out",
+    pendingNote: "This shop is waiting on payment. Clients can't join until it is marked paid on the Shops page.",
     empty: "No shop on this login yet.",
     emptyCta: "Set up your shop →",
     demo: "Demo mode — no Supabase key in config.js.",
@@ -67,7 +68,8 @@ var T = {
     daysOut: "{n} días",
     lastVisit: "Última visita {d}",
     cadence: "suele venir cada {n} días",
-    qr: "QR y enlaces", promo: "Anuncio", out: "Salir",
+    qr: "QR y enlaces", promo: "Anuncio", shops: "Negocios", out: "Salir",
+    pendingNote: "Este negocio espera el pago. Los clientes no pueden unirse hasta marcarlo como pagado en la página Negocios.",
     empty: "Este acceso aún no tiene negocio.",
     emptyCta: "Configura tu negocio →",
     demo: "Modo demo: no hay clave de Supabase en config.js.",
@@ -122,6 +124,7 @@ $("insightSub").textContent = t("insightSub");
 $("rewardsH").textContent = t("rewardsH");
 $("recentH").textContent = t("recentH");
 $("promoLink").textContent = t("promo");
+$("adminLink").textContent = t("shops");
 $("btnEn").setAttribute("aria-pressed", String(lang === "en"));
 $("btnEs").setAttribute("aria-pressed", String(lang === "es"));
 $("btnEn").onclick = function () { localStorage.setItem("ros.lang", "en"); location.reload(); };
@@ -152,6 +155,13 @@ function emptyRow(text) {
   return row('<span class="hint" style="margin:0">' + esc(text) + "</span>");
 }
 
+/* The shop list is a platform-admin screen; the dashboard only links to it. */
+if (!SB.demo) {
+  SB.rpc("is_platform_admin").then(function (isAdmin) {
+    if (isAdmin) $("adminLink").classList.remove("hidden");
+  }).catch(function () {});
+}
+
 (SB.demo ? Promise.reject({ status: 0, message: t("demo") }) : SB.rest("shop_owners?select=shop_id,role"))
   .then(function (owners) {
     if (!owners || !owners.length) {
@@ -164,7 +174,7 @@ function emptyRow(text) {
     var s = "shop_id=eq." + encodeURIComponent(owners[0].shop_id);
     var shopId = encodeURIComponent(owners[0].shop_id);
     return Promise.all([
-      SB.rest("shops?select=name,texts_included,milestone,stamps_at_join&id=eq." + shopId),
+      SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status&id=eq." + shopId),
       SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId),
       SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6"),
       SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4"),
@@ -197,6 +207,7 @@ function emptyRow(text) {
     var textsTotal = shop.texts_included || 0;
 
     $("greet").textContent = t(greetKey) + (shop.name ? ", " + shop.name : "");
+    if (shop.status && shop.status !== "active") say(t("pendingNote"));
     $("plan").textContent = shop.milestone
       ? t("prog", { stamps: shop.milestone, start: shop.stamps_at_join || 0 })
       : "";

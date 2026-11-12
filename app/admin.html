@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shops · RetainOS</title>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="dashboard.html">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M79.34 43.76 A30 30 0 1 1 45.82 20.29" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><path d="M60.68 18.20 L44.15 8.41 L47.49 32.18 Z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72.98" cy="30.72" r="11" fill="currentColor"/></svg>
+    <span>Retain<b>OS</b></span>
+  </a>
+  <div style="display:flex;gap:8px;align-items:center">
+    <div class="lang">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="es">ES</button>
+    </div>
+    <a class="chip" href="setup.html" id="newShop"></a>
+    <a class="chip" href="dashboard.html" id="back"></a>
+  </div>
+</header>
+
+<main class="wrap" style="max-width:760px">
+  <h1 id="h1" style="font-size:28px;margin:6px 0 4px"></h1>
+  <p class="hint" id="sub" style="margin-bottom:18px"></p>
+  <div class="msg hidden" id="msg"></div>
+  <div class="card">
+    <div class="row" style="border:0;padding-top:0"><b id="count"></b></div>
+    <div id="list"></div>
+  </div>
+  <p class="foot" id="foot"></p>
+</main>
+<script src="admin.js"></script>
+</body>
+</html>

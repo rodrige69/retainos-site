@@ -21,6 +21,12 @@ var T = {
     s2note: "Default numbers come from the business type. Change them if this shop needs something different.",
     lLang: "Default language",
     lPlan: "Plan",
+    lPay: "Payment",
+    payPending: "Invoice sent · not paid yet",
+    payActive: "Paid · clients can join",
+    payNote: "A shop only takes clients once it is paid. Mark it paid here, or later on the Shops page.",
+    lSub: "Votel sub-account",
+    subNote: "Booked Solid and Day Off only: paste the sub-account id from Votel. Leave empty for Come Back.",
     lStart: "Stamps at join",
     lMile: "Stamps to the card",
     lTexts: "Texts a month",
@@ -79,6 +85,12 @@ var T = {
     s2note: "Los números vienen del tipo de negocio. Cámbialos si este negocio necesita otra cosa.",
     lLang: "Idioma por defecto",
     lPlan: "Plan",
+    lPay: "Pago",
+    payPending: "Factura enviada · aún sin pagar",
+    payActive: "Pagado · los clientes pueden unirse",
+    payNote: "Un negocio recibe clientes solo cuando está pagado. Márcalo aquí, o después en la página Negocios.",
+    lSub: "Sub-cuenta de Votel",
+    subNote: "Solo Booked Solid y Day Off: pega el id de la sub-cuenta desde Votel. En Come Back, déjalo vacío.",
     lStart: "Sellos al unirse",
     lMile: "Sellos para la tarjeta",
     lTexts: "Textos al mes",
@@ -138,7 +150,8 @@ function paint() {
     h1: "h1", sub: "sub", s1: "s1", s1note: "s1note", lName: "lName", lSlug: "lSlug",
     slugNote: "slugNote", lType: "lType", typeNote: "typeNote", lCity: "lCity",
     lState: "lState", lZip: "lZip", lPhone: "lPhone", s2: "s2", s2note: "s2note",
-    lLang: "lLang", lPlan: "lPlan", lStart: "lStart", lMile: "lMile", lTexts: "lTexts",
+    lLang: "lLang", lPlan: "lPlan", lPay: "lPay", payNote: "payNote",
+    lSub: "lSub", subNote: "subNote", lStart: "lStart", lMile: "lMile", lTexts: "lTexts",
     mileNote: "mileNote", lTier: "lTier", lTool: "lTool", lLink: "lLink", s3: "s3",
     s3note: "s3note", lStaff: "lStaff", lOwners: "lOwners", ownersNote: "ownersNote",
     submit: "submit", rH: "rH", rNote: "rNote", rQr: "rQr", rDash: "rDash", copy: "copy",
@@ -154,6 +167,11 @@ function paint() {
       location.reload();
     };
   });
+  var pay = $("payState");
+  if (pay && pay.options.length >= 2) {
+    pay.options[0].textContent = t("payPending");
+    pay.options[1].textContent = t("payActive");
+  }
   paintTypes();
   paintMile();
 }
@@ -285,6 +303,8 @@ $("submit").onclick = function () {
     phone: val("phone"),
     language: $("lang").value,
     plan: $("plan").value,
+    status: $("payState").value,
+    votel_subaccount_id: val("subacct"),
     texts: parseInt(val("texts"), 10) || 100,
     stamps_at_join: parseInt(val("start"), 10),
     milestone: parseInt(val("milestone"), 10),
@@ -310,6 +330,8 @@ $("submit").onclick = function () {
       if (!r || !r.ok) { say(t(r && r.error) || (r && r.error) || "Error", "bad"); return; }
       $("joinUrl").value = r.join_url;
       $("rBody").innerHTML =
+        "<div class='row'><span>" + t("lPay") + "</span><b>" +
+          t(r.status === "active" ? "payActive" : "payPending") + "</b></div>" +
         "<div class='row'><span>" + t("join") + "</span><b>" + r.shop_id + "</b></div>" +
         "<div class='row'><span>" + t("lMile") + "</span><b>" + r.stamps_at_join + " → " + r.milestone + "</b></div>" +
         "<div class='row'><span>" + r.staff + "</span><b>" + t("staffN") + "</b></div>" +
