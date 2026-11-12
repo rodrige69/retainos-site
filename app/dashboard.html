@@ -62,7 +62,10 @@
         <input id="bookingInput" type="text" autocapitalize="none" spellcheck="false" placeholder="https://booksy.com/yourshop">
         <button class="btn" id="bookingSave" type="button"></button>
       </div>
-      <button class="linkbtn hidden" id="bookingChange" type="button"></button>
+      <div class="linkrow">
+        <a class="linkbtn" id="bookingOpen" target="_blank" rel="noopener"></a>
+        <button class="linkbtn hidden" id="bookingChange" type="button"></button>
+      </div>
       <p class="hint" id="bookingNote"></p>
     </div>
 
@@ -70,6 +73,9 @@
     <div class="linkbox" id="payRow">
       <input id="payUrl" type="text" readonly>
       <button class="btn" id="payShare" type="button"></button>
+    </div>
+    <div class="linkrow" id="payOpenRow">
+      <a class="linkbtn" id="payOpen" target="_blank" rel="noopener"></a>
     </div>
     <div class="linkbox" id="payEdit">
       <input id="payInput" type="text" autocapitalize="none" spellcheck="false" placeholder="https://venmo.com/yourname">

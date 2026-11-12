@@ -39,6 +39,7 @@ var T = {
     shareH: "Send a link",
     shareSub: "Hand a client your booking link or your payment link straight from your phone.",
     lBooking: "Booking link", lPay: "Payment link", share: "Share",
+    open: "Open link ↗",
     bookingHint: "Paste the link clients book from — Booksy, Square, your own site.",
     bookingChange: "Change booking link", cancel: "Cancel",
     bookingSaved: "Booking link saved.", bookingSavedEmpty: "Booking link cleared.",
@@ -94,6 +95,7 @@ var T = {
     shareH: "Enviar un enlace",
     shareSub: "Mándale a un cliente tu enlace de reservas o el de pago desde tu teléfono.",
     lBooking: "Enlace de reservas", lPay: "Enlace de pago", share: "Compartir",
+    open: "Abrir enlace ↗",
     bookingHint: "Pega el enlace donde reservan tus clientes: Booksy, Square o tu propia página.",
     bookingChange: "Cambiar enlace de reservas", cancel: "Cancelar",
     bookingSaved: "Enlace de reservas guardado.", bookingSavedEmpty: "Enlace de reservas borrado.",
@@ -222,6 +224,9 @@ function shareLink(url, label, btn, input) {
 function renderBookingLink() {
   var link = currentShop.booking_link || "";
   $("bookingUrl").value = link;
+  $("bookingOpen").href = link || "#";
+  $("bookingOpen").textContent = t("open");
+  if (link) showEl("bookingOpen"); else hideEl("bookingOpen");
   if (link) {
     $("bookingInput").value = link;
     if (bookingEditing) { hideEl("bookingView"); showEl("bookingEdit"); }
@@ -247,6 +252,7 @@ function renderShare() {
     hideEl("bookingView");
     hideEl("bookingEdit");
     hideEl("bookingChange");
+    hideEl("bookingOpen");
     $("bookingNote").textContent = t("cantLoad");
   } else {
     renderBookingLink();
@@ -255,14 +261,17 @@ function renderShare() {
   if (settingsFailed) {
     hideEl("payRow");
     hideEl("payEdit");
+    hideEl("payOpenRow");
     $("payNote").textContent = t("payLoadFail");
     return;
   }
 
   var pay = (settingsRow && settingsRow.payment_link) || "";
   $("payUrl").value = pay;
-  if (pay) { showEl("payRow"); hideEl("payEdit"); }
-  else { hideEl("payRow"); showEl("payEdit"); }
+  $("payOpen").href = pay || "#";
+  $("payOpen").textContent = t("open");
+  if (pay) { showEl("payRow"); hideEl("payEdit"); showEl("payOpenRow"); }
+  else { hideEl("payRow"); showEl("payEdit"); hideEl("payOpenRow"); }
   $("payNote").textContent = pay ? t("payNote") : t("payHint");
 }
 
