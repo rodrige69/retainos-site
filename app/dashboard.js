@@ -39,6 +39,9 @@ var T = {
     shareH: "Send a link",
     shareSub: "Hand a client your booking link or your payment link straight from your phone.",
     lBooking: "Booking link", lPay: "Payment link", share: "Share",
+    bookingHint: "Paste the link clients book from — Booksy, Square, your own site.",
+    bookingChange: "Change booking link", cancel: "Cancel",
+    bookingSaved: "Booking link saved.", bookingSavedEmpty: "Booking link cleared.",
     bookingNone: "No booking link on file yet.",
     payHint: "Paste the link you use to get paid — Venmo, Cash App, Square, Zelle. Only you can see it.",
     payNote: "Only you can see this link. It never appears on the client pages.",
@@ -90,6 +93,9 @@ var T = {
     shareH: "Enviar un enlace",
     shareSub: "Mándale a un cliente tu enlace de reservas o el de pago desde tu teléfono.",
     lBooking: "Enlace de reservas", lPay: "Enlace de pago", share: "Compartir",
+    bookingHint: "Pega el enlace donde reservan tus clientes: Booksy, Square o tu propia página.",
+    bookingChange: "Cambiar enlace de reservas", cancel: "Cancelar",
+    bookingSaved: "Enlace de reservas guardado.", bookingSavedEmpty: "Enlace de reservas borrado.",
     bookingNone: "Todavía no hay enlace de reservas.",
     payHint: "Pega el enlace con el que cobras: Venmo, Cash App, Square, Zelle. Solo tú lo ves.",
     payNote: "Solo tú ves este enlace. Nunca aparece en las páginas del cliente.",
@@ -121,6 +127,7 @@ function $(id) { return document.getElementById(id); }
 var currentShop = null;
 var settingsRow = {};
 var settingsFailed = false;
+var bookingEditing = false;
 var partialLoad = false;
 
 /* Each panel on this page loads on its own. A failed request costs that panel
@@ -204,7 +211,19 @@ function renderShare() {
   if (!currentShop) return;
   var link = currentShop.booking_link || "";
   $("bookingUrl").value = link;
-  if (link) showEl("bookingRow"); else hideEl("bookingRow");
+  if (link) {
+    $("bookingInput").value = link;
+    if (bookingEditing) { hideEl("bookingView"); showEl("bookingEdit"); }
+    else { showEl("bookingView"); hideEl("bookingEdit"); }
+    showEl("bookingChange");
+    $("bookingChange").textContent = bookingEditing ? t("cancel") : t("bookingChange");
+    $("bookingNote").textContent = "";
+  } else {
+    hideEl("bookingView");
+    showEl("bookingEdit");
+    hideEl("bookingChange");
+    $("bookingNote").textContent = t("bookingHint");
+  }
 
   if (settingsFailed) {
     hideEl("payRow");
@@ -245,6 +264,7 @@ $("refH").textContent = t("refH");
 $("shareH").textContent = t("shareH");
 $("shareSub").textContent = t("shareSub");
 $("lBooking").textContent = t("lBooking");
+$("bookingSave").textContent = t("paySave");
 $("lPay").textContent = t("lPay");
 $("bookingShare").textContent = t("share");
 $("payShare").textContent = t("share");
@@ -260,6 +280,31 @@ $("signout").onclick = function () { SB.signOut(); };
 $("bookingShare").onclick = function () {
   shareLink(currentShop && currentShop.booking_link, t("lBooking"), this, $("bookingUrl"));
 };
+$("bookingChange").onclick = function () {
+  bookingEditing = !bookingEditing;
+  if (bookingEditing) $("bookingInput").value = (currentShop && currentShop.booking_link) || "";
+  renderShare();
+};
+$("bookingSave").onclick = function () {
+  if (!currentShop) return;
+  var btn = this;
+  var link = $("bookingInput").value.trim();
+  btn.disabled = true;
+  SB.rpc("set_shop_booking", { p_shop: currentShop.id, p_link: link }).then(function (r) {
+    btn.disabled = false;
+    if (!r || !r.ok) { say(t(r && r.error) || t("bad_link"), "bad"); return; }
+    currentShop.booking_link = r.booking_link;
+    bookingEditing = false;
+    $("bookingInput").value = "";
+    renderShare();
+    say(t(r.booking_link ? "bookingSaved" : "bookingSavedEmpty"), "good");
+  }).catch(function (e) {
+    btn.disabled = false;
+    if (e && e.status === 401) { location.replace("signin.html"); return; }
+    say(t(e && e.message) || t("bad_link"), "bad");
+  });
+};
+
 $("payShare").onclick = function () {
   shareLink(settingsRow && settingsRow.payment_link, t("lPay"), this, $("payUrl"));
 };

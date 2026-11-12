@@ -183,3 +183,8 @@ select/insert/update, and the RLS policies check `shop_owners` against
 `auth.uid()`. It never appears on the join, thank-you or claim pages.
 `set_shop_payment(p_shop, p_link)` checks ownership and that the value looks
 like an http(s) link, and an empty value clears it.
+
+The booking link can be changed from the same card after setup
+(`set_shop_booking`), which matters because shops switch booking tools. Both
+link writers check ownership and only accept http(s), so the dashboard can't be
+used to store something else there.

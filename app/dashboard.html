@@ -54,10 +54,16 @@
 
     <div id="bookingRow">
       <label class="label" id="lBooking" for="bookingUrl"></label>
-      <div class="linkbox">
+      <div class="linkbox" id="bookingView">
         <input id="bookingUrl" type="text" readonly>
         <button class="btn" id="bookingShare" type="button"></button>
       </div>
+      <div class="linkbox hidden" id="bookingEdit">
+        <input id="bookingInput" type="text" autocapitalize="none" spellcheck="false" placeholder="https://booksy.com/yourshop">
+        <button class="btn" id="bookingSave" type="button"></button>
+      </div>
+      <button class="linkbtn hidden" id="bookingChange" type="button"></button>
+      <p class="hint" id="bookingNote"></p>
     </div>
 
     <label class="label" id="lPay" for="payUrl"></label>
