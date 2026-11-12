@@ -35,6 +35,9 @@ var T = {
     lastVisit: "Last visit {d}",
     cadence: "usually every {n} days",
     qr: "QR & links", promo: "Announcement", shops: "Shops", out: "Sign out",
+    text: "Text", textAria: "Text {name} from your own phone",
+    msgDue: "Hi {name}, it's {shop}. You're about due for your usual — want me to hold a spot this week?",
+    msgNew: "Hi {name}, thanks for joining {shop}. When would you like to come in?",
     pendingNote: "This shop is waiting on payment. Clients can't join until it is marked paid on the Shops page.",
     empty: "No shop on this login yet.",
     emptyCta: "Set up your shop →",
@@ -73,6 +76,9 @@ var T = {
     lastVisit: "Última visita {d}",
     cadence: "suele venir cada {n} días",
     qr: "QR y enlaces", promo: "Anuncio", shops: "Negocios", out: "Salir",
+    text: "Mensaje", textAria: "Escribele a {name} desde tu propio teléfono",
+    msgDue: "Hola {name}, te saluda {shop}. Ya toca tu visita de siempre, ¿te aparto un lugar esta semana?",
+    msgNew: "Hola {name}, gracias por unirte a {shop}. ¿Cuándo te gustaría venir?",
     pendingNote: "Este negocio espera el pago. Los clientes no pueden unirse hasta marcarlo como pagado en la página Negocios.",
     empty: "Este acceso aún no tiene negocio.",
     emptyCta: "Configura tu negocio →",
@@ -106,6 +112,26 @@ function initials(name) {
   return name.trim().split(/\s+/).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase();
 }
 function one(n, single, many) { return n === 1 ? single : many; }
+/* Tap to reach a client from the owner's own phone. Nothing is sent by
+   RetainOS here: the dashboard only builds a link the phone already knows how
+   to open, so it is a person writing to a person and no messaging registration
+   is involved. */
+function reach(phone, name, body) {
+  var digits = String(phone == null ? "" : phone).replace(/\D/g, "");
+  if (digits.length < 10) return "";
+  var e164 = digits.length === 10 ? "1" + digits : digits;
+  var text = encodeURIComponent(body || "");
+  return '<span class="reach">' +
+    '<a href="sms:+' + e164 + "?&body=" + text + '" aria-label="' + esc(t("textAria", { name: name || "" })) + '">' +
+    esc(t("text")) + "</a>" +
+    '<a href="https://wa.me/' + e164 + "?text=" + text + '" target="_blank" rel="noopener">WhatsApp</a>' +
+    "</span>";
+}
+
+function withBooking(line, bookingLink) {
+  return bookingLink ? line + " " + bookingLink : line;
+}
+
 function row(html) {
   var d = document.createElement("div");
   d.className = "row";
@@ -179,11 +205,11 @@ if (!SB.demo) {
     var s = "shop_id=eq." + encodeURIComponent(owners[0].shop_id);
     var shopId = encodeURIComponent(owners[0].shop_id);
     return Promise.all([
-      SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status&id=eq." + shopId),
+      SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId),
       SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId),
       SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6"),
       SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4"),
-      SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits&" + s + "&order=joined_at.desc&limit=500"),
+      SB.rest("members?select=id,first_name,last_name,joined_at,cycle_visits,phone&" + s + "&order=joined_at.desc&limit=500"),
       SB.rest("messages?select=kind,sent_at&" + s + "&order=sent_at.desc&limit=1"),
       SB.rest("referrals?select=referrer_id,friend_id,created_at&" + s + "&order=created_at.desc&limit=6")
     ]);
@@ -249,7 +275,9 @@ if (!SB.demo) {
           '<div class="who"><span class="init">' + esc(initials(m.first_name)) + "</span>" +
           "<span><b>" + who + "</b><small>" +
           t("lastVisit", { d: day(m.last_visit_at) }) + " · " +
-          t("cadence", { n: m.rebook_days || 28 }) + "</small></span></div>" +
+          t("cadence", { n: m.rebook_days || 28 }) + "</small>" +
+          reach(m.phone, m.first_name, withBooking(t("msgDue", { name: m.first_name || "", shop: shop.name || "" }), shop.booking_link)) +
+          "</span></div>" +
           '<span class="meta">' + t("daysOut", { n: m.days_out }) + "</span>"
         ));
       });
@@ -301,7 +329,9 @@ if (!SB.demo) {
           '<div class="who"><span class="init">' + esc(initials(m.first_name)) + "</span>" +
           "<span><b>" + esc(nameOf(m.id) || "—") + "</b><small>" +
           t("joined", { d: day(m.joined_at) }) + " · " +
-          t("stampsNow", { n: stamps, total: goal }) + "</small></span></div>" +
+          t("stampsNow", { n: stamps, total: goal }) + "</small>" +
+          reach(m.phone, m.first_name, withBooking(t("msgNew", { name: m.first_name || "", shop: shop.name || "" }), shop.booking_link)) +
+          "</span></div>" +
           '<span class="meta">' + esc(stamps >= goal ? t("atGoal") : "") + "</span>"
         ));
       });
