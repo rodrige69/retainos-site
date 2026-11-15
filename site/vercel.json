@@ -4,7 +4,64 @@
   "headers": [
     {
       "source": "/go/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/tax-preparer-referral-program",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/pharmacy-front-store-loyalty-program",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/florist-bakery-loyalty-program",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/tattoo-shop-loyalty-program",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/es/programa-de-referidos-para-preparadores-de-impuestos",
+      "destination": "/es",
+      "permanent": true
+    },
+    {
+      "source": "/es/programa-de-lealtad-para-farmacias",
+      "destination": "/es",
+      "permanent": true
+    },
+    {
+      "source": "/es/programa-de-lealtad-para-floristerias-y-pastelerias",
+      "destination": "/es",
+      "permanent": true
+    },
+    {
+      "source": "/es/programa-de-lealtad-para-estudios-de-tatuajes",
+      "destination": "/es",
+      "permanent": true
+    },
+    {
+      "source": "/laundromat-loyalty-program",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/es/programa-de-lealtad-para-lavanderias",
+      "destination": "/es",
+      "permanent": true
     }
   ]
 }
