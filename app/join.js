@@ -44,6 +44,7 @@ var T = {
     refCopy: "Copy",
     refCopied: "Copied",
     broken: "This code doesn't match a shop",
+    brokenH: "This code doesn't match a shop",
     brokenP: "Ask the front desk for the shop's code, or scan the QR on their counter.",
     demo: "Demo mode — no Supabase key in config.js, so nothing is saved.",
     foot: "Powered by RetainOS"
@@ -86,6 +87,7 @@ var T = {
     refCopy: "Copiar",
     refCopied: "Copiado",
     broken: "Este código no corresponde a un negocio",
+    brokenH: "Este código no corresponde a un negocio",
     brokenP: "Pídele el código al mostrador o escanea el QR de la caja.",
     demo: "Modo demo: no hay clave de Supabase en config.js, así que no se guarda nada.",
     foot: "Con tecnología de RetainOS"
