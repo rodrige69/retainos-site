@@ -38,6 +38,8 @@ var T = {
     linkLbl: "Your card link",
     copy: "Copy",
     copied: "Copied",
+    done: "Done",
+    doneMsg: "All set. You can close this page.",
     note: "Keep this link: it opens your card on any phone. Tap it, then add it to your home screen and it's one tap from now on.",
     refLbl: "Invite a friend",
     refNote: "Send this link. Whoever joins with it gets credited to you, and the shop sees who brought them.",
@@ -81,6 +83,8 @@ var T = {
     linkLbl: "El enlace de tu tarjeta",
     copy: "Copiar",
     copied: "Copiado",
+    done: "Listo",
+    doneMsg: "Todo listo. Ya puedes cerrar esta página.",
     note: "Guarda este enlace: abre tu tarjeta en cualquier teléfono. Tócalo y agrégalo a tu pantalla de inicio para tenerlo a un toque.",
     refLbl: "Invita a un amigo",
     refNote: "Comparte este enlace. Quien se una con él queda a tu nombre, y el negocio ve quién lo trajo.",
@@ -98,6 +102,7 @@ var params = new URLSearchParams(location.search);
 var slug = params.get("shop");
 var incoming = params.get("t");
 var referredBy = params.get("ref");
+var urlLang = params.get("l") === "es" ? "es" : (params.get("l") === "en" ? "en" : "");
 if (!slug) {
   var parts = location.pathname.split("/").filter(Boolean);
   slug = parts.length ? parts[parts.length - 1].replace(/\.html$/, "") : "";
@@ -121,8 +126,8 @@ function hide(id) { $(id).classList.add("hidden"); }
 function paint() {
   document.documentElement.lang = lang;
   ["h1", "sub", "lFirst", "lLast", "lPhone", "lEmail", "join", "fine",
-   "foot", "brokenH", "brokenP", "linkLbl", "copy", "refLbl", "refCopy"].forEach(function (id) {
-    $(id).textContent = t(id);
+   "foot", "brokenH", "brokenP", "linkLbl", "copy", "refLbl", "refCopy", "doneBtn"].forEach(function (id) {
+    $(id).textContent = t(id === "doneBtn" ? "done" : id);
   });
   /* The consent wording is the legal bit: it is stored verbatim with the member. */
   $("consentText").textContent = t("consent");
@@ -140,7 +145,7 @@ function paint() {
 }
 
 function cardUrl(token) {
-  return location.origin + "/join.html?shop=" + encodeURIComponent(slug) + "&t=" + encodeURIComponent(token);
+  return location.origin + "/join.html?shop=" + encodeURIComponent(slug) + "&t=" + encodeURIComponent(token) + (urlLang ? "&l=" + urlLang : "");
 }
 
 function drawCard(c, token) {
@@ -224,7 +229,7 @@ function boot() {
     .then(function (rows) {
       if (!rows || !rows.length) { broken(); return; }
       shop = rows[0];
-      lang = shop.default_language === "es" ? "es" : "en";
+      lang = urlLang || (shop.default_language === "es" ? "es" : "en");
       $("shopName").textContent = shop.name;
       $("badge").textContent = shop.name.charAt(0).toUpperCase();
       $("shopMeta").textContent = "";
@@ -299,7 +304,7 @@ $("join").onclick = function () {
     }
     location.href = "thankyou.html?shop=" + encodeURIComponent(shop.id) +
       "&t=" + encodeURIComponent(res.token) +
-      "&n=" + encodeURIComponent(first);
+      "&n=" + encodeURIComponent(first) + (urlLang ? "&l=" + urlLang : "");
   }).catch(function (e) {
     say((e && e.message) || "Error", "bad");
   }).then(function () { btn.disabled = false; });
@@ -327,6 +332,11 @@ $("copy").onclick = function () {
   };
   if (navigator.clipboard) navigator.clipboard.writeText(input.value).then(done, done);
   else { document.execCommand("copy"); done(); }
+};
+
+$("doneBtn").onclick = function () {
+  try { window.close(); } catch (e) {}
+  $("doneMsg").textContent = t("doneMsg");
 };
 
 boot();
