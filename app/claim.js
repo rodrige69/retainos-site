@@ -11,12 +11,12 @@ var T = {
     lCode: "Reward code",
     lookup: "Show my reward",
     needCode: "Type the code from your message.",
-    okH: "Your reward is ready, {name}",
-    okSub: "Show this code at {shop}.",
+    okH: "Your reward was delivered, {name}",
+    okSub: "We emailed it to you from {shop}.",
     expiry: "Use it by {date}.",
     noExpiry: "No expiry on this one.",
-    okHow: "The counter enters this code and marks it used. A screenshot or this page both work.",
-    optOut: "Texts are only about your visits and rewards. Reply STOP to opt out, HELP for help.",
+    okHow: "Look for an email with the subject \"You've been awarded a complimentary Hotel Savings Card\". Check spam or promotions if you don't see it. Copy the code in that email and tap its button to redeem. The email also has a video that shows how.",
+    optOut: "",
     claimedH: "This reward was already used",
     claimedP: "It was marked used on {date}.",
     expiredH: "This reward has expired",
@@ -34,12 +34,12 @@ var T = {
     lCode: "Código del premio",
     lookup: "Ver mi premio",
     needCode: "Escribe el código de tu mensaje.",
-    okH: "Tu premio está listo, {name}",
-    okSub: "Muestra este código en {shop}.",
+    okH: "Tu premio fue enviado, {name}",
+    okSub: "Te lo enviamos por correo de parte de {shop}.",
     expiry: "Úsalo antes del {date}.",
     noExpiry: "Este no caduca.",
-    okHow: "En el mostrador escriben este código y lo marcan como usado. Sirve una captura o esta página.",
-    optOut: "Solo enviamos mensajes por tus visitas y premios. Responde STOP para darte de baja, HELP para ayuda.",
+    okHow: "Busca un correo con el asunto \"You've been awarded a complimentary Hotel Savings Card\" (llega en inglés). Revisa spam o promociones si no lo ves. Copia el código de ese correo y toca su botón para canjear. El correo también tiene un video que explica cómo.",
+    optOut: "",
     claimedH: "Este premio ya se usó",
     claimedP: "Se marcó como usado el {date}.",
     expiredH: "Este premio caducó",
@@ -118,8 +118,9 @@ function renderOk(r) {
   show("okBlock");
   $("okH").textContent = r.first_name ? t("okH", { name: r.first_name }) : t("okH", { name: "" }).replace(/,\s*$/, "");
   $("okSub").textContent = t("okSub", { shop: r.shop || "" });
-  $("voucher").textContent = r.code || "";
-  $("okExpiry").textContent = r.expires_at ? t("expiry", { date: fullDate(r.expires_at) }) : t("noExpiry");
+  $("voucher").style.display = "none";
+  $("okExpiry").style.display = "none";
+  $("okOptOut").style.display = "none";
   if (r.shop_id) {
     $("badge").textContent = (r.shop || "·").charAt(0).toUpperCase();
     $("shopName").textContent = r.shop || "";
