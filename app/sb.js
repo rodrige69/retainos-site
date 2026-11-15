@@ -12,9 +12,18 @@
     if (s) localStorage.setItem(SKEY, JSON.stringify(s));
     else localStorage.removeItem(SKEY);
   }
+  /* A saved login that has expired must never be sent: Supabase answers
+     "JWT expired" and public pages (join, thank-you) would read that as a
+     missing shop. Fall back to the anon key instead. */
+  function expired(jwt) {
+    try {
+      var p = JSON.parse(atob(jwt.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+      return !!p.exp && p.exp * 1000 < Date.now() + 15000;
+    } catch (e) { return false; }
+  }
   function token() {
     var s = session();
-    return (s && s.access_token) || key;
+    return (s && s.access_token && !expired(s.access_token)) ? s.access_token : key;
   }
 
   function call(path, opts) {
