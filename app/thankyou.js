@@ -17,7 +17,7 @@ var T = {
     emailH: "Check your email",
     emailP: "We sent your card link to the email you gave us. It's the fastest way to get your card back if you change phones.",
     emailNote: "Don't see it? Look in spam or junk and mark it “not spam” so your stamps don't end up there.",
-    optOut: "Texts are only about your visits and rewards. Reply STOP to opt out, HELP for help.",
+    optOut: "",
     shopMeta: "Rewards club",
     demo: "Demo mode — no Supabase key in config.js.",
     foot: "Powered by RetainOS"
@@ -36,7 +36,7 @@ var T = {
     emailH: "Revisa tu correo",
     emailP: "Enviamos el enlace de tu tarjeta al correo que nos diste. Es la forma más rápida de recuperarla si cambias de teléfono.",
     emailNote: "¿No lo ves? Mira en spam o correo no deseado y márcalo como “no es spam” para que tus sellos no acaben ahí.",
-    optOut: "Solo enviamos mensajes por tus visitas y premios. Responde STOP para darte de baja, HELP para ayuda.",
+    optOut: "",
     shopMeta: "Club de premios",
     demo: "Modo demo: no hay clave de Supabase en config.js.",
     foot: "Con tecnología de RetainOS"
@@ -47,7 +47,8 @@ var params = new URLSearchParams(location.search);
 var slug = params.get("shop") || "";
 var token = params.get("t") || "";
 var name = params.get("n") || "";
-var lang = localStorage.getItem("ros.lang") || "en";
+var lang = params.get("l") === "es" ? "es" : (params.get("l") === "en" ? "en" : (localStorage.getItem("ros.lang") || "en"));
+var urlLang = params.get("l") === "es" || params.get("l") === "en";
 
 function t(k, vars) {
   var s = (T[lang] && T[lang][k]) || T.en[k] || k;
@@ -59,7 +60,7 @@ function $(id) { return document.getElementById(id); }
 function paint(shop) {
   /* Decide the language before any string is written, so a Spanish shop never
      paints one pass in English. */
-  if (shop && shop.default_language === "es") lang = "es";
+  if (!urlLang && shop && shop.default_language === "es") lang = "es";
   document.documentElement.lang = lang;
   $("h1").textContent = t("h1", { name: name ? ", " + name : "" });
   $("sub").textContent = t("sub", { shop: shop && shop.name ? shop.name : "" });
@@ -93,7 +94,7 @@ function drawStamps(c) {
 }
 
 var cardLink = token
-  ? location.origin + "/join.html?shop=" + encodeURIComponent(slug) + "&t=" + encodeURIComponent(token)
+  ? location.origin + "/join.html?shop=" + encodeURIComponent(slug) + "&t=" + encodeURIComponent(token) + (urlLang ? "&l=" + params.get("l") : "")
   : location.origin + "/join.html?shop=" + encodeURIComponent(slug);
 $("cardUrl").value = cardLink;
 $("openCard").href = cardLink;
