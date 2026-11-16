@@ -7,12 +7,12 @@
       plans: ["Come Back", "Booked Solid", "Day Off"],
       scope: ["Come Back includes Hotel Savings Cards.", "Booked Solid adds Dining + Domestic US Getaways.", "Day Off adds Dining + International Getaways."],
       yours: "Your plan", preview: "Preview only. Switch to your own plan tab to make changes.",
-      hotelH: "Hotel Savings Card", hotelP: "A $100 hotel savings card for loyal clients. Included in every plan.", hotelL: "Visits to earn it", hotelS: "Stamps on the card",
-      diningH: "Dining & Local Perks", diningT: "$100 Dining Voucher", diningP: "Redeemable at partner restaurants. Delivered as an instant digital code.", diningL: "Visits to earn it", diningS: "Total stamps on the card",
-      usH: "US Vacation Getaways", usT: "Offer US Vacation Getaways", usP: "3-night resort certificates for loyal guests.",
-      intH: "International Getaways", intT: "Offer International Getaways", intP: "4-night all-inclusive escapes.",
-      getL: "Visits to earn it", getS: "Total stamps on the card", dests: "Available destinations", destsP: "Clients pick one when they finish the card.",
-      ownH: "Your own perk", ownP: "Optional. Something you give in the chair, like a free product or add-on.", ownPh: "Example: Free beard trim", ownL: "Visits to earn it",
+      hotelH: "Hotel Savings Card", hotelP: "A $100 hotel savings card for loyal clients. Included in every plan.", hotelL: "Visits to earn it", hotelS: "After joining",
+      diningH: "Dining & Local Perks", diningT: "$100 Dining Voucher", diningP: "Redeemable at partner restaurants. Delivered as an instant digital code.", diningL: "Visits to earn it", diningS: "After joining",
+      usH: "US Vacation Getaways", usT: "Offer US Vacation Getaways", usP: "3-night resort stays for loyal guests.",
+      intH: "International Getaways", intT: "Offer International Getaways", intP: "4 to 5 night stays in Mexico and the Dominican Republic.",
+      getL: "Visits to earn it", getS: "After joining", dests: "Available destinations", nights: "nights", fees: "taxes & fees", perPerson: "per person", feesNote: "Taxes & fees are per person for the whole stay, paid when the client books.", destsP: "Clients pick one when they finish the card.",
+      ownH: "Your own perk", ownP: "Optional. Something you give in the chair, like a free product or add-on.", ownPh: "Example: Free beard trim", ownL: "Visits to earn it", ownS: "After joining", note: "Every client starts with {n} stamps, so visits are counted after they join.",
       lockedN: "Included in a higher plan. Ask us to upgrade.", visits: "Visits", save: "Save rewards", saved: "Saved. Your clients' cards are updated.",
       bad_dining: "Dining needs more stamps than the hotel card.", bad_getaway: "The getaway needs more stamps than dining.", bad_hotel: "Hotel card needs 2 to 24 stamps.",
       signin: "Sign in again.", notOwner: "This login isn't linked to a shop.", fail: "Couldn't save. Try again."
@@ -22,24 +22,27 @@
       plans: ["Come Back", "Booked Solid", "Day Off"],
       scope: ["Come Back incluye Tarjetas de ahorro de hotel.", "Booked Solid añade Restaurantes + Escapadas en EE. UU.", "Day Off añade Restaurantes + Escapadas internacionales."],
       yours: "Tu plan", preview: "Solo vista previa. Cambia a la pestaña de tu plan para editar.",
-      hotelH: "Tarjeta de ahorro de hotel", hotelP: "Una tarjeta de ahorro de hotel de $100 para clientes fieles. Incluida en todos los planes.", hotelL: "Visitas para ganarla", hotelS: "Sellos en la tarjeta",
-      diningH: "Restaurantes y locales", diningT: "Cupón de restaurante de $100", diningP: "Se canjea en restaurantes aliados. Llega como código digital al instante.", diningL: "Visitas para ganarlo", diningS: "Sellos totales en la tarjeta",
-      usH: "Escapadas en EE. UU.", usT: "Ofrecer escapadas en EE. UU.", usP: "Certificados de resort de 3 noches para clientes fieles.",
-      intH: "Escapadas internacionales", intT: "Ofrecer escapadas internacionales", intP: "Escapadas todo incluido de 4 noches.",
-      getL: "Visitas para ganarla", getS: "Sellos totales en la tarjeta", dests: "Destinos disponibles", destsP: "El cliente elige uno al completar la tarjeta.",
-      ownH: "Tu propio premio", ownP: "Opcional. Algo que das en tu silla, como un producto o extra gratis.", ownPh: "Ejemplo: recorte de barba gratis", ownL: "Visitas para ganarlo",
+      hotelH: "Tarjeta de ahorro de hotel", hotelP: "Una tarjeta de ahorro de hotel de $100 para clientes fieles. Incluida en todos los planes.", hotelL: "Visitas para ganarla", hotelS: "Después de unirse",
+      diningH: "Restaurantes y locales", diningT: "Cupón de restaurante de $100", diningP: "Se canjea en restaurantes aliados. Llega como código digital al instante.", diningL: "Visitas para ganarlo", diningS: "Después de unirse",
+      usH: "Escapadas en EE. UU.", usT: "Ofrecer escapadas en EE. UU.", usP: "Estadías de resort de 3 noches para clientes fieles.",
+      intH: "Escapadas internacionales", intT: "Ofrecer escapadas internacionales", intP: "Estadías de 4 a 5 noches en México y República Dominicana.",
+      getL: "Visitas para ganarla", getS: "Después de unirse", dests: "Destinos disponibles", nights: "noches", fees: "impuestos y tarifas", perPerson: "por persona", feesNote: "Los impuestos y tarifas son por persona por toda la estadía, y se pagan al reservar.", destsP: "El cliente elige uno al completar la tarjeta.",
+      ownH: "Tu propio premio", ownP: "Opcional. Algo que das en tu silla, como un producto o extra gratis.", ownPh: "Ejemplo: recorte de barba gratis", ownL: "Visitas para ganarlo", ownS: "Después de unirse", note: "Cada cliente empieza con {n} sellos, así que las visitas se cuentan después de unirse.",
       lockedN: "Incluido en un plan superior. Pídenos mejorar.", visits: "Visitas", save: "Guardar premios", saved: "Guardado. Las tarjetas de tus clientes se actualizaron.",
       bad_dining: "El restaurante necesita más sellos que la tarjeta de hotel.", bad_getaway: "La escapada necesita más sellos que el restaurante.", bad_hotel: "La tarjeta de hotel necesita de 2 a 24 sellos.",
       signin: "Entra otra vez.", notOwner: "Este acceso no está ligado a un negocio.", fail: "No se pudo guardar. Intenta otra vez."
     }
   };
-  var DEST = {
-    us: ["Orlando, FL|Theme park resort stay", "Las Vegas, NV|Strip luxury resort getaway", "Miami, FL|South Beach coastal retreat", "New York, NY|Manhattan boutique stay", "Tampa, FL|Gulf coast bay getaway"],
-    intl: ["Cancún, Mexico|Riviera beachfront resort stay", "Punta Cana, Dominican Republic|All-inclusive tropical escape", "Puerto Plata, Dominican Republic|Oceanfront luxury villa experience"]
-  };
+  var DEST = { us: [], intl: [] };
+  function parseIds(str, all) {
+    if (str == null || str === "") return all.slice();
+    var ids = String(str).split(/[,;]/).map(function (x) { return parseInt(x, 10); }).filter(function (x) { return all.indexOf(x) > -1; });
+    return ids.length ? ids : all.slice();
+  }
+  function money(n) { return "$" + Number(n).toFixed(2); }
   var RANK = { regulars: 0, full_book: 1, hands_off: 2 };
   var shopId = new URLSearchParams(location.search).get("shop") || localStorage.getItem("ros.shop") || "";
-  var own = 0, view = 0, plan = "regulars", dirty = false;
+  var start = 2, own = 0, view = 0, plan = "regulars", dirty = false;
   var S = { hotel: 5, dining: null, getaway: null, places: null, ownText: "", ownStamps: null };
   function t(k) { return TX[lang][k] || k; }
   function say(m, bad) { var e = $("msg"); e.textContent = m || ""; e.className = "msg" + (m ? (bad ? " bad" : " good") : ""); }
@@ -49,7 +52,7 @@
   function stepper(label, sub, val, min, max, on, disabled) {
     var w = el("div", "stepper");
     w.appendChild(el("div", "lbl", esc(label) + "<small>" + esc(sub) + "</small>"));
-    var c = el("div", "ctl"), m = el("button", "", "−"), p = el("button", "", "+"), o = el("output", "", val + " " + t("visits"));
+    var c = el("div", "ctl"), m = el("button", "", "−"), p = el("button", "", "+"), o = el("output", "", (val - start) + " " + t("visits"));
     m.type = p.type = "button"; m.disabled = p.disabled = disabled;
     m.setAttribute("aria-label", "-"); p.setAttribute("aria-label", "+");
     m.onclick = function () { if (val > min) on(val - 1); };
@@ -77,6 +80,7 @@
     var ro = view !== own;
     var sc = $("scope"); sc.innerHTML = "";
     sc.appendChild(el("p", "", esc(TX[lang].scope[view])));
+    sc.appendChild(el("p", "", esc(t("note").replace("{n}", start))));
     if (ro) sc.appendChild(el("div", "note", esc(t("preview"))));
     $("save").style.display = ro ? "none" : "";
 
@@ -86,7 +90,7 @@
     var hc = el("div", "card pcard"); hc.style.marginTop = "14px";
     hc.appendChild(el("div", "prow", "<h2>" + esc(t("hotelH")) + "</h2><span class='tag'>" + (view === 0 ? "ALL PLANS" : "ALL PLANS") + "</span>"));
     hc.appendChild(el("p", "", esc(t("hotelP"))));
-    hc.appendChild(stepper(t("hotelL"), t("hotelS"), S.hotel, 2, 22, function (v) {
+    hc.appendChild(stepper(t("hotelL"), t("hotelS"), S.hotel, start + 1, 22, function (v) {
       S.hotel = v; if (S.dining != null && S.dining <= v) S.dining = v + 1; if (S.getaway != null && S.getaway <= (S.dining || v)) S.getaway = (S.dining || v) + 1; touch();
     }, ro));
     box.appendChild(hc);
@@ -113,21 +117,21 @@
       if (S.getaway != null) {
         gc.appendChild(stepper(t("getL"), t("getS"), S.getaway, (S.dining || S.hotel) + 1, 24, function (v) { S.getaway = v; touch(); }, ro || locked));
         gc.appendChild(el("p", "", "<b>" + esc(t("dests")) + "</b><br>" + esc(t("destsP"))));
-        var chosen = S.places == null ? null : S.places.split(";").map(function (x) { return x.trim(); });
+        var all = DEST[key].map(function (d) { return d.id; });
+        var chosen = parseIds(S.places, all);
         DEST[key].forEach(function (d) {
-          var parts = d.split("|"), row = el("label", "dest"), cb = el("input");
-          cb.type = "checkbox"; cb.disabled = ro || locked;
-          cb.checked = chosen == null ? true : chosen.indexOf(parts[0]) > -1;
+          var row = el("label", "dest"), cb = el("input");
+          cb.type = "checkbox"; cb.disabled = ro || locked; cb.checked = chosen.indexOf(d.id) > -1;
           cb.onchange = function () {
-            var all = DEST[key].map(function (x) { return x.split("|")[0]; });
-            var cur = S.places == null ? all.slice() : S.places.split(";").map(function (x) { return x.trim(); }).filter(Boolean);
-            var i = cur.indexOf(parts[0]);
-            if (cb.checked && i < 0) cur.push(parts[0]); if (!cb.checked && i > -1) cur.splice(i, 1);
-            S.places = cur.join("; "); dirty = true; say("");
+            var cur = parseIds(S.places, all), i = cur.indexOf(d.id);
+            if (cb.checked && i < 0) cur.push(d.id); if (!cb.checked && i > -1) cur.splice(i, 1);
+            S.places = cur.join(","); dirty = true; say("");
           };
-          row.appendChild(cb); row.appendChild(el("span", "", esc(parts[0]) + "<small>" + esc(parts[1]) + "</small>"));
+          row.appendChild(cb);
+          row.appendChild(el("span", "", esc(d.name) + "<small>" + d.nights + " " + esc(t("nights")) + " · " + esc(t("fees")) + " " + money(d.total_fee) + " " + esc(t("perPerson")) + "</small>"));
           gc.appendChild(row);
         });
+        gc.appendChild(el("p", "", esc(t("feesNote"))));
       }
       if (locked) gc.appendChild(el("div", "note", esc(t("lockedN"))));
       box.appendChild(gc);
@@ -140,8 +144,6 @@
       var inp = el("input"); inp.type = "text"; inp.maxLength = 200; inp.placeholder = t("ownPh"); inp.value = S.ownText || ""; inp.style.marginTop = "10px";
       inp.oninput = function () {
         S.ownText = inp.value; dirty = true; say("");
-        if (S.ownText && S.ownStamps == null) { S.ownStamps = S.hotel; paintOwnStep(); }
-        if (!S.ownText) { S.ownStamps = null; paintOwnStep(); }
       };
       oc.appendChild(inp);
       var slot = el("div"); slot.id = "ownStep"; oc.appendChild(slot); box.appendChild(oc);
@@ -150,12 +152,13 @@
   }
   function paintOwnStep() {
     var s = $("ownStep"); if (!s) return; s.innerHTML = "";
-    if (S.ownText && S.ownStamps != null) s.appendChild(stepper(t("ownL"), "", S.ownStamps, 1, 24, function (v) { S.ownStamps = v; dirty = true; paintOwnStep(); }, false));
+    if (S.ownStamps == null) S.ownStamps = S.hotel;
+    s.appendChild(stepper(t("ownL"), t("ownS"), S.ownStamps, start + 1, 24, function (v) { S.ownStamps = v; dirty = true; paintOwnStep(); }, false));
   }
 
   function save() {
     var btn = $("save"); btn.disabled = true;
-    SB.rpc("set_my_rewards", { p_shop: shopId, p_cfg: { hotel: S.hotel, dining: S.dining, getaway: S.getaway, places: S.getaway != null ? S.places : null, own_text: S.ownText || "", own_stamps: S.ownStamps } })
+    SB.rpc("set_my_rewards", { p_shop: shopId, p_cfg: { hotel: S.hotel, dining: S.dining, getaway: S.getaway, places: S.getaway != null ? S.places : null, own_text: S.ownText || "", own_stamps: S.ownText ? S.ownStamps : null } })
       .then(function (r) {
         if (!r || !r.ok) return say(TX[lang][r && r.error] || t("fail"), true);
         dirty = false; say(t("saved"));
@@ -174,6 +177,9 @@
   function load() {
     return SB.rpc("get_my_rewards", { p_shop: shopId }).then(function (r) {
       if (!r || !r.ok) return say(r && r.error === "not_owner" ? t("notOwner") : t("signin"), true);
+      SB.rest("shops?select=stamps_at_join&id=eq." + encodeURIComponent(shopId)).then(function (rows) {
+        var n = rows && rows[0] && rows[0].stamps_at_join; if (n != null && n !== start) { start = n; paint(); }
+      }).catch(function () {});
       plan = r.plan; own = view = RANK[plan] || 0;
       S.hotel = r.hotel || 5; S.dining = r.dining || null; S.getaway = r.getaway || null;
       S.places = r.places || null; S.ownText = r.own_text || ""; S.ownStamps = r.own_stamps || null;
@@ -181,6 +187,9 @@
       paint();
     });
   }
+  SB.rest("destinations?select=id,name,region,nights,total_fee,nightly_fee,popular&order=popular.desc,name.asc").then(function (rows) {
+    (rows || []).forEach(function (d) { (d.region === "intl" ? DEST.intl : DEST.us).push(d); }); paint();
+  }).catch(function () {});
   (shopId ? Promise.resolve() : SB.rest("shop_owners?select=shop_id").then(function (rows) { if (rows && rows.length) shopId = rows[0].shop_id; }))
     .then(load).catch(function (e) { if (e && e.status === 401) { location.replace("signin.html"); return; } say((e && e.message) || t("signin"), true); });
 })();
