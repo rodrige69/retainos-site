@@ -1,0 +1,17 @@
+/* Public shop card: the one link a shop shares everywhere. */
+.langs{display:flex;justify-content:flex-end;gap:4px;margin-bottom:10px}
+.langs button{border:0;background:transparent;font:600 12px var(--sans);letter-spacing:.08em;color:var(--muted);padding:6px 10px;border-radius:999px;cursor:pointer}
+.langs button.on{background:#fff;color:var(--espresso);box-shadow:0 1px 3px rgba(30,26,23,.12)}
+.shophead{text-align:center;padding:6px 0 10px}
+.shophead #badge{width:84px!important;height:84px!important;font-size:38px!important;margin:0 auto 14px}
+.shophead h1{font-size:30px}
+.kind{margin:6px 0 0;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--terra)}
+.where{margin:8px 0 0;color:var(--ink2);font-size:15px}
+.center{text-align:center}
+.btn.block+.btn.block{margin-top:10px}
+a.btn{text-decoration:none}
+.reach{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:22px}
+.reach a{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:8px;background:#fff;border:1px solid rgba(30,26,23,.12);color:var(--espresso);text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.reach a:active{background:var(--accent-bg)}
+.foot{text-align:center;margin-top:22px}
+.shophead .ownerPhoto{display:none}
