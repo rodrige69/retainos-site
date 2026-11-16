@@ -1,0 +1,40 @@
+/* Client-facing theme: Artisan Craft & Tactile Luxury (from the Stitch design).
+   Loaded after app.css on the join and card pages only. Colors, type and depth
+   follow DESIGN.md; behaviour is untouched. */
+:root{--bg:#FCF9F3;--ink:#1C1C18;--ink2:#4D4540;--muted:#6B625C;--line:rgba(30,26,23,.14);--card:#fff;--accent:#1E1A17;--accent-dk:#000;--accent-bg:rgba(197,155,95,.22);
+  --espresso:#1E1A17;--gold:#C59B5F;--gold-lt:#FECF8F;--terra:#A25A3D;--ivory:#F9F6F0;
+  --serif:Newsreader,"Iowan Old Style",Georgia,serif;--sans:"Hanken Grotesk",Figtree,system-ui,-apple-system,sans-serif}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;line-height:1.2}
+a{color:var(--terra)}
+.card{border:1px solid rgba(30,26,23,.06);border-radius:16px;box-shadow:0 4px 16px -2px rgba(30,26,23,.08),0 1px 3px rgba(30,26,23,.04);padding:24px 22px}
+.label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin:18px 0 6px}
+input[type=text],input[type=email],input[type=tel],input[type=password],select{min-height:52px;border:1px solid rgba(30,26,23,.16);border-radius:8px;font-size:17px;font-weight:600;color:var(--ink)}
+input::placeholder{color:#9B918A;font-weight:400}
+input:focus,select:focus{outline:0;border-color:var(--espresso);box-shadow:0 0 0 3px rgba(197,155,95,.25)}
+.hint{color:var(--muted);font-size:13px}
+.btn{min-height:52px;border-radius:8px;background:var(--espresso);color:var(--ivory);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;transition:transform .08s}
+.btn:hover{background:#000}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--espresso);border:1.5px solid var(--espresso)}
+.btn.ghost:hover{background:rgba(30,26,23,.04)}
+.msg{border-radius:8px;background:rgba(197,155,95,.16);border-color:rgba(197,155,95,.4);color:var(--espresso)}
+.msg.bad{background:#FDECEC;border-color:#F5C6C6;color:#93000A}
+.msg.good{background:#EEF3E8;border-color:#CBD9BD;color:#2F5A1E}
+.linkbox{display:flex;gap:8px;align-items:stretch}
+.linkbox .btn{min-height:52px;padding:0 16px}
+
+/* shop header: logo or initial, owner photo when there is one */
+#badge{display:grid!important;place-items:center;width:48px!important;height:48px!important;border-radius:50%!important;background:var(--espresso)!important;color:var(--gold)!important;font-family:var(--serif)!important;font-weight:500!important;font-size:22px!important;overflow:hidden;flex:none;box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(197,155,95,.5)}
+#badge img{width:100%;height:100%;object-fit:cover;display:block}
+#shopName{font-family:var(--serif);font-size:20px!important;font-weight:500}
+#shopMeta{letter-spacing:.08em;text-transform:uppercase;font-size:11px;font-weight:600}
+.ownerPhoto{width:48px;height:48px;border-radius:50%;object-fit:cover;margin-left:auto;box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(197,155,95,.5)}
+
+/* stamps: debossed wells; stamped ones are raised gold */
+.stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+.stamps i{width:100%;height:auto;aspect-ratio:1;border:0;border-style:solid;background:#E5E2DC;box-shadow:inset 0 2px 4px rgba(30,26,23,.14),inset 0 1px 1px rgba(0,0,0,.08);color:#8A817B;font-size:12px;font-weight:700}
+.stamps i.on{background:radial-gradient(circle at 35% 30%,#FFE3B3,var(--gold-lt) 55%,#ECBF7F);color:var(--espresso);box-shadow:0 6px 12px -2px rgba(30,26,23,.16),0 2px 4px -1px rgba(30,26,23,.08),inset 0 1px 1px rgba(255,255,255,.4)}
+.stepnum{background:var(--espresso)!important;color:var(--gold)!important}
+.foot{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.consent{font-size:14px}

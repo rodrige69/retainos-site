@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#17191C">
+<meta name="theme-color" content="#FCF9F3">
 <title>You're in · RetainOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="client-theme.css">
 <script src="config.js"></script>
 <script src="sb.js"></script>
 </head>
@@ -15,7 +18,7 @@
 <main class="wrap narrow" style="padding-top:26px">
   <div class="card">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
-      <span id="badge" style="width:44px;height:44px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:'Bricolage Grotesque';font-weight:800;font-size:19px">·</span>
+      <span id="badge" style="width:44px;height:44px;border-radius:13px">·</span>
       <div><b id="shopName" style="font-size:18px">&nbsp;</b><br><small id="shopMeta" class="hint"></small></div>
     </div>
 
@@ -48,6 +51,7 @@
   <p class="foot" id="foot"></p>
 </main>
 
+<script src="brand.js"></script>
 <script src="promo-widget.js"></script>
 <script src="thankyou.js"></script>
 </body>
