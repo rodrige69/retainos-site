@@ -438,6 +438,7 @@ var ownersFailed = false;
     }
     var s = "shop_id=eq." + encodeURIComponent(owners[0].shop_id);
     var shopId = encodeURIComponent(owners[0].shop_id);
+    try { localStorage.setItem("ros.shop", decodeURIComponent(shopId)); } catch (e) {}
     try { history.replaceState({}, "", location.pathname + "?shop=" + shopId); } catch (e) {}
     return Promise.all([
       soft(0, SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId)),
