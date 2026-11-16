@@ -10,7 +10,7 @@ var T = {
     print: "Print this poster",
     printHint: "Print it at A4 or letter size and put one at the counter.",
     posterHead: "Scan to join our rewards club",
-    posterSub: "Free to join. Every visit earns a stamp.",
+    posterSub: "Every visit earns a stamp.",
     step: "Escanea para unirte · Scan to join",
     foot: "Powered by RetainOS",
     empty: "No shop linked to this login yet.",
@@ -28,7 +28,7 @@ var T = {
     print: "Imprimir este cartel",
     printHint: "Imprímelo en A4 o carta y pon uno en el mostrador.",
     posterHead: "Escanea y únete a nuestro club de premios",
-    posterSub: "Es gratis. Cada visita gana un sello.",
+    posterSub: "Cada visita gana un sello.",
     step: "Escanea para unirte · Scan to join",
     foot: "Con tecnología de RetainOS",
     empty: "Todavía no hay un negocio ligado a este acceso.",
@@ -64,13 +64,30 @@ function paint() {
   document.getElementById("back").textContent = t("back");
 }
 
+/* Every shop gets its QR drawn here from its join link, so a brand-new shop
+   never depends on a pre-made image file. */
+function drawQr(url, name) {
+  var img = document.getElementById("qr");
+  img.alt = name + " QR";
+  var make = function () {
+    var q = window.qrcode(0, "M");
+    q.addData(url);
+    q.make();
+    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(q.createSvgTag({ cellSize: 6, margin: 0, scalable: true }));
+  };
+  if (window.qrcode) return make();
+  var el = document.createElement("script");
+  el.src = "lib/qrcode.js";
+  el.onload = make;
+  document.head.appendChild(el);
+}
+
 function select(slug) {
   var shop = shops.filter(function (s) { return s.id === slug; })[0] || shops[0];
   if (!shop) return;
   document.getElementById("shopSel").value = shop.id;
   document.getElementById("joinUrl").value = JOIN_BASE + shop.id;
-  document.getElementById("qr").src = "qr/" + shop.id + ".svg";
-  document.getElementById("qr").alt = shop.name + " QR";
+  drawQr(JOIN_BASE + shop.id, shop.name);
   document.getElementById("posterShop").textContent = shop.name;
   document.getElementById("badge").textContent = shop.name.charAt(0).toUpperCase();
 }
