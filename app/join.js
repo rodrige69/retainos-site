@@ -39,6 +39,7 @@ var T = {
     copy: "Copy",
     copied: "Copied",
     done: "Done",
+    notYou: "Not {name}? Join as someone else",
     doneMsg: "All set. You can close this page.",
     note: "Keep this link: it opens your card on any phone. Tap it, then add it to your home screen and it's one tap from now on.",
     qrShow: "Show my QR",
@@ -100,6 +101,7 @@ var T = {
     brokenH: "Este código no corresponde a un negocio",
     brokenP: "Pídele el código al mostrador o escanea el QR de la caja.",
     demo: "Modo demo: no hay clave de Supabase en config.js, así que no se guarda nada.",
+    notYou: "¿No eres {name}? Únete como otra persona",
     foot: "Con tecnología de RetainOS"
   }
 };
@@ -196,7 +198,17 @@ function drawCard(c, token) {
     hide("refBox");
   }
   $("cardNote").textContent = t("note");
+  $("notYou").textContent = c.first_name ? t("notYou", { name: c.first_name }) : t("notYou", { name: "" }).replace("Not ? ", "Not you? ").replace("¿No eres ? ", "¿No eres tú? ");
 }
+
+/* A phone remembers the card of whoever joined on it. This lets someone else
+   (or the owner testing) start fresh: forget the card on this phone and show
+   the join form. The member's card itself is not touched. */
+$("notYou").onclick = function () {
+  try { localStorage.removeItem(tokenKey); } catch (e) {}
+  var q = "?shop=" + encodeURIComponent(slug) + (urlLang ? "&l=" + urlLang : "") + (referredBy ? "&ref=" + encodeURIComponent(referredBy) : "");
+  location.replace(location.pathname + q);
+};
 
 /* The member's own QR: the card link, so a normal phone camera opens the card and
    the staff scanner reads the token out of it. The generator loads only when tapped. */
