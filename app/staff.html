@@ -58,6 +58,12 @@
         <div class="stamps" id="confirmStamps"></div>
         <p class="hint" id="confirmNote"></p>
         <button class="btn block" id="confirmBtn" type="button"></button>
+        <button class="btn block" id="ovReqBtn" type="button"></button>
+        <div id="ovBox" class="hidden">
+          <p class="hint" id="ovSent"></p>
+          <input id="ovCode" type="tel" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="text-align:center;letter-spacing:6px;font-size:22px">
+          <button class="btn block" id="ovGoBtn" type="button" style="margin-top:8px"></button>
+        </div>
         <button class="btn block ghost" id="confirmCancel" type="button"></button>
       </div>
 
