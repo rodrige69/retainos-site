@@ -285,7 +285,7 @@ def how(v, key):
         who_en = "Parents earn" if mode(v) == "family" else "They earn"
         who_es = "Los padres ganan" if mode(v) == "family" else "Se ganan"
         steps = (step(1, ("They check in with a quick scan.", "Se registran con un escaneo rápido."),
-                      (f"Clients scan your QR code {v['scan_en']}. " + v.get("visit_confirmation_en", "Every visit counts toward a reward."), f"Tus clientes escanean tu código QR {v['scan_es']}. Cada visita cuenta para su premio."), qr)
+                      (f"Clients scan your QR code {v['scan_en']}. " + v.get("visit_confirmation_en", "Every visit counts toward a reward."), v.get("visit_confirmation_es") or f"Tus clientes escanean tu código QR {v['scan_es']}. Cada visita cuenta para su premio."), qr)
                  + step(2, ("We remind them when it's time.", "Les recordamos cuando les toca."), step2, mini_text(v, v["msg_en"], v["msg_es"]))
                  + step(3, (f"{who_en} something worth coming back for.", f"{who_es} algo que vale la pena."),
                         ("Complimentary rewards for visits and referrals. You never touch your prices.", "Premios de cortesía por visitas y referidos. Tú no tocas tus precios."), reward))
@@ -682,6 +682,11 @@ EN_BOOKING_COPY = {
 }
 
 
+ES_BOOKING_COPY = {'salons': ('Recuérdales a tus clientas cuándo les toca un corte o un retoque de color.', 'RetainOS les envía un recordatorio con el enlace de reservas que ya usas. Premia sus visitas sin bajar tus precios.', 'Empieza con Regresa · $39 al mes'),
+    'barbershops': ('Dales un motivo para volver por su segundo corte.', 'RetainOS les recuerda cuándo les toca otro corte y les envía tu enlace de reservas. También puedes premiar a quienes recomiendan tu barbería.', 'Empieza con Regresa · $39 al mes'),
+    'nail-lash': ('Haz que tus clientas de uñas y pestañas vuelvan.', 'Recuérdales cuándo les toca otra manicura o un retoque de pestañas. Pueden reservar con el enlace que ya usas y ganar premios por volver.', 'Ver planes para uñas y pestañas')}
+
+
 def vertical_page(v):
     alt = ("/" + v["slug"], "/es/" + v["slug_es"])
     items = faq_owner(v)
@@ -726,6 +731,19 @@ def vertical_page(v):
         v = {**v, "lead_with_come_back": True}
         cta_href = "#come-back"
         fine = ("$0 setup for Black Friday. Month to month.", "")
+    if LANG == "es" and v["key"] in ES_BOOKING_COPY:
+        headline, subhead, button = ES_BOOKING_COPY[v["key"]]
+        h1, sub, cta = (h1[0], headline), (sub[0], subhead), (CTA[0], button)
+        nail_lash = v["key"] == "nail-lash"
+        v = {**v, "lead_with_come_back": not nail_lash,
+             "visit_confirmation_es": 'Tus clientas se inscriben escaneando el código QR una sola vez. Tu equipo confirma cada visita pagada para que cuente para el premio.' if v["key"] != "barbershops" else 'Tus clientes se inscriben escaneando el código QR una sola vez. Tu equipo confirma cada visita pagada para que cuente para el premio.'}
+        cta_href = "#plans" if nail_lash else "#come-back"
+        fine = ("", "Desde $39 al mes. Sin costo de instalación por Black Friday en Regresa y Agenda Llena."
+                if nail_lash else "Sin costo de instalación por Black Friday. Mes a mes.")
+        if nail_lash:
+            v.update(next_es="retoque de pestañas", msg_es='¡Hola, Ana! Esta semana te toca tu retoque de pestañas en Petal & Polish Studio. Te faltan dos visitas para ganar tu tarjeta de descuentos en hoteles de $100.',
+                     pain_es='Entre manicuras, pedicuras y retoques de pestañas, es fácil que una clienta se olvide de reservar su próxima cita.', step2_es='Tus clientas reciben un recordatorio en el idioma que prefieran cuando les toca su próxima manicura, pedicura o retoque de pestañas.')
+            summary = (summary[0], summary[1] + " " + 'Por ejemplo: «¡Hola, Mia! ¿Lista para tu próxima manicura en Petal &amp; Polish Studio? Toca el enlace para reservar tu próxima cita».')
     workflow = how(v, L(v["slug"], "es-" + v["slug_es"]))
     story = (workflow + problem(v)) if v.get("lead_with_come_back") else (problem(v) + workflow)
     ld = [{"@context": "https://schema.org", "@type": "Service", "name": L(label[0].replace("&amp;", "&"), label[1]),
