@@ -298,10 +298,11 @@ function say(text, kind) {
 document.documentElement.lang = lang;
 $("signout").textContent = t("out");
 $("qrLink").textContent = t("qr");
-$("tabHome").textContent = t("navHome");
-$("tabScan").textContent = t("navScan");
-$("tabQr").textContent = t("qr");
-$("tabPromo").textContent = t("promo");
+$("tabHome").textContent = lang === "es" ? "Inicio" : "Home";
+$("tabScan").textContent = lang === "es" ? "Escanear" : "Scan";
+$("tabPerks").textContent = lang === "es" ? "Premios" : "Perks";
+$("tabQr").textContent = lang === "es" ? "QR" : "QR & Links";
+$("tabPromo").textContent = lang === "es" ? "Mensaje" : "Message";
 $("scanBtn").textContent = t("scanBig");
 $("hdrRole").textContent = t("role");
 $("dueH").textContent = t("dueH");
@@ -490,7 +491,7 @@ var ownersFailed = false;
     var sid = new URLSearchParams(location.search).get("shop");
     if (sid) {
       var q = "?shop=" + encodeURIComponent(sid);
-      $("scanBtn").href = "staff.html" + q; $("tabScan").href = "staff.html" + q;
+      $("scanBtn").href = "staff.html" + q; $("tabScan").href = "staff.html" + q; $("tabPerks").href = "perks.html" + q;
     }
     if (shop.status && shop.status !== "active") say(t("pendingNote"));
     $("plan").textContent = shop.milestone
