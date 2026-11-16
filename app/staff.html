@@ -33,10 +33,6 @@
       <div class="slots" id="slots"><i></i><i></i><i></i><i></i></div>
       <div class="pinpad" id="pad"></div>
 
-      <label class="label" id="lPhone" for="phone"></label>
-      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="3055551234">
-      <p class="hint" id="phoneHint"></p>
-
       <label class="label" id="lType"></label>
       <div id="types" style="display:flex;gap:8px;flex-wrap:wrap">
         <span class="chip" data-type="appointment" aria-pressed="true"></span>
@@ -44,6 +40,30 @@
         <span class="chip" data-type="product" aria-pressed="false"></span>
         <span class="chip" data-type="other" aria-pressed="false"></span>
       </div>
+
+
+      <button class="btn block" id="scanBtn" type="button"></button>
+      <p class="hint" id="scanHint"></p>
+
+      <div id="scanBox" class="hidden" style="margin-top:14px">
+        <video id="scanVideo" playsinline muted style="width:100%;border-radius:14px;background:#000"></video>
+        <canvas id="scanCanvas" class="hidden"></canvas>
+        <p class="hint" id="scanPoint"></p>
+        <button class="btn block ghost" id="scanCancel" type="button"></button>
+      </div>
+
+      <div id="confirmBox" class="hidden" style="margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:14px">
+        <b id="confirmWho" style="font-size:20px"></b>
+        <div class="stamps" id="confirmStamps"></div>
+        <p class="hint" id="confirmNote"></p>
+        <button class="btn block" id="confirmBtn" type="button"></button>
+        <button class="btn block ghost" id="confirmCancel" type="button"></button>
+      </div>
+
+      <p class="hint" id="orType" style="margin-top:22px"></p>
+      <label class="label" id="lPhone" for="phone"></label>
+      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="3055551234">
+      <p class="hint" id="phoneHint"></p>
 
       <button class="btn block" id="submit"></button>
       <p class="hint" id="weekNote"></p>
