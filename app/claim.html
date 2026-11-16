@@ -39,6 +39,27 @@
     </div>
 
     <!-- used, expired or unknown -->
+    <!-- getaway rewards: pick a destination, then hand off to Marketing Boost -->
+    <div id="gaBlock" class="hidden">
+      <h1 id="gaH" style="font-size:26px;margin-top:10px"></h1>
+      <p class="hint" id="gaSub"></p>
+      <label class="label" id="lDest" for="gaDest"></label>
+      <select id="gaDest"></select>
+      <p class="hint" id="gaFees"></p>
+      <label class="label" id="lName" for="gaName"></label>
+      <input id="gaName" type="text" autocomplete="name">
+      <label class="label" id="lEmail" for="gaEmail"></label>
+      <input id="gaEmail" type="email" autocomplete="email">
+      <label class="label" id="lPhone" for="gaPhone"></label>
+      <input id="gaPhone" type="tel" inputmode="tel" autocomplete="tel-national">
+      <div class="msg" id="gaMsg"></div>
+      <button class="btn block" id="gaGo"></button>
+    </div>
+    <div id="gaDone" class="hidden">
+      <h1 id="gaDoneH" style="font-size:26px;margin-top:10px"></h1>
+      <p class="hint" id="gaDoneP"></p>
+    </div>
+
     <div id="badBlock" class="hidden">
       <h1 id="badH" style="font-size:24px;margin-top:10px"></h1>
       <p class="hint" id="badP"></p>

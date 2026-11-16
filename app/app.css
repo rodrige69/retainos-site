@@ -113,3 +113,4 @@ input:focus,select:focus{outline:3px solid var(--accent-bg);border-color:var(--a
 .insight:first-child{border-top:0}
 @media(max-width:780px){.hero{grid-template-columns:1fr}.heroSide{border-left:0;border-top:1px solid #2A2D31;padding:16px 0 0}.cols{grid-template-columns:1fr}}
 @media print{.top,.demo,.foot,.btn,.noprint{display:none!important}body{background:#fff}.poster{border:0}}
+.msg:empty{display:none}
