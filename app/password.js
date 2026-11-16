@@ -59,7 +59,7 @@ function $(id) { return document.getElementById(id); }
 
 function paint() {
   document.documentElement.lang = lang;
-  ["h1", "sub", "lPw", "lPw2", "save", "foot", "toSignin", "lEmail", "resend"].forEach(function (id) {
+  ["h1", "sub", "lPw", "lPw2", "save", "foot", "toSignin", "lEmail", "resend", "go"].forEach(function (id) {
     if ($(id)) $(id).textContent = t(id);
   });
   $("btnEn").setAttribute("aria-pressed", String(lang === "en"));
