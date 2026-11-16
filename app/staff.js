@@ -1,7 +1,7 @@
 var T = {
   en: {
     h1: "Log a visit",
-    sub: "Enter your PIN and the client's mobile number.",
+    sub: "Enter your PIN, then scan the client's QR. No QR? Type their number below.",
     lShop: "Which shop?",
     lPin: "Your 4-digit PIN",
     lPhone: "Client's 10-digit number",
@@ -27,11 +27,23 @@ var T = {
     unknownShop: "We don't recognise this shop code.",
     badPhone: "That number looks short — use 10 digits.",
     demo: "Demo mode — no Supabase key in config.js, so nothing is saved.",
-    foot: "One stamp per client per week. Nothing sends from this page."
+    foot: "One stamp per client per week. Nothing sends from this page.",
+    scanBtn: "Scan client's QR",
+    scanHint: "Ask the client to open their card and tap Show my QR.",
+    scanPoint: "Point the camera at the client's QR.",
+    scanCancel: "Cancel",
+    orType: "Or type the client's number instead:",
+    confirmBtn: "Confirm visit",
+    confirmCancel: "Cancel",
+    confirmCount: "{stamps} of {milestone} stamps",
+    camDenied: "The camera is blocked. Allow camera access for this page, or type the client's number below.",
+    camNone: "This phone can't open the camera here. Type the client's number below.",
+    notThisShop: "That QR isn't a card from this shop.",
+    locked: "Too many wrong PINs. Try again in {minutes} minutes."
   },
   es: {
     h1: "Registrar una visita",
-    sub: "Pon tu PIN y el número del cliente.",
+    sub: "Pon tu PIN y escanea el QR del cliente. ¿Sin QR? Escribe su número abajo.",
     lShop: "¿En qué negocio?",
     lPin: "Tu PIN de 4 dígitos",
     lPhone: "Número del cliente (10 dígitos)",
@@ -57,7 +69,19 @@ var T = {
     unknownShop: "No reconocemos ese código de negocio.",
     badPhone: "Ese número parece corto: usa 10 dígitos.",
     demo: "Modo demo: no hay clave de Supabase en config.js, así que no se guarda nada.",
-    foot: "Un sello por cliente por semana. Desde esta página no se envía nada."
+    foot: "Un sello por cliente por semana. Desde esta página no se envía nada.",
+    scanBtn: "Escanear el QR del cliente",
+    scanHint: "Pídele al cliente que abra su tarjeta y toque Mostrar mi QR.",
+    scanPoint: "Apunta la cámara al QR del cliente.",
+    scanCancel: "Cancelar",
+    orType: "O escribe el número del cliente:",
+    confirmBtn: "Confirmar visita",
+    confirmCancel: "Cancelar",
+    confirmCount: "{stamps} de {milestone} sellos",
+    camDenied: "La cámara está bloqueada. Permite el acceso a la cámara para esta página o escribe el número del cliente abajo.",
+    camNone: "Este teléfono no puede abrir la cámara aquí. Escribe el número del cliente abajo.",
+    notThisShop: "Ese QR no es una tarjeta de este negocio.",
+    locked: "Demasiados PIN incorrectos. Inténtalo de nuevo en {minutes} minutos."
   }
 };
 
@@ -74,7 +98,8 @@ function t(k, vars) {
 
 function paint() {
   document.documentElement.lang = lang;
-  ["h1", "sub", "lShop", "lPin", "lPhone", "phoneHint", "lType", "weekNote", "submit", "foot"].forEach(function (id) {
+  ["h1", "sub", "lShop", "lPin", "lPhone", "phoneHint", "lType", "weekNote", "submit", "foot",
+   "scanBtn", "scanHint", "scanPoint", "scanCancel", "orType", "confirmBtn", "confirmCancel"].forEach(function (id) {
     var el = document.getElementById(id);
     var key = { lPin: "lPin", lPhone: "lPhone", lType: "lType", phoneHint: "phoneHint", weekNote: "weekNote" }[id] || id;
     if (el && T[lang][key]) el.textContent = T[lang][key];
@@ -93,7 +118,11 @@ function paint() {
   renderPin();
 }
 
+var idleTimer = null;
 function renderPin() {
+  /* A PIN left on screen clears itself after 2 minutes of no taps. */
+  clearTimeout(idleTimer);
+  if (pin) idleTimer = setTimeout(function () { pin = ""; renderPin(); }, 120000);
   [].forEach.call(document.getElementById("slots").children, function (s, i) {
     s.className = i < pin.length ? "on" : "";
   });
@@ -137,16 +166,152 @@ document.getElementById("submit").onclick = function () {
     .then(function (res) {
       if (!res) return say(T[lang].badPin, "bad");
       if (res.ok) { pin = ""; renderPin(); return done(res); }
-      var map = {
-        bad_pin: "badPin",
-        too_soon: "tooSoon",
-        not_member: "notMember",
-        unknown_shop: "unknownShop",
-        bad_phone: "badPhone"
-      };
-      say(t(map[res.error] || "badPin", { days: res.days_left }), "bad");
+      say(errText(res), "bad");
     })
     .catch(function (e) { say(e.message, "bad"); })
+    .then(function () { btn.disabled = false; });
+};
+
+function errText(res) {
+  if (!res) return t("badPin");
+  var map = {
+    bad_pin: "badPin",
+    locked: "locked",
+    too_soon: "tooSoon",
+    not_member: "notMember",
+    unknown_shop: "unknownShop",
+    bad_phone: "badPhone"
+  };
+  return t(map[res.error] || "badPin", { days: res.days_left, minutes: res.minutes });
+}
+
+/* ---- Scan to stamp ----
+   The client's card QR holds their card link (…&t=<token>). The camera reads it,
+   the PIN-gated lookup shows who it is, and Confirm visit stamps through the same
+   rules as typing the number. The scanner library only loads when Scan is tapped. */
+var cam = null, scanning = false, scanTok = "", jsqrReady = null;
+
+function tokenFrom(text) {
+  var s = String(text || "");
+  var m = s.match(/[?&]t=([0-9a-fA-F-]{36})(?:&|$)/);
+  var tok = m ? m[1] : s.trim();
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(tok) ? tok.toLowerCase() : "";
+}
+
+function loadJsQR() {
+  if (window.jsQR) return Promise.resolve();
+  if (!jsqrReady) {
+    jsqrReady = new Promise(function (ok, bad) {
+      var el = document.createElement("script");
+      el.src = "lib/jsQR.js";
+      el.onload = ok;
+      el.onerror = function () { jsqrReady = null; bad(new Error("scanner")); };
+      document.head.appendChild(el);
+    });
+  }
+  return jsqrReady;
+}
+
+function stopCam() {
+  scanning = false;
+  if (cam) { cam.getTracks().forEach(function (tr) { tr.stop(); }); cam = null; }
+  document.getElementById("scanBox").classList.add("hidden");
+}
+
+function hideConfirm() {
+  scanTok = "";
+  document.getElementById("confirmBox").classList.add("hidden");
+}
+
+function drawStamps(el, cycle, milestone) {
+  el.innerHTML = "";
+  for (var i = 0; i < milestone; i++) {
+    var d = document.createElement("i");
+    if (i < cycle) { d.className = "on"; d.textContent = "✓"; }
+    else d.textContent = String(i + 1);
+    el.appendChild(d);
+  }
+}
+
+function showConfirm(res, tok) {
+  scanTok = tok;
+  document.getElementById("msg").className = "msg hidden";
+  document.getElementById("confirmWho").textContent = res.member || "";
+  drawStamps(document.getElementById("confirmStamps"), res.cycle, res.milestone);
+  var note = t("confirmCount", { stamps: res.cycle, milestone: res.milestone });
+  if (!res.can_stamp) note += " · " + t("tooSoon", { days: res.days_left });
+  document.getElementById("confirmNote").textContent = note;
+  document.getElementById("confirmBtn").classList.toggle("hidden", !res.can_stamp);
+  document.getElementById("confirmBox").classList.remove("hidden");
+}
+
+function scanTick() {
+  if (!scanning) return;
+  var v = document.getElementById("scanVideo");
+  if (v.readyState >= 2 && v.videoWidth) {
+    var c = document.getElementById("scanCanvas");
+    var w = Math.min(v.videoWidth, 640);
+    var h = Math.round(v.videoHeight * w / v.videoWidth);
+    c.width = w;
+    c.height = h;
+    var ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(v, 0, 0, w, h);
+    var img = ctx.getImageData(0, 0, w, h);
+    var code = window.jsQR(img.data, w, h, { inversionAttempts: "dontInvert" });
+    var tok = code && code.data ? tokenFrom(code.data) : "";
+    if (tok) { stopCam(); return lookup(tok); }
+  }
+  setTimeout(scanTick, 120);
+}
+
+function lookup(tok) {
+  SB.rpc("lookup_card_for_staff", { p_shop: shop, p_pin: pin, p_token: tok })
+    .then(function (res) {
+      if (res && res.ok) return showConfirm(res, tok);
+      if (res && res.error === "not_member") return say(t("notThisShop"), "bad");
+      say(errText(res), "bad");
+    })
+    .catch(function (e) { say(e.message, "bad"); });
+}
+
+document.getElementById("scanBtn").onclick = function () {
+  if (pin.length !== 4) return say(t("needPin"), "bad");
+  hideConfirm();
+  document.getElementById("msg").className = "msg hidden";
+  if (SB.demo) return showConfirm({ member: "Client", cycle: 3, milestone: 5, can_stamp: true }, "demo");
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return say(t("camNone"), "bad");
+  loadJsQR()
+    .then(function () {
+      return navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+    })
+    .then(function (stream) {
+      cam = stream;
+      var v = document.getElementById("scanVideo");
+      v.srcObject = stream;
+      document.getElementById("scanBox").classList.remove("hidden");
+      return v.play();
+    })
+    .then(function () { scanning = true; scanTick(); })
+    .catch(function (e) {
+      stopCam();
+      say(t(e && e.name === "NotAllowedError" ? "camDenied" : "camNone"), "bad");
+    });
+};
+
+document.getElementById("scanCancel").onclick = stopCam;
+document.getElementById("confirmCancel").onclick = hideConfirm;
+
+document.getElementById("confirmBtn").onclick = function () {
+  if (SB.demo) { hideConfirm(); return done({ member: "Client", staff: "Marcus", visits: 4, cycle: 4, milestone: 5 }); }
+  var btn = this;
+  btn.disabled = true;
+  SB.rpc("log_visit_by_token", { p_shop: shop, p_pin: pin, p_token: scanTok, p_visit_type: visitType })
+    .then(function (res) {
+      hideConfirm();
+      if (res && res.ok) return done(res);
+      say(res && res.error === "not_member" ? t("notThisShop") : errText(res), "bad");
+    })
+    .catch(function (e) { hideConfirm(); say(e.message, "bad"); })
     .then(function () { btn.disabled = false; });
 };
 

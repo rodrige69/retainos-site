@@ -41,6 +41,9 @@ var T = {
     done: "Done",
     doneMsg: "All set. You can close this page.",
     note: "Keep this link: it opens your card on any phone. Tap it, then add it to your home screen and it's one tap from now on.",
+    qrShow: "Show my QR",
+    qrHide: "Hide my QR",
+    qrNote: "Next time you visit {shop}, show this QR to get your next stamp.",
     refLbl: "Invite a friend",
     refNote: "Send this link. Whoever joins with it gets credited to you, and the shop sees who brought them.",
     refCopy: "Copy",
@@ -86,6 +89,9 @@ var T = {
     done: "Listo",
     doneMsg: "Todo listo. Ya puedes cerrar esta página.",
     note: "Guarda este enlace: abre tu tarjeta en cualquier teléfono. Tócalo y agrégalo a tu pantalla de inicio para tenerlo a un toque.",
+    qrShow: "Mostrar mi QR",
+    qrHide: "Ocultar mi QR",
+    qrNote: "La próxima vez que visites {shop}, muestra este QR para recibir tu sello.",
     refLbl: "Invita a un amigo",
     refNote: "Comparte este enlace. Quien se una con él queda a tu nombre, y el negocio ve quién lo trajo.",
     refCopy: "Copiar",
@@ -113,6 +119,7 @@ var reward = { name: "hotel savings card" };
 var stopsAt = [];
 var lang = "en";
 var tokenKey = "ros.card." + slug;
+var cardToken = "";
 
 function t(k, vars) {
   var s = T[lang][k] || k;
@@ -178,6 +185,8 @@ function drawCard(c, token) {
     ? t("next", { left: next.at - c.stamps, reward: next.name || "" })
     : t("ready");
   $("cardUrl").value = cardUrl(token);
+  cardToken = token;
+  qrPaint();
   if (c.ref_code) {
     $("refUrl").value = location.origin + "/join.html?shop=" + encodeURIComponent(slug) +
       "&ref=" + encodeURIComponent(c.ref_code);
@@ -188,6 +197,38 @@ function drawCard(c, token) {
   }
   $("cardNote").textContent = t("note");
 }
+
+/* The member's own QR: the card link, so a normal phone camera opens the card and
+   the staff scanner reads the token out of it. The generator loads only when tapped. */
+var qrShown = false;
+function qrPaint() {
+  $("qrBtn").textContent = t(qrShown ? "qrHide" : "qrShow");
+  $("qrNote").textContent = t("qrNote", { shop: shop && shop.name ? shop.name : "" });
+}
+function loadScript(src) {
+  return new Promise(function (ok, bad) {
+    var el = document.createElement("script");
+    el.src = src;
+    el.onload = ok;
+    el.onerror = bad;
+    document.head.appendChild(el);
+  });
+}
+function drawQr() {
+  var make = function () {
+    var q = window.qrcode(0, "M");
+    q.addData(cardUrl(cardToken).replace(/&l=(en|es)$/, ""));
+    q.make();
+    $("qrSvg").innerHTML = q.createSvgTag({ cellSize: 6, margin: 0, scalable: true });
+  };
+  if (window.qrcode) return make();
+  loadScript("lib/qrcode.js").then(make).catch(function () {});
+}
+$("qrBtn").onclick = function () {
+  qrShown = !qrShown;
+  if (qrShown) { show("qrBox"); drawQr(); } else { hide("qrBox"); }
+  qrPaint();
+};
 
 function broken() {
   hide("form");
