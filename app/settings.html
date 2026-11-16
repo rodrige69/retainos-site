@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#FCF9F3">
+<title>Settings · RetainOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="client-theme.css">
+<link rel="stylesheet" href="dashboard-theme.css">
+<script src="config.js"></script>
+<script src="sb.js"></script>
+</head>
+<body>
+<main class="wrap narrow" style="padding-top:24px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <p class="hint" id="eyebrow" style="margin:0;letter-spacing:.1em;text-transform:uppercase;font-size:11px"></p>
+    <div style="display:flex;gap:6px">
+      <button class="btn ghost" data-lang="en" type="button">EN</button>
+      <button class="btn ghost" data-lang="es" type="button">ES</button>
+    </div>
+  </div>
+  <h1 id="h1" style="font-size:28px;margin-top:10px"></h1>
+  <p class="hint" id="sub"></p>
+
+  <div class="card pcard" style="margin-top:14px"><h2 id="linksH"></h2><div id="links" class="slinks"></div></div>
+
+  <div class="card pcard" style="margin-top:14px">
+    <h2 id="staffH"></h2><p id="staffP"></p>
+    <div id="staffList"></div>
+    <div class="msg" id="staffMsg" role="status"></div>
+    <h3 id="addH" class="sh3"></h3>
+    <label class="label" id="lName" for="sName"></label><input id="sName" type="text" maxlength="60" autocomplete="off">
+    <label class="label" id="lPin" for="sPin"></label><input id="sPin" type="text" inputmode="numeric" maxlength="4" autocomplete="off">
+    <button class="btn" id="addStaff" type="button" style="width:100%;margin-top:12px"></button>
+  </div>
+
+  <div class="card pcard" style="margin-top:14px">
+    <h2 id="shopH"></h2>
+    <label class="label" id="lShop" for="fName"></label><input id="fName" type="text" maxlength="80">
+    <label class="label" id="lPhone" for="fPhone"></label><input id="fPhone" type="text" inputmode="tel" maxlength="40">
+    <label class="label" id="lAddr" for="fAddr"></label><input id="fAddr" type="text" maxlength="200">
+    <label class="label" id="lWeb" for="fWeb"></label><input id="fWeb" type="text" maxlength="200">
+    <label class="label" id="lIg" for="fIg"></label><input id="fIg" type="text" maxlength="100">
+    <div class="msg" id="shopMsg" role="status" style="margin-top:10px"></div>
+    <button class="btn" id="saveShop" type="button" style="width:100%;margin-top:12px"></button>
+  </div>
+
+  <div class="card pcard" style="margin-top:14px">
+    <h2 id="acctH"></h2>
+    <a class="btn ghost" id="pwd" href="password.html" style="display:block;text-align:center;text-decoration:none;margin-top:12px"></a>
+    <button class="btn ghost" id="out" type="button" style="width:100%;margin-top:10px"></button>
+  </div>
+</main>
+<script src="settings.js"></script>
+<script src="owner-nav.js"></script>
+</body>
+</html>
