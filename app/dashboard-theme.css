@@ -1,0 +1,34 @@
+/* Owner dashboard: Artisan Craft theme (look only; logic is in dashboard.js). */
+.top{border-bottom:1px solid rgba(30,26,23,.08)}
+.logo{font-family:var(--serif);font-weight:500;color:var(--espresso)}
+.logo svg,.logo b{color:var(--gold)}
+.chip{border-radius:8px;border:1px solid rgba(30,26,23,.16);background:#fff;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--espresso);text-decoration:none;min-height:36px}
+.lang{border-color:var(--espresso);border-radius:8px}
+.lang button{font-size:12px;letter-spacing:.06em;color:var(--espresso)}
+.lang button[aria-pressed=true]{background:var(--espresso);color:var(--ivory)}
+.hero{background:var(--espresso);border-radius:16px;box-shadow:0 8px 30px -4px rgba(30,26,23,.2)}
+.hero h1{font-family:var(--serif);font-weight:500}
+.heroDate{color:var(--gold);font-weight:600;letter-spacing:.1em;font-size:12px}
+.heroPlan{color:#D8CFC2}
+.heroBig b{font-family:var(--serif);font-weight:500;color:var(--gold-lt)}
+.heroBig span{color:#D8CFC2}
+.heroSide{border-left-color:rgba(197,155,95,.3)}
+.meterLabel{color:#E9E2D6}
+.meter{background:rgba(255,255,255,.12)}
+.meter i{background:linear-gradient(90deg,var(--gold),var(--gold-lt))}
+.meterNote{color:#BDB3A5}
+.kpi{background:#fff;border:1px solid rgba(30,26,23,.06);border-radius:16px;box-shadow:0 4px 16px -2px rgba(30,26,23,.08)}
+.kpi .n{font-family:var(--serif);font-weight:500;color:var(--espresso)}
+.kpi .k{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.sec{font-family:var(--serif);font-weight:500;font-size:22px;color:var(--espresso)}
+.list{border-radius:16px;border:1px solid rgba(30,26,23,.06);box-shadow:0 4px 16px -2px rgba(30,26,23,.06)}
+.row,.insight{border-top-color:rgba(30,26,23,.07)}
+.init{background:var(--espresso);color:var(--gold);font-family:var(--serif);font-weight:500;font-size:15px}
+.row .meta{color:var(--terra)}
+.pill{background:#EFEAE0;color:var(--ink2);letter-spacing:.06em}
+.pill.on{background:#EEF3E8;color:#2F5A1E}
+.pill.pend{background:rgba(197,155,95,.22);color:#6B4A14}
+.pill.off{background:#F6E6E0;color:#8A4630}
+.linkbtn{color:var(--terra)}
+.note{background:rgba(197,155,95,.16);border-color:rgba(197,155,95,.4);color:var(--espresso)}
+.voucher{border-color:var(--gold);background:rgba(197,155,95,.16);color:var(--espresso);font-family:var(--serif);font-weight:500}

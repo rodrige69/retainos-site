@@ -39,6 +39,7 @@ var T = {
     shareH: "Send a link",
     shareSub: "Hand a client your booking link or your payment link straight from your phone.",
     lBooking: "Booking link", lPay: "Payment link", share: "Share",
+    lCard: "Your shop card link", cardNote: "Your one link for everything: it shows your booking button, contact info and rewards sign-up. Share this one on Instagram, Google and everywhere else.",
     open: "Open link ↗",
     bookingHint: "Paste the link clients book from — Booksy, Square, your own site.",
     bookingChange: "Change booking link", cancel: "Cancel",
@@ -95,6 +96,7 @@ var T = {
     shareH: "Enviar un enlace",
     shareSub: "Mándale a un cliente tu enlace de reservas o el de pago desde tu teléfono.",
     lBooking: "Enlace de reservas", lPay: "Enlace de pago", share: "Compartir",
+    lCard: "El enlace de tu negocio", cardNote: "Tu enlace para todo: muestra tu botón de reservas, tus datos de contacto y el registro al club. Compártelo en Instagram, Google y donde quieras.",
     open: "Abrir enlace ↗",
     bookingHint: "Pega el enlace donde reservan tus clientes: Booksy, Square o tu propia página.",
     bookingChange: "Cambiar enlace de reservas", cancel: "Cancelar",
@@ -307,6 +309,9 @@ $("lBooking").textContent = t("lBooking");
 $("bookingSave").textContent = t("paySave");
 $("lPay").textContent = t("lPay");
 $("bookingShare").textContent = t("share");
+$("lCard").textContent = t("lCard");
+$("cardLinkShare").textContent = t("share");
+$("cardLinkNote").textContent = t("cardNote");
 $("payShare").textContent = t("share");
 $("paySave").textContent = t("paySave");
 $("promoLink").textContent = t("promo");
@@ -317,6 +322,9 @@ $("btnEn").onclick = function () { localStorage.setItem("ros.lang", "en"); locat
 $("btnEs").onclick = function () { localStorage.setItem("ros.lang", "es"); location.reload(); };
 $("signout").onclick = function () { SB.signOut(); };
 
+$("cardLinkShare").onclick = function () {
+  shareLink($("cardLinkUrl").value, t("lCard"), this, $("cardLinkUrl"));
+};
 $("bookingShare").onclick = function () {
   shareLink(currentShop && currentShop.booking_link, t("lBooking"), this, $("bookingUrl"));
 };
@@ -438,6 +446,7 @@ var ownersFailed = false;
     if (!out) return;
     var shop = arr(out[0])[0] || {};
     currentShop = shop;
+    $("cardLinkUrl").value = location.origin + "/" + (new URLSearchParams(location.search).get("shop") || "");
     /* The card names links that belong to a specific shop, so it only appears
        once we actually have that shop back. Before that, empty boxes with dead
        Share buttons would be a false-empty state. */
