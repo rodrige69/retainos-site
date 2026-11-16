@@ -51,7 +51,7 @@ var lang = params.get("l") === "es" ? "es" : (params.get("l") === "en" ? "en" : 
 var urlLang = params.get("l") === "es" || params.get("l") === "en";
 
 function t(k, vars) {
-  var s = (T[lang] && T[lang][k]) || T.en[k] || k;
+  var s = (T[lang] && T[lang][k] !== undefined) ? T[lang][k] : (T.en[k] !== undefined ? T.en[k] : k);
   Object.keys(vars || {}).forEach(function (key) { s = s.replace("{" + key + "}", vars[key]); });
   return s;
 }
