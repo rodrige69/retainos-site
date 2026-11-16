@@ -33,7 +33,7 @@ var T = {
     unknownShop: "We don't recognise this shop code.",
     badPhone: "That number looks short — use 10 digits.",
     demo: "Demo mode — no Supabase key in config.js, so nothing is saved.",
-    foot: "One stamp per client per week. Nothing sends from this page.",
+    foot: "Powered by RetainOS",
     scanBtn: "Scan client's QR",
     scanHint: "Ask the client to open their card and tap Show my QR.",
     scanPoint: "Point the camera at the client's QR.",
@@ -81,7 +81,7 @@ var T = {
     unknownShop: "No reconocemos ese código de negocio.",
     badPhone: "Ese número parece corto: usa 10 dígitos.",
     demo: "Modo demo: no hay clave de Supabase en config.js, así que no se guarda nada.",
-    foot: "Un sello por cliente por semana. Desde esta página no se envía nada.",
+    foot: "Con tecnología de RetainOS",
     scanBtn: "Escanear el QR del cliente",
     scanHint: "Pídele al cliente que abra su tarjeta y toque Mostrar mi QR.",
     scanPoint: "Apunta la cámara al QR del cliente.",
@@ -377,6 +377,7 @@ function done(r) {
   document.getElementById("form").classList.add("hidden");
   document.getElementById("shopPick").classList.add("hidden");
   document.getElementById("done").classList.remove("hidden");
+  document.getElementById("again").textContent = t("again");
   document.getElementById("doneH").textContent = r.member ? t("done", { name: r.member }) : t("donePlain");
   document.getElementById("doneSub").textContent = t("doneSub", {
     staff: r.staff, stamps: r.cycle, milestone: r.milestone
