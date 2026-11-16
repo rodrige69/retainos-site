@@ -25,6 +25,14 @@ Ejemplo: **“¡Hola Jessica! Te escribe Mía de Bella Hair Studio. Espero que e
 
 Pon el enlace directo de reservas en los recordatorios y haz que los servicios, los precios, la elección de estilista y los horarios disponibles sean fáciles de encontrar. Al pagar, pregúntale a la clienta si quiere reservar su próxima cita o recibir un recordatorio.
 
+### ¿Puedo enviar recordatorios para que mis clientas vuelvan a reservar sin cambiar mi app de reservas?
+
+Sí. Cuando a una clienta le toque su próximo servicio, envíale el enlace de reservas que ya usas. Un recordatorio de cita le avisa de una visita que ya está en la agenda. Un recordatorio para volver a reservar la ayuda a agendar la próxima.
+
+**Ejemplo:** «Hola, María. Soy Mía de Bella Hair Studio. Si ya estás lista para tu retoque de color, aquí puedes ver los horarios y reservar: [Enlace]».
+
+Envíalo a quienes aceptaron recibir recordatorios. Al tocar el enlace, la clienta abre tu página de reservas. Revisa tu agenda para saber si reservó antes de volver a escribirle. [Mira cómo funciona RetainOS para salones](/es/programa-de-lealtad-para-salones).
+
 ## 4. Usa una secuencia corta para recuperar clientas
 
 Piensa en un primer recordatorio cerca de su ciclo habitual, un seguimiento útil más adelante y un último saludo si corresponde. Evita los mensajes diarios. Detente si alguien pide no recibir más mensajes y no sigas insistiendo con quien no responde.

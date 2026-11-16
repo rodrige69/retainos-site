@@ -26,6 +26,14 @@ Example: **“Hi Jessica! It's Mia from Bella Hair Studio. Hope you're doing wel
 
 Put the direct booking link in reminders and make services, prices, staff selection, and appointment availability easy to find. Ask at checkout whether the client wants to rebook or receive a reminder.
 
+### Can I send salon rebooking reminders without switching my booking app?
+
+Yes. Send clients your existing booking link when they’re due for their next service. An appointment reminder is for a visit already on the calendar. A rebooking reminder helps a client schedule their next visit.
+
+**Example:** “Hi Maria, it’s Mia from Bella Hair Studio. If you’re ready for your next color touch-up, here’s my booking link: [Booking link].”
+
+Send the reminder to clients who agreed to receive it. A tap opens your booking page. Check your calendar to see whether the client booked before sending any follow-up. [See how RetainOS works for salons](/hair-salon-loyalty-program).
+
 ## 4. Use a Short Win-Back Sequence
 
 Consider an initial reminder near the usual service cycle, a later helpful follow-up, and a final check-in if appropriate. Avoid daily messages. Stop on opt-out and don't keep chasing nonresponders.
