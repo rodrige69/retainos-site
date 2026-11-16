@@ -233,10 +233,17 @@ function drawStamps(el, cycle, milestone) {
   }
 }
 
+function fmtPhone(p) {
+  var d = String(p || "").replace(/\D/g, "");
+  if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+  return d.length === 10 ? "(" + d.slice(0, 3) + ") " + d.slice(3, 6) + "-" + d.slice(6) : String(p || "");
+}
+
 function showConfirm(res, tok) {
   scanTok = tok;
   document.getElementById("msg").className = "msg hidden";
-  document.getElementById("confirmWho").textContent = res.member || "";
+  document.getElementById("confirmWho").textContent = ((res.member || "") + " " + (res.last || "")).trim();
+  document.getElementById("confirmPhone").textContent = fmtPhone(res.phone);
   drawStamps(document.getElementById("confirmStamps"), res.cycle, res.milestone);
   var note = t("confirmCount", { stamps: res.cycle, milestone: res.milestone });
   if (!res.can_stamp) note += " · " + t("tooSoon", { days: res.days_left });
@@ -278,7 +285,7 @@ document.getElementById("scanBtn").onclick = function () {
   if (pin.length !== 4) return say(t("needPin"), "bad");
   hideConfirm();
   document.getElementById("msg").className = "msg hidden";
-  if (SB.demo) return showConfirm({ member: "Client", cycle: 3, milestone: 5, can_stamp: true }, "demo");
+  if (SB.demo) return showConfirm({ member: "Client", last: "Demo", phone: "3055550142", cycle: 3, milestone: 5, can_stamp: true }, "demo");
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return say(t("camNone"), "bad");
   loadJsQR()
     .then(function () {
