@@ -347,7 +347,7 @@ def buy(key, label_en, label_es, hi):
     return T(f'<a class="{cls}" href="{funnel(key, "en")}">{label_en}</a>', f'<a class="{cls}" href="{funnel(key, "es")}">{label_es}</a>', "div")
 
 
-def plan(name, price, setup_line, for_, feats, key, label, hi=False, link=None):
+def plan(name, price, setup_line, for_, feats, key, label, hi=False, link=None, card_id=None):
     lis = "".join(f"<li>{CHECK}<span>{T(a, b)}</span></li>" for a, b in feats)
     badge = f'<span class="badge">{T("Recommended", "Recomendado")}</span>' if hi else ""
     if link:
@@ -355,7 +355,8 @@ def plan(name, price, setup_line, for_, feats, key, label, hi=False, link=None):
             T(f'<a class="btn pbtn alt" href="{link[0]}">{label[0]}</a>', f'<a class="btn pbtn alt" href="{link[1]}">{label[1]}</a>', "div")
     else:
         btn = buy(key, label[0], label[1], hi)
-    return f"""<div class="plan{' hi' if hi else ''}"><div class="nm">{T(*name)}{badge}</div>
+    anchor = f' id="{card_id}"' if card_id else ""
+    return f"""<div class="plan{' hi' if hi else ''}"{anchor}><div class="nm">{T(*name)}{badge}</div>
 <div class="pr">${price}<span>{T("/month", "/mes")}</span></div><div class="for">{T(*for_)}</div>
 <div class="setup">{setup_line}</div><ul>{lis}</ul>{btn}</div>"""
 
@@ -396,10 +397,12 @@ def plans(v, promo):
            ("Staff contests", "Concursos para tu equipo"),
            ("Monthly check-in and report", "Revisión y reporte mensual")]
     call = (url("/start", "/es/empezar"), "/es/empezar")
+    lead_with_come_back = v.get("lead_with_come_back", False)
     cards = (plan(("COME BACK", "REGRESA"), 39, setup_waived(99), ("Turn one-time clients into regulars", "Convierte clientes de una vez en clientes fieles"), cb, "come-back",
-                  ("Start with Come Back", "Empezar con Regresa"))
+                  ("Start with Come Back", "Empezar con Regresa"), hi=lead_with_come_back,
+                  card_id="come-back" if lead_with_come_back else None)
              + plan(("BOOKED SOLID", "AGENDA LLENA"), 79, setup_waived(99), ("Fill the calendar", "Llena tu agenda"), bs, "booked-solid",
-                    ("Start with Booked Solid", "Empezar con Agenda Llena"), hi=True)
+                    ("Start with Booked Solid", "Empezar con Agenda Llena"), hi=not lead_with_come_back)
              + plan(("DAY OFF", "DÍA LIBRE"), 149, T("$249 one-time setup", "$249 de instalación única"), ("We run it. You take the day off.", "Lo manejamos nosotros. Tú descansas."), do, "day-off",
                     ("Talk to us about Day Off", "Habla con nosotros sobre Día Libre"), link=("/start", "/es/empezar")))
     h = ("Simple plans. No commission. Ever.", "Planes simples. Sin comisiones. Nunca.")
@@ -662,14 +665,14 @@ def home_page():
 
 EN_BOOKING_COPY = {
     "salons": (
-        "Keep your chairs full of regulars.",
-        "When clients are due for their next cut or color, RetainOS reminds them with the booking link you already use. Reward repeat visits without cutting your prices.",
-        "See salon plans",
+        "Give clients a nudge when they’re due for a cut or color.",
+        "RetainOS sends the reminder with the booking link you already use. Reward repeat appointments without cutting your prices.",
+        "Start with Come Back · $39/month",
     ),
     "barbershops": (
-        "Help first-time clients book their next cut.",
-        "When clients are due for a fresh cut, RetainOS reminds them with the booking link you already use. Reward repeat visits without cutting your prices.",
-        "See barbershop plans",
+        "Give first-time clients a reason to book their second cut.",
+        "RetainOS reminds clients when they’re due for a fresh cut and sends them to your existing booking link. Give happy clients a reason to refer a friend, too.",
+        "Start with Come Back · $39/month",
     ),
     "nail-lash": (
         "Keep your nail and lash clients coming back.",
@@ -719,13 +722,19 @@ def vertical_page(v):
                 step2_en="Clients get a reminder in English or Spanish when they’re due for another manicure, pedicure or lash fill.",
             )
             summary = (summary[0] + " For example, a manicure reminder can say: “Hi Mia! Ready for your next manicure at Petal & Polish Studio? Tap to book your next visit.”", summary[1])
+    if LANG == "en" and v["key"] in ("salons", "barbershops"):
+        v = {**v, "lead_with_come_back": True}
+        cta_href = "#come-back"
+        fine = ("$0 setup for Black Friday. Month to month.", "")
+    workflow = how(v, L(v["slug"], "es-" + v["slug_es"]))
+    story = (workflow + problem(v)) if v.get("lead_with_come_back") else (problem(v) + workflow)
     ld = [{"@context": "https://schema.org", "@type": "Service", "name": L(label[0].replace("&amp;", "&"), label[1]),
            "provider": {"@type": "Organization", "name": "RetainOS", "url": DOMAIN}, "areaServed": "US", "availableLanguage": ["en", "es"]},
           faq_jsonld(items)]
     return "".join([
         head(*title, *desc, alt=alt, jsonld=ld), topbar(alt), '<main id="top">',
         hero(v, label, None, h1, sub, cta, fine, cta_href),
-        summary_block(*summary), problem(v), how(v, L(v["slug"], "es-" + v["slug_es"])), gets(v), why(v), plans(v, False), after(), faq_section(items),
+        summary_block(*summary), story, gets(v), why(v), plans(v, False), after(), faq_section(items),
         claim(CLAIM_H if not care else ("Your clients already trust you. Make the next visit easy.", "Tus clientes ya confían en ti. Facilita su próxima visita."),
               (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday.")),
         "</main>", footer(), end()])
