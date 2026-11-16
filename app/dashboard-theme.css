@@ -32,3 +32,18 @@
 .linkbtn{color:var(--terra)}
 .note{background:rgba(197,155,95,.16);border-color:rgba(197,155,95,.4);color:var(--espresso)}
 .voucher{border-color:var(--gold);background:rgba(197,155,95,.16);color:var(--espresso);font-family:var(--serif);font-weight:500}
+
+/* header identity + bottom tab bar (from the Stitch owner terminal) */
+.ident{display:inline-flex;align-items:center;gap:10px;min-width:0}
+.idBadge{width:40px;height:40px;border-radius:50%;background:var(--espresso);color:var(--gold);display:grid;place-items:center;font-family:var(--serif);font-size:19px;flex:none;box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(197,155,95,.5)}
+.idText{display:flex;flex-direction:column;min-width:0}
+.idText b{font-family:var(--serif);font-weight:500;font-size:18px;color:var(--espresso);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+.idText small{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--terra)}
+.heroScan{background:var(--ivory);color:var(--espresso);margin-top:18px;text-decoration:none}
+.heroScan:hover{background:#fff}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:rgba(252,249,243,.96);backdrop-filter:blur(8px);border-top:1px solid rgba(30,26,23,.1);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+.tabbar a{flex:1;text-align:center;padding:12px 4px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-radius:8px}
+.tabbar a.on{color:var(--espresso);background:rgba(197,155,95,.2)}
+body{padding-bottom:78px}
+@media(max-width:780px){#qrLink,#promoLink{display:none}}
+@media(min-width:781px){.tabbar{max-width:560px;margin:0 auto;left:50%;right:auto;transform:translateX(-50%);border:1px solid rgba(30,26,23,.1);border-radius:14px 14px 0 0;width:100%}}

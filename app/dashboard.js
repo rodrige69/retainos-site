@@ -4,6 +4,7 @@
 
 var T = {
   en: {
+    navHome: "Dashboard", navScan: "Scan client", scanBig: "Scan client QR", role: "Live terminal · Owner",
     greetM: "Good morning", greetA: "Good afternoon", greetE: "Good evening",
     prog: "{stamps} stamps to the card · {start} added when a client joins",
     heroDueK: "clients past their usual gap",
@@ -61,6 +62,7 @@ var T = {
     signin: "Session expired. Sign in again."
   },
   es: {
+    navHome: "Panel", navScan: "Escanear", scanBig: "Escanear QR del cliente", role: "Terminal en vivo · Dueño",
     greetM: "Buenos días", greetA: "Buenas tardes", greetE: "Buenas noches",
     prog: "{stamps} sellos para la tarjeta · {start} al unirse",
     heroDueK: "clientes pasados de su ritmo",
@@ -296,6 +298,12 @@ function say(text, kind) {
 document.documentElement.lang = lang;
 $("signout").textContent = t("out");
 $("qrLink").textContent = t("qr");
+$("tabHome").textContent = t("navHome");
+$("tabScan").textContent = t("navScan");
+$("tabQr").textContent = t("qr");
+$("tabPromo").textContent = t("promo");
+$("scanBtn").textContent = t("scanBig");
+$("hdrRole").textContent = t("role");
 $("dueH").textContent = t("dueH");
 $("dueSub").textContent = t("dueSub");
 $("insightH").textContent = t("insightH");
@@ -477,6 +485,12 @@ var ownersFailed = false;
     var textsTotal = shop.texts_included || 0;
 
     $("greet").textContent = t(greetKey) + (shop.name ? ", " + shop.name : "");
+    if (shop.name) { $("hdrName").textContent = shop.name; $("hdrBadge").textContent = shop.name.charAt(0).toUpperCase(); }
+    var sid = new URLSearchParams(location.search).get("shop");
+    if (sid) {
+      var q = "?shop=" + encodeURIComponent(sid);
+      $("scanBtn").href = "staff.html" + q; $("tabScan").href = "staff.html" + q;
+    }
     if (shop.status && shop.status !== "active") say(t("pendingNote"));
     $("plan").textContent = shop.milestone
       ? t("prog", { stamps: shop.milestone, start: shop.stamps_at_join || 0 })
