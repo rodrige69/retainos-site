@@ -43,6 +43,17 @@ ARTICLES = [
      "related": ["salon-barbershop-referral-program", "experience-based-loyalty-rewards", "customer-retention-rate"]},
 ]
 
+for slug, slug_es, image_source, related in reversed([
+    ("black-friday-barbershop-promotions", "promociones-black-friday-barberias",
+     "get-repeat-customers-without-discounts", ["black-friday-salon-offers-without-discounts", "salon-barbershop-referral-program", "experience-based-loyalty-rewards"]),
+    ("black-friday-salon-offers-without-discounts", "promociones-black-friday-salones",
+     "bring-back-salon-clients", ["black-friday-barbershop-promotions", "bring-back-salon-clients", "get-repeat-customers-without-discounts"]),
+]):
+    image = next(article for article in ARTICLES if article["slug"] == image_source)
+    ARTICLES.insert(0, dict(image, slug=slug, slug_es=slug_es, related=related,
+                            published="2026-11-16", date_en="November 16, 2026",
+                            date_es="16 de noviembre de 2026"))
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
