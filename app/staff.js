@@ -413,7 +413,12 @@ function say(text, kind) {
 function boot() {
   pad();
   paint();
-  if (shop) return;
+  if (shop) {
+    SB.rest("shops?select=name&id=eq." + encodeURIComponent(shop)).then(function (rows) {
+      if (rows && rows[0] && rows[0].name) document.getElementById("shopChip").textContent = rows[0].name;
+    }).catch(function () {});
+    return;
+  }
 
   document.getElementById("shopPick").classList.remove("hidden");
   SB.rest("shops?select=id,name&order=name").then(function (rows) {

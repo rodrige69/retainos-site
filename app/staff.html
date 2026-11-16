@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Log a visit · RetainOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="client-theme.css">
+<link rel="stylesheet" href="staff-theme.css">
 <script src="config.js"></script>
 <script src="sb.js"></script>
 </head>
@@ -15,12 +19,12 @@
     <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M79.34 43.76 A30 30 0 1 1 45.82 20.29" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><path d="M60.68 18.20 L44.15 8.41 L47.49 32.18 Z" fill="currentColor" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72.98" cy="30.72" r="11" fill="currentColor"/></svg>
     <span>Retain<b>OS</b></span>
   </span>
-  <span class="chip" id="shopChip">·</span>
+  <span class="shopchip"><i class="dot"></i><span id="shopChip">·</span></span>
 </header>
 
 <main class="wrap narrow">
   <div class="card">
-    <h1 id="h1" style="font-size:26px"></h1>
+    <h1 id="h1"></h1>
     <p class="hint" id="sub"></p>
 
     <div id="shopPick" class="hidden">
@@ -34,7 +38,7 @@
       <div class="pinpad" id="pad"></div>
 
       <label class="label" id="lType"></label>
-      <div id="types" style="display:flex;gap:8px;flex-wrap:wrap">
+      <div id="types">
         <span class="chip" data-type="appointment" aria-pressed="true"></span>
         <span class="chip" data-type="walk_in" aria-pressed="false"></span>
         <span class="chip" data-type="product" aria-pressed="false"></span>
