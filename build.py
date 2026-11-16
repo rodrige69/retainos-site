@@ -186,7 +186,7 @@ def phone(v):
 </div></div>"""
 
 
-def hero(v, eyebrow, pill, h1, sub, cta, fine=None):
+def hero(v, eyebrow, pill, h1, sub, cta, fine=None, cta_href=None):
     pill_html = f'<span class="pill">{T(*pill)}</span>' if pill else ""
     fine_html = T(*fine, "p", "fine") if fine else ""
     return f"""<div class="wrap hero">
@@ -194,7 +194,7 @@ def hero(v, eyebrow, pill, h1, sub, cta, fine=None):
 <div class="eyebrow">{T(*eyebrow)}{pill_html}</div>
 {T(*h1, "h1")}
 {T(*sub, "p", "sub")}
-<div class="ctas"><a class="btn" href="{start_href()}">{T(*cta)}</a><a class="btn alt" href="#how">{T("See how it works", "Mira cómo funciona")}</a></div>
+<div class="ctas"><a class="btn" href="{cta_href or start_href()}">{T(*cta)}</a><a class="btn alt" href="#how">{T("See how it works", "Mira cómo funciona")}</a></div>
 {fine_html}
 </div>
 <div>{phone(v)}</div>
@@ -285,7 +285,7 @@ def how(v, key):
         who_en = "Parents earn" if mode(v) == "family" else "They earn"
         who_es = "Los padres ganan" if mode(v) == "family" else "Se ganan"
         steps = (step(1, ("They check in with a quick scan.", "Se registran con un escaneo rápido."),
-                      (f"Clients scan your QR code {v['scan_en']}. Every visit counts toward a reward.", f"Tus clientes escanean tu código QR {v['scan_es']}. Cada visita cuenta para su premio."), qr)
+                      (f"Clients scan your QR code {v['scan_en']}. " + v.get("visit_confirmation_en", "Every visit counts toward a reward."), f"Tus clientes escanean tu código QR {v['scan_es']}. Cada visita cuenta para su premio."), qr)
                  + step(2, ("We remind them when it's time.", "Les recordamos cuando les toca."), step2, mini_text(v, v["msg_en"], v["msg_es"]))
                  + step(3, (f"{who_en} something worth coming back for.", f"{who_es} algo que vale la pena."),
                         ("Complimentary rewards for visits and referrals. You never touch your prices.", "Premios de cortesía por visitas y referidos. Tú no tocas tus precios."), reward))
@@ -660,6 +660,25 @@ def home_page():
         "</main>", footer(), end()])
 
 
+EN_BOOKING_COPY = {
+    "salons": (
+        "Keep your chairs full of regulars.",
+        "When clients are due for their next cut or color, RetainOS reminds them with the booking link you already use. Reward repeat visits without cutting your prices.",
+        "See salon plans",
+    ),
+    "barbershops": (
+        "Help first-time clients book their next cut.",
+        "When clients are due for a fresh cut, RetainOS reminds them with the booking link you already use. Reward repeat visits without cutting your prices.",
+        "See barbershop plans",
+    ),
+    "nail-lash": (
+        "Keep your nail and lash clients coming back.",
+        "Remind clients when it’s time for their next manicure or lash fill, with the booking link you already use. Reward repeat visits without discounting your services.",
+        "See nail &amp; lash plans",
+    ),
+}
+
+
 def vertical_page(v):
     alt = ("/" + v["slug"], "/es/" + v["slug_es"])
     items = faq_owner(v)
@@ -684,12 +703,28 @@ def vertical_page(v):
                    f"RetainOS es un programa automatizado de lealtad y referidos para {v['short_es']}. Las visitas se registran con un escaneo QR, los recordatorios salen cuando toca volver y {who_es} premios de cortesía, como tarjetas de descuentos en hoteles, por visitas y referidos. Tus precios no cambian. Nosotros lo configuramos todo, en español e inglés.")
         desc = (f"Automated loyalty and referral program for {v['short_en']}. Reward regulars without cutting your prices. Done for you, in English and Spanish.",
                 f"Programa automatizado de lealtad y referidos para {v['short_es']}. Premia a tus clientes fieles sin bajar tus precios. Hecho por nosotros, en español e inglés.")
+    h1 = (v["h1_en"], v["h1_es"])
+    cta, fine, cta_href = CTA, FINE, None
+    if LANG == "en" and v["key"] in EN_BOOKING_COPY:
+        headline, subhead, button = EN_BOOKING_COPY[v["key"]]
+        h1, sub, cta = (headline, h1[1]), (subhead, sub[1]), (button, CTA[1])
+        fine = ("From $39/month. $99 setup fee waived for Black Friday on Come Back and Booked Solid.", "")
+        cta_href = "#plans"
+        v = {**v, "visit_confirmation_en": "Your staff confirms the paid visit so it counts toward a reward."}
+        if v["key"] == "nail-lash":
+            v.update(
+                next_en="lash fill",
+                msg_en="Hi Ana! Your lash fill is due this week at Petal & Polish Studio. You're 2 visits from your $100 hotel savings card.",
+                pain_en="When clients are due for another manicure, pedicure or lash fill, it’s easy for rebooking to slip.",
+                step2_en="Clients get a reminder in English or Spanish when they’re due for another manicure, pedicure or lash fill.",
+            )
+            summary = (summary[0] + " For example, a manicure reminder can say: “Hi Mia! Ready for your next manicure at Petal & Polish Studio? Tap to book your next visit.”", summary[1])
     ld = [{"@context": "https://schema.org", "@type": "Service", "name": L(label[0].replace("&amp;", "&"), label[1]),
            "provider": {"@type": "Organization", "name": "RetainOS", "url": DOMAIN}, "areaServed": "US", "availableLanguage": ["en", "es"]},
           faq_jsonld(items)]
     return "".join([
         head(*title, *desc, alt=alt, jsonld=ld), topbar(alt), '<main id="top">',
-        hero(v, label, None, (v["h1_en"], v["h1_es"]), sub, CTA, FINE),
+        hero(v, label, None, h1, sub, cta, fine, cta_href),
         summary_block(*summary), problem(v), how(v, L(v["slug"], "es-" + v["slug_es"])), gets(v), why(v), plans(v, False), after(), faq_section(items),
         claim(CLAIM_H if not care else ("Your clients already trust you. Make the next visit easy.", "Tus clientes ya confían en ti. Facilita su próxima visita."),
               (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday.")),
