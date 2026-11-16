@@ -71,7 +71,7 @@ function paint(shop) {
   $("shopMeta").textContent = t("shopMeta");
   if (shop && shop.name) {
     $("shopName").textContent = shop.name;
-    $("badge").textContent = shop.name.charAt(0).toUpperCase();
+    if (window.ROS && ROS.brand) ROS.brand(shop); else $("badge").textContent = shop.name.charAt(0).toUpperCase();
   }
   if (SB.demo) {
     var d = $("demoNote");
@@ -117,7 +117,7 @@ if (SB.demo) {
   drawStamps({ stamps: 2, milestone: 5 });
 } else {
   if (slug) {
-    SB.rest("shops?select=id,name,milestone,default_language&id=eq." + encodeURIComponent(slug))
+    SB.rest("shops?select=id,name,milestone,default_language,logo_url,owner_photo_url&id=eq." + encodeURIComponent(slug))
       .then(function (rows) {
         var shop = rows && rows[0];
         if (shop) paint(shop);

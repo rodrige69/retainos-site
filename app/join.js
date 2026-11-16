@@ -16,7 +16,7 @@ var T = {
     consent: "I agree to get texts from this shop about my stamps and rewards. Msg frequency varies. Msg & data rates may apply. Reply HELP for help, STOP to opt out.",
     startNote: "You start with {n} stamps on your card.",
     startNone: "Your first visit starts the card.",
-    join: "Join free",
+    join: "Join",
     fine: "We only text about your own visits and rewards. Never for reviews.",
     needFirst: "Add your first name.",
     needLast: "Add your last name.",
@@ -64,7 +64,7 @@ var T = {
     consent: "Acepto recibir mensajes de este negocio sobre mis sellos y premios. La frecuencia varía. Pueden aplicar cargos de mensajes y datos. Responde HELP para ayuda, STOP para darte de baja.",
     startNote: "Empiezas con {n} sellos en tu tarjeta.",
     startNone: "Tu primera visita empieza la tarjeta.",
-    join: "Unirme gratis",
+    join: "Unirme",
     fine: "Solo te escribimos por tus visitas y premios. Nunca por reseñas.",
     needFirst: "Escribe tu nombre.",
     needLast: "Escribe tu apellido.",
@@ -266,13 +266,13 @@ function boot() {
     return;
   }
 
-  SB.rest("shops?select=id,name,milestone,stamps_at_join,default_language&id=eq." + encodeURIComponent(slug))
+  SB.rest("shops?select=id,name,milestone,stamps_at_join,default_language,logo_url,owner_photo_url&id=eq." + encodeURIComponent(slug))
     .then(function (rows) {
       if (!rows || !rows.length) { broken(); return; }
       shop = rows[0];
       lang = urlLang || (shop.default_language === "es" ? "es" : "en");
       $("shopName").textContent = shop.name;
-      $("badge").textContent = shop.name.charAt(0).toUpperCase();
+      if (window.ROS && ROS.brand) ROS.brand(shop);
       $("shopMeta").textContent = "";
       paint();
       /* This shop's own reward stops, whatever plan it is on: never a lookup
