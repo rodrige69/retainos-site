@@ -94,11 +94,11 @@
     inviteOwner: function (email) {
       if (this.demo) return Promise.resolve({ demo: true });
       var here = /^https?:/.test(location.origin || "") ? location.origin + "/password.html" : "";
-      var body = { email: email, create_user: true };
+      var body = { email: email, create_user: true, data: { needs_password: true } };
       if (here) body.redirect_to = here;
       return call("/auth/v1/otp", { method: "POST", body: body, auth: false }).catch(function (e) {
         if (!here || !e || e.status !== 400) throw e;
-        return call("/auth/v1/otp", { method: "POST", body: { email: email, create_user: true }, auth: false });
+        return call("/auth/v1/otp", { method: "POST", body: { email: email, create_user: true, data: { needs_password: true } }, auth: false });
       });
     },
     sendRecovery: function (email) {
@@ -113,7 +113,7 @@
     },
     updatePassword: function (password) {
       if (this.demo) return Promise.resolve({ demo: true });
-      return call("/auth/v1/user", { method: "PUT", body: { password: password } });
+      return call("/auth/v1/user", { method: "PUT", body: { password: password, data: { needs_password: false } } });
     },
     verifyCode: function (email, code) {
       if (this.demo) return Promise.resolve({ demo: true });
@@ -159,7 +159,18 @@
     var recovery = false;
     try { recovery = localStorage.getItem("ros.recover") === "1"; } catch (e) {}
     var onPassword = /\/password(\.html)?$/.test(location.pathname);
-    if (onPassword) {
+    /* An invite link can land on the home page when Supabase ignores the
+       redirect target. The invite marks the new account, so a first-time owner
+       is still sent to choose a password. */
+    var needsPassword = false;
+    try {
+      var tok = (JSON.parse(localStorage.getItem("ros.session") || "{}").access_token || "").split(".")[1];
+      var claims = JSON.parse(atob(tok.replace(/-/g, "+").replace(/_/g, "/")));
+      needsPassword = !!(claims.user_metadata && claims.user_metadata.needs_password);
+    } catch (e) {}
+    if (needsPassword && !onPassword) {
+      location.replace("password.html");
+    } else if (onPassword) {
       /* The invite link sends owners here on purpose: stay put so they can
          choose a password while the session from the link is still fresh. */
     } else if (recovery) {

@@ -418,6 +418,7 @@ var ownersFailed = false;
     }
     var s = "shop_id=eq." + encodeURIComponent(owners[0].shop_id);
     var shopId = encodeURIComponent(owners[0].shop_id);
+    try { history.replaceState({}, "", location.pathname + "?shop=" + shopId); } catch (e) {}
     return Promise.all([
       soft(0, SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId)),
       soft(1, SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId)),
