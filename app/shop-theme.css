@@ -15,3 +15,11 @@ a.btn{text-decoration:none}
 .reach a:active{background:var(--accent-bg)}
 .foot{text-align:center;margin-top:22px}
 .shophead .ownerPhoto{display:none}
+
+.hoursbox{margin-top:22px;background:#fff;border:1px solid rgba(30,26,23,.08);border-radius:12px;padding:14px 16px}
+.hhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.hhead b{font-family:var(--serif);font-weight:500;font-size:18px}
+.hpill{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.hpill.on{background:#EEF3E8;color:#2F5A1E}.hpill.off{background:#F6E6E0;color:#8A4630}
+.hline{display:flex;justify-content:space-between;padding:7px 8px;border-radius:8px;font-size:14px;color:var(--ink2)}
+.hline.today{background:rgba(197,155,95,.2);color:var(--espresso);font-weight:700}
