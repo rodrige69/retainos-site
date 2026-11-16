@@ -1,0 +1,20 @@
+/* Staff scan terminal: Artisan Craft theme. Look only; behaviour is in staff.js. */
+.top{background:var(--bg);border-bottom:1px solid rgba(30,26,23,.08)}
+.logo{font-family:var(--serif);font-weight:500;color:var(--espresso)}
+.logo svg,.logo b{color:var(--gold)}
+.shopchip{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.shopchip .dot{width:8px;height:8px;border-radius:50%;background:#2F5A1E;display:inline-block}
+#h1{font-size:28px}
+.card{background:var(--ivory)}
+#types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#types .chip{justify-content:center;min-height:46px;border-radius:8px;border:1px solid rgba(30,26,23,.16);background:#fff;color:var(--ink2);font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+#types .chip.warn{background:var(--espresso);border-color:var(--espresso);color:var(--ivory)}
+.pinpad button{min-height:58px;border-radius:8px;border:1px solid rgba(30,26,23,.14);background:#fff;font-family:var(--serif);font-size:24px;font-weight:500;color:var(--espresso);box-shadow:0 2px 4px -1px rgba(30,26,23,.08)}
+.pinpad button:active{background:var(--accent-bg);transform:scale(.97)}
+.slots i{width:14px;height:14px;background:#E5E2DC;box-shadow:inset 0 1px 2px rgba(30,26,23,.2)}
+.slots i.on{background:var(--gold)}
+#confirmBox{background:#fff;border:1px solid rgba(30,26,23,.08)!important;border-radius:16px!important;box-shadow:0 8px 30px -4px rgba(30,26,23,.08)}
+#confirmWho{font-family:var(--serif);font-weight:500}
+#scanVideo{border-radius:12px!important}
+#ovCode{font-family:var(--serif)}
+.foot{text-align:center;margin-top:22px}
