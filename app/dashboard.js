@@ -4,6 +4,8 @@
 
 var T = {
   en: {
+    hoursH: "Hours of operation", hoursSub: "Shown on your shop card so clients know when you are open.", closedL: "Closed", hoursSave: "Save hours", hoursSaved: "Hours saved.", hoursBad: "Check the times: opening must be before closing.",
+    days: { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" },
     navHome: "Dashboard", navScan: "Scan client", scanBig: "Scan client QR", role: "Live terminal · Owner",
     greetM: "Good morning", greetA: "Good afternoon", greetE: "Good evening",
     prog: "{stamps} stamps to the card · {start} added when a client joins",
@@ -62,6 +64,8 @@ var T = {
     signin: "Session expired. Sign in again."
   },
   es: {
+    hoursH: "Horario", hoursSub: "Se muestra en la tarjeta de tu negocio para que los clientes sepan cuándo abres.", closedL: "Cerrado", hoursSave: "Guardar horario", hoursSaved: "Horario guardado.", hoursBad: "Revisa las horas: la apertura debe ser antes del cierre.",
+    days: { mon: "Lunes", tue: "Martes", wed: "Miércoles", thu: "Jueves", fri: "Viernes", sat: "Sábado", sun: "Domingo" },
     navHome: "Panel", navScan: "Escanear", scanBig: "Escanear QR del cliente", role: "Terminal en vivo · Dueño",
     greetM: "Buenos días", greetA: "Buenas tardes", greetE: "Buenas noches",
     prog: "{stamps} sellos para la tarjeta · {start} al unirse",
@@ -440,7 +444,7 @@ var ownersFailed = false;
     var shopId = encodeURIComponent(owners[0].shop_id);
     try { history.replaceState({}, "", location.pathname + "?shop=" + shopId); } catch (e) {}
     return Promise.all([
-      soft(0, SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link&id=eq." + shopId)),
+      soft(0, SB.rest("shops?select=name,texts_included,milestone,stamps_at_join,status,booking_link,hours&id=eq." + shopId)),
       soft(1, SB.rest("v_shop_dashboard?select=*&shop_id=eq." + shopId)),
       soft(2, SB.rest("v_due_back?select=first_name,phone,days_out,rebook_days,last_visit_at&" + s + "&is_due=eq.true&order=days_out.desc&limit=6")),
       soft(3, SB.rest("rewards_issued?select=member_id,voucher_code,status,expires_at,issued_at&" + s + "&status=eq.issued&order=expires_at.asc&limit=4")),
@@ -453,7 +457,9 @@ var ownersFailed = false;
   .then(function (out) {
     if (!out) return;
     var shop = arr(out[0])[0] || {};
+    shop.id = shop.id || new URLSearchParams(location.search).get("shop");
     currentShop = shop;
+    renderHours();
     $("cardLinkUrl").value = location.origin + "/" + (new URLSearchParams(location.search).get("shop") || "");
     /* The card names links that belong to a specific shop, so it only appears
        once we actually have that shop back. Before that, empty boxes with dead
@@ -627,3 +633,56 @@ var ownersFailed = false;
     if (e && e.status === 401) { location.replace("signin.html"); return; }
     say((e && e.message) || t("signin"), "bad");
   });
+
+
+/* Hours of operation: one row per day, closed or open/close times. Saved
+   through set_shop_hours; the shop card reads them (anon can see hours). */
+var DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+function renderHours() {
+  var box = $("hoursRows");
+  if (!box || !currentShop) return;
+  $("hoursH").textContent = t("hoursH");
+  $("hoursSub").textContent = t("hoursSub");
+  $("hoursSave").textContent = t("hoursSave");
+  var h = currentShop.hours || {};
+  box.innerHTML = "";
+  DAYS.forEach(function (d) {
+    var v = h[d];
+    var open = currentShop.hours ? !!v : d !== "sun";
+    var row = document.createElement("div");
+    row.className = "hrow";
+    row.innerHTML = '<b>' + esc(t("days")[d]) + '</b>' +
+      '<label class="hclosed"><input type="checkbox" data-d="' + d + '" class="hc"' + (open ? "" : " checked") + '> ' + esc(t("closedL")) + '</label>' +
+      '<span class="htimes"><input type="time" data-d="' + d + '" class="ho" value="' + ((v && v.open) || "09:00") + '"> – ' +
+      '<input type="time" data-d="' + d + '" class="hx" value="' + ((v && v.close) || "19:00") + '"></span>';
+    box.appendChild(row);
+  });
+  function sync() {
+    DAYS.forEach(function (d) {
+      var c = box.querySelector('.hc[data-d="' + d + '"]').checked;
+      box.querySelector('.ho[data-d="' + d + '"]').disabled = c;
+      box.querySelector('.hx[data-d="' + d + '"]').disabled = c;
+    });
+  }
+  box.onchange = sync;
+  sync();
+  showEl("hoursCard");
+}
+if ($("hoursSave")) $("hoursSave").onclick = function () {
+  if (!currentShop) return;
+  var box = $("hoursRows"), out = {}, bad = false;
+  DAYS.forEach(function (d) {
+    if (box.querySelector('.hc[data-d="' + d + '"]').checked) { out[d] = null; return; }
+    var o = box.querySelector('.ho[data-d="' + d + '"]').value, x = box.querySelector('.hx[data-d="' + d + '"]').value;
+    if (!o || !x || o >= x) bad = true;
+    out[d] = { open: o, close: x };
+  });
+  if (bad) return say(t("hoursBad"), "bad");
+  var btn = this; btn.disabled = true;
+  SB.rpc("set_shop_hours", { p_shop: currentShop.id, p_hours: out }).then(function (r) {
+    btn.disabled = false;
+    if (!r || !r.ok) return say(t("hoursBad"), "bad");
+    currentShop.hours = r.hours;
+    say(t("hoursSaved"), "good");
+  }).catch(function () { btn.disabled = false; say(t("hoursBad"), "bad"); });
+};

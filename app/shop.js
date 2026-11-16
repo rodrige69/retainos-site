@@ -4,6 +4,8 @@
 var T = {
   en: {
     book: "Book now", join: "Join our rewards club", joinNote: "Free. A stamp every visit, rewards you'll actually use.",
+    hours: "Hours", openToday: "Open today", closedToday: "Closed today", closed: "Closed",
+    days: { mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" },
     call: "Call", directions: "Directions", website: "Website", instagram: "Instagram",
     foot: "Powered by RetainOS", brokenH: "We can't find that shop",
     brokenP: "Check the link, or ask the shop for their card link.",
@@ -11,6 +13,8 @@ var T = {
   },
   es: {
     book: "Reservar", join: "Únete al club de premios", joinNote: "Gratis. Un sello cada visita, premios que sí usarás.",
+    hours: "Horario", openToday: "Abierto hoy", closedToday: "Cerrado hoy", closed: "Cerrado",
+    days: { mon: "Lunes", tue: "Martes", wed: "Miércoles", thu: "Jueves", fri: "Viernes", sat: "Sábado", sun: "Domingo" },
     call: "Llamar", directions: "Cómo llegar", website: "Sitio web", instagram: "Instagram",
     foot: "Con tecnología de RetainOS", brokenH: "No encontramos ese negocio",
     brokenP: "Revisa el enlace o pídele al negocio su enlace de tarjeta.",
@@ -49,6 +53,8 @@ function paint() {
   $("where").textContent = line;
   $("where").hidden = !line;
 
+  paintHours(L);
+
   var reach = $("reach");
   reach.innerHTML = "";
   function add(href, label, ext) {
@@ -66,12 +72,39 @@ function paint() {
   reach.hidden = !reach.children.length;
 }
 
+var DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+function clock(s) {
+  var p = s.split(":"), h = +p[0], ap = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return h + (p[1] === "00" ? "" : ":" + p[1]) + " " + ap;
+}
+function paintHours(L) {
+  var box = $("hoursBox");
+  var hrs = shop && shop.hours;
+  if (!hrs) { box.hidden = true; return; }
+  var today = "";
+  try {
+    today = new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: shop.timezone || "America/New_York" })
+      .format(new Date()).toLowerCase().slice(0, 3);
+  } catch (e) {}
+  var openNow = !!hrs[today];
+  var html = '<div class="hhead"><b>' + L.hours + '</b><span class="hpill ' + (openNow ? "on" : "off") + '">' +
+    (openNow ? L.openToday : L.closedToday) + '</span></div>';
+  DAYS.forEach(function (d) {
+    var v = hrs[d];
+    html += '<div class="hline' + (d === today ? " today" : "") + '"><span>' + L.days[d] + '</span><span>' +
+      (v ? clock(v.open) + " – " + clock(v.close) : L.closed) + '</span></div>';
+  });
+  box.innerHTML = html;
+  box.hidden = false;
+}
+
 ["en", "es"].forEach(function (k) { $(k).onclick = function () { lang = k; paint(); }; });
 
 paint();
 if (!slug) { $("broken").hidden = false; }
 else {
-  SB.rest("shops?select=id,name,business_type,default_language,logo_url,owner_photo_url,address,city,state,zip,phone,booking_link,website,instagram&id=eq." + encodeURIComponent(slug))
+  SB.rest("shops?select=id,name,business_type,default_language,logo_url,owner_photo_url,address,city,state,zip,phone,booking_link,website,instagram,hours,timezone&id=eq." + encodeURIComponent(slug))
     .then(function (rows) {
       shop = rows && rows[0];
       if (!shop) { $("broken").hidden = false; return; }
