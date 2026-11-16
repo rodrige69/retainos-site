@@ -178,6 +178,7 @@ document.getElementById("submit").onclick = function () {
     .then(function (res) {
       if (!res) return say(T[lang].badPin, "bad");
       if (res.ok) { pin = ""; renderPin(); return done(res); }
+      if (res.error === "too_soon") ovShow({ phone: phone });
       say(errText(res), "bad");
     })
     .catch(function (e) { say(e.message, "bad"); })
@@ -203,7 +204,7 @@ function errText(res) {
    The client's card QR holds their card link (…&t=<token>). The camera reads it,
    the PIN-gated lookup shows who it is, and Confirm visit stamps through the same
    rules as typing the number. The scanner library only loads when Scan is tapped. */
-var cam = null, scanning = false, scanTok = "", jsqrReady = null;
+var cam = null, scanning = false, scanTok = "", jsqrReady = null, ovWho = null;
 
 function tokenFrom(text) {
   var s = String(text || "");
@@ -232,10 +233,24 @@ function stopCam() {
   document.getElementById("scanBox").classList.add("hidden");
 }
 
-function hideConfirm() {
-  scanTok = "";
+function ovShow(who) {
+  ovWho = who;
+  document.getElementById("ovCode").value = "";
+  document.getElementById("ovBox").classList.add("hidden");
+  document.getElementById("ovReqBtn").classList.remove("hidden");
+  document.getElementById("ovPanel").classList.remove("hidden");
+}
+
+function ovHide() {
+  ovWho = null;
+  document.getElementById("ovPanel").classList.add("hidden");
   document.getElementById("ovBox").classList.add("hidden");
   document.getElementById("ovCode").value = "";
+}
+
+function hideConfirm() {
+  scanTok = "";
+  ovHide();
   document.getElementById("confirmBox").classList.add("hidden");
 }
 
@@ -265,8 +280,7 @@ function showConfirm(res, tok) {
   if (!res.can_stamp) note += " · " + t("tooSoon");
   document.getElementById("confirmNote").textContent = note;
   document.getElementById("confirmBtn").classList.toggle("hidden", !res.can_stamp);
-  document.getElementById("ovReqBtn").classList.toggle("hidden", !!res.can_stamp);
-  document.getElementById("ovBox").classList.add("hidden");
+  if (res.can_stamp) ovHide(); else ovShow({ token: tok });
   document.getElementById("confirmBox").classList.remove("hidden");
 }
 
@@ -326,11 +340,19 @@ document.getElementById("scanBtn").onclick = function () {
 document.getElementById("scanCancel").onclick = stopCam;
 document.getElementById("confirmCancel").onclick = hideConfirm;
 
+document.getElementById("phone").addEventListener("input", function () {
+  if (ovWho && ovWho.phone) ovHide();
+});
+
 document.getElementById("ovReqBtn").onclick = function () {
   if (SB.demo) { document.getElementById("ovBox").classList.remove("hidden"); return; }
   var btn = this;
   btn.disabled = true;
-  SB.rpc("request_visit_override", { p_shop: shop, p_pin: pin, p_token: scanTok })
+  if (!ovWho) return;
+  var req = ovWho.token
+    ? SB.rpc("request_visit_override", { p_shop: shop, p_pin: pin, p_token: ovWho.token })
+    : SB.rpc("request_visit_override_by_phone", { p_shop: shop, p_pin: pin, p_phone: ovWho.phone });
+  req
     .then(function (res) {
       if (res && res.ok) {
         document.getElementById("msg").className = "msg hidden";
@@ -350,9 +372,13 @@ document.getElementById("ovGoBtn").onclick = function () {
   if (SB.demo) { hideConfirm(); return done({ member: "Client", staff: "Marcus", visits: 4, cycle: 4, milestone: 5 }); }
   var btn = this;
   btn.disabled = true;
-  SB.rpc("log_visit_by_token", { p_shop: shop, p_pin: pin, p_token: scanTok, p_visit_type: visitType, p_override_code: code })
+  if (!ovWho) return;
+  var go = ovWho.token
+    ? SB.rpc("log_visit_by_token", { p_shop: shop, p_pin: pin, p_token: ovWho.token, p_visit_type: visitType, p_override_code: code })
+    : SB.rpc("log_visit", { p_shop: shop, p_pin: pin, p_phone: ovWho.phone, p_visit_type: visitType, p_override_code: code });
+  go
     .then(function (res) {
-      if (res && res.ok) { hideConfirm(); return done(res); }
+      if (res && res.ok) { hideConfirm(); ovHide(); return done(res); }
       say(errText(res), "bad");
     })
     .catch(function (e) { say(e.message, "bad"); })
@@ -399,6 +425,7 @@ document.getElementById("again").onclick = function () {
   document.getElementById("form").classList.remove("hidden");
   document.getElementById("phone").value = "";
   document.getElementById("msg").className = "msg hidden";
+  ovHide();
   pin = "";
   renderPin();
 };
