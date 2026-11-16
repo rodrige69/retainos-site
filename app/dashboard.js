@@ -166,12 +166,16 @@ function initials(name) {
   if (!name) return "?";
   return name.trim().split(/\s+/).map(function (w) { return w[0]; }).slice(0, 2).join("").toUpperCase();
 }
+/* Texting is hidden from owners for now. Set to false to bring back the texts
+   meter, the "texts used" line and the Text / WhatsApp buttons. */
+var HIDE_TEXTING = true;
 function one(n, single, many) { return n === 1 ? single : many; }
 /* Tap to reach a client from the owner's own phone. Nothing is sent by
    RetainOS here: the dashboard only builds a link the phone already knows how
    to open, so it is a person writing to a person and no messaging registration
    is involved. */
 function reach(phone, name, body) {
+  if (HIDE_TEXTING) return "";
   var digits = String(phone == null ? "" : phone).replace(/\D/g, "");
   if (digits.length < 10) return "";
   var e164 = digits.length === 10 ? "1" + digits : digits;
@@ -472,6 +476,7 @@ var ownersFailed = false;
     $("heroDue").textContent = failedPanel[1] ? "—" : dueN;
     $("heroDueK").textContent = dueN === 1 ? t("heroDueOne") : t("heroDueK");
 
+    if (HIDE_TEXTING) $("meterLabel").parentNode.style.display = "none";
     $("meterLabel").textContent = t("meterLabel");
     var pct = textsTotal ? Math.min(100, Math.round((msgsN / textsTotal) * 100)) : 0;
     $("meterFill").style.width = pct + "%";
@@ -520,7 +525,7 @@ var ownersFailed = false;
     } else {
       if (readyN) lines.push(t("insReady", { n: readyN }));
       if (dueN) lines.push(t("insDue", { n: dueN }));
-      if (textsTotal) lines.push(t("insTexts", { used: msgsN, total: textsTotal }));
+      if (textsTotal && !HIDE_TEXTING) lines.push(t("insTexts", { used: msgsN, total: textsTotal }));
       if (!lines.length) lines.push(t("insAllGood"));
     }
     lines.forEach(function (text) {
