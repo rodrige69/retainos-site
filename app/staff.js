@@ -7,7 +7,7 @@ var T = {
     lPhone: "Client's 10-digit number",
     phoneHint: "Digits only. The number they joined with.",
     lType: "What was today's visit?",
-    weekNote: "Every stamp is saved with your name and the time. A client can get one stamp per 7 days.",
+    weekNote: "Every stamp is saved with your name and the time.",
     submit: "Log the visit",
     appointment: "Appointment",
     walk_in: "Walk-in",
@@ -22,7 +22,13 @@ var T = {
     noReward: "{left} more visit(s) to the next reward.",
     again: "Log another visit",
     badPin: "That PIN isn't right. Try again, or ask the owner to reset it.",
-    tooSoon: "Already stamped — {days} day(s) until this client's next stamp.",
+    tooSoon: "This client was already stamped recently.",
+    ovReq: "Request override",
+    ovSent: "A code was sent to the owner. Ask them for it and enter it here.",
+    ovGo: "Stamp with code",
+    ovBad: "That code isn't right or has expired.",
+    ovNeedCode: "Enter the 6-digit code.",
+    ovFail: "Couldn't send the code. Try again in a minute.",
     notMember: "Not a member yet. Send them the shop's join QR first.",
     unknownShop: "We don't recognise this shop code.",
     badPhone: "That number looks short — use 10 digits.",
@@ -49,7 +55,7 @@ var T = {
     lPhone: "Número del cliente (10 dígitos)",
     phoneHint: "Solo números. Con el que se registró.",
     lType: "¿Qué fue la visita de hoy?",
-    weekNote: "Cada sello se guarda con tu nombre y la hora. El cliente puede recibir un sello cada 7 días.",
+    weekNote: "Cada sello se guarda con tu nombre y la hora.",
     submit: "Registrar la visita",
     appointment: "Cita",
     walk_in: "Sin cita",
@@ -64,7 +70,13 @@ var T = {
     noReward: "Faltan {left} visita(s) para el próximo premio.",
     again: "Registrar otra visita",
     badPin: "Ese PIN no es correcto. Inténtalo otra vez o pide al dueño que lo cambie.",
-    tooSoon: "Ya tiene sello — faltan {days} día(s) para el próximo.",
+    tooSoon: "Este cliente ya recibió un sello hace poco.",
+    ovReq: "Pedir autorización",
+    ovSent: "Se envió un código al dueño. Pídeselo y escríbelo aquí.",
+    ovGo: "Sellar con el código",
+    ovBad: "Ese código no es correcto o ya venció.",
+    ovNeedCode: "Escribe el código de 6 dígitos.",
+    ovFail: "No se pudo enviar el código. Intenta de nuevo en un minuto.",
     notMember: "Todavía no es miembro. Mándale el QR de registro del negocio.",
     unknownShop: "No reconocemos ese código de negocio.",
     badPhone: "Ese número parece corto: usa 10 dígitos.",
@@ -99,9 +111,9 @@ function t(k, vars) {
 function paint() {
   document.documentElement.lang = lang;
   ["h1", "sub", "lShop", "lPin", "lPhone", "phoneHint", "lType", "weekNote", "submit", "foot",
-   "scanBtn", "scanHint", "scanPoint", "scanCancel", "orType", "confirmBtn", "confirmCancel"].forEach(function (id) {
+   "scanBtn", "scanHint", "scanPoint", "scanCancel", "orType", "confirmBtn", "confirmCancel", "ovReqBtn", "ovGoBtn", "ovSent"].forEach(function (id) {
     var el = document.getElementById(id);
-    var key = { lPin: "lPin", lPhone: "lPhone", lType: "lType", phoneHint: "phoneHint", weekNote: "weekNote" }[id] || id;
+    var key = { lPin: "lPin", lPhone: "lPhone", lType: "lType", phoneHint: "phoneHint", weekNote: "weekNote", ovReqBtn: "ovReq", ovGoBtn: "ovGo" }[id] || id;
     if (el && T[lang][key]) el.textContent = T[lang][key];
   });
   document.querySelectorAll("#types .chip").forEach(function (c) {
@@ -180,7 +192,9 @@ function errText(res) {
     too_soon: "tooSoon",
     not_member: "notMember",
     unknown_shop: "unknownShop",
-    bad_phone: "badPhone"
+    bad_phone: "badPhone",
+    bad_override: "ovBad",
+    send_failed: "ovFail"
   };
   return t(map[res.error] || "badPin", { days: res.days_left, minutes: res.minutes });
 }
@@ -220,6 +234,8 @@ function stopCam() {
 
 function hideConfirm() {
   scanTok = "";
+  document.getElementById("ovBox").classList.add("hidden");
+  document.getElementById("ovCode").value = "";
   document.getElementById("confirmBox").classList.add("hidden");
 }
 
@@ -246,9 +262,11 @@ function showConfirm(res, tok) {
   document.getElementById("confirmPhone").textContent = fmtPhone(res.phone);
   drawStamps(document.getElementById("confirmStamps"), res.cycle, res.milestone);
   var note = t("confirmCount", { stamps: res.cycle, milestone: res.milestone });
-  if (!res.can_stamp) note += " · " + t("tooSoon", { days: res.days_left });
+  if (!res.can_stamp) note += " · " + t("tooSoon");
   document.getElementById("confirmNote").textContent = note;
   document.getElementById("confirmBtn").classList.toggle("hidden", !res.can_stamp);
+  document.getElementById("ovReqBtn").classList.toggle("hidden", !!res.can_stamp);
+  document.getElementById("ovBox").classList.add("hidden");
   document.getElementById("confirmBox").classList.remove("hidden");
 }
 
@@ -307,6 +325,39 @@ document.getElementById("scanBtn").onclick = function () {
 
 document.getElementById("scanCancel").onclick = stopCam;
 document.getElementById("confirmCancel").onclick = hideConfirm;
+
+document.getElementById("ovReqBtn").onclick = function () {
+  if (SB.demo) { document.getElementById("ovBox").classList.remove("hidden"); return; }
+  var btn = this;
+  btn.disabled = true;
+  SB.rpc("request_visit_override", { p_shop: shop, p_pin: pin, p_token: scanTok })
+    .then(function (res) {
+      if (res && res.ok) {
+        document.getElementById("msg").className = "msg hidden";
+        btn.classList.add("hidden");
+        document.getElementById("ovBox").classList.remove("hidden");
+        return document.getElementById("ovCode").focus();
+      }
+      say(errText(res), "bad");
+    })
+    .catch(function (e) { say(e.message, "bad"); })
+    .then(function () { btn.disabled = false; });
+};
+
+document.getElementById("ovGoBtn").onclick = function () {
+  var code = document.getElementById("ovCode").value.replace(/\D/g, "");
+  if (code.length !== 6) return say(t("ovNeedCode"), "bad");
+  if (SB.demo) { hideConfirm(); return done({ member: "Client", staff: "Marcus", visits: 4, cycle: 4, milestone: 5 }); }
+  var btn = this;
+  btn.disabled = true;
+  SB.rpc("log_visit_by_token", { p_shop: shop, p_pin: pin, p_token: scanTok, p_visit_type: visitType, p_override_code: code })
+    .then(function (res) {
+      if (res && res.ok) { hideConfirm(); return done(res); }
+      say(errText(res), "bad");
+    })
+    .catch(function (e) { say(e.message, "bad"); })
+    .then(function () { btn.disabled = false; });
+};
 
 document.getElementById("confirmBtn").onclick = function () {
   if (SB.demo) { hideConfirm(); return done({ member: "Client", staff: "Marcus", visits: 4, cycle: 4, milestone: 5 }); }
