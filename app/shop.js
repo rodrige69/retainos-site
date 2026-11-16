@@ -18,7 +18,10 @@ var T = {
   }
 };
 var params = new URLSearchParams(location.search);
-var slug = params.get("shop");
+/* A rewrite happens on the server, so the browser still sees /<shop> with no
+   query string: read the shop from the path when ?shop= is not there. */
+var slug = params.get("shop") || decodeURIComponent(location.pathname.replace(/^\/+|\/+$/g, "")).replace(/\.html$/, "");
+if (slug === "shop") slug = "";
 var lang = params.get("l") === "es" ? "es" : "en";
 var shop = null;
 
@@ -80,6 +83,7 @@ else {
       if (safeUrl(shop.booking_link)) { b.href = shop.booking_link; b.hidden = false; }
       $("page").hidden = false;
       paint();
+      if (window.ROS && ROS.promo) ROS.promo($("promo"), shop.id);
     })
     .catch(function () { $("broken").hidden = false; });
 }
