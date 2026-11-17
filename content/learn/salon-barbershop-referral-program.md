@@ -14,6 +14,8 @@ Happy clients already recommend their favorite stylist or barber. A referral pro
 
 **Short answer:** To start a salon referral program, define what counts as a qualified referral, choose an appropriate reward, give customers an easy sharing method, verify the referred customer's first paid visit, and track costs and outcomes.
 
+
+The [barbershop program](https://retainos.co/barbershop-loyalty-program) covers the visit side, and [how small businesses structure loyalty](https://retainos.co/learn/small-business-loyalty-programs) explains how visits and referrals can reward the same client.
 ## 1. Define a Qualified Referral
 
 A useful rule is: the referred person must be a new customer who completes and pays for an eligible service. Exclude self-referrals, duplicates, cancellations, and refunded transactions according to published terms.

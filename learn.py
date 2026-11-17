@@ -77,15 +77,15 @@ def inline(s):
 
 S = {
     "en": {"base": "/learn", "home": "/", "start": "/start", "how": "/#how", "plans": "/#plans", "rewards": "/rewards", "contact": "/contact",
-           "lc": "Learning Center", "homel": "Home", "by": "By RetainOS", "upd": "Updated", "min": "min read", "quick": "Quick answer",
+           "lc": "Learning Center", "homel": "Home", "by": "By", "upd": "Updated", "min": "min read", "quick": "Quick answer",
            "toc": "On this page", "faq": "Frequently asked questions", "fits": "How RetainOS fits", "keep": "Keep reading",
            "photo": "Photo by", "on": "on", "claim": "Claim a pilot spot", "seehow": "See how it works", "plansl": "Plans",
-           "all": "All guides", "date": "October 27, 2026", "inlang": "en-US", "disc": "Disclosures"},
+           "all": "All guides", "date": "October 27, 2026", "inlang": "en-US", "about": "/about", "nextl": "Read next"},
     "es": {"base": "/es/aprende", "home": "/es", "start": "/es/empezar", "how": "/es#how", "plans": "/es#plans", "rewards": "/es/premios", "contact": "/es/contacto",
-           "lc": "Centro de aprendizaje", "homel": "Inicio", "by": "Por RetainOS", "upd": "Actualizado el", "min": "min de lectura", "quick": "Respuesta rápida",
+           "lc": "Centro de aprendizaje", "homel": "Inicio", "by": "Por", "upd": "Actualizado el", "min": "min de lectura", "quick": "Respuesta rápida",
            "toc": "En esta página", "faq": "Preguntas frecuentes", "fits": "Cómo encaja RetainOS", "keep": "Sigue leyendo",
            "photo": "Foto de", "on": "en", "claim": "Quiero un lugar en el piloto", "seehow": "Mira cómo funciona", "plansl": "Planes",
-           "all": "Todas las guías", "date": "27 de octubre de 2026", "inlang": "es-US", "disc": "Información importante"},
+           "all": "Todas las guías", "date": "27 de octubre de 2026", "inlang": "es-US", "about": "/es/acerca", "nextl": "Lee a continuación"},
 }
 
 
@@ -214,6 +214,16 @@ def crumbs(lang, last=None):
     return f'<nav class="crumbs" aria-label="Breadcrumb"><a href="{t["home"]}">{t["homel"]}</a> <span>›</span> <a href="{t["base"]}">{t["lc"]}</a> <span>›</span> <span aria-current="page">{html.escape(last)}</span></nav>'
 
 
+def readnext(lang, a, by_slug):
+    """Contextual hand-off to the first related guide, placed mid-article."""
+    t = S[lang]
+    nxt = by_slug[a["related"][0]]
+    return ('<div class="readnext" style="margin:32px 0;padding:16px 20px;background:#fff;border:1px solid var(--line);'
+            'border-left:3px solid var(--accent);border-radius:12px">'
+            f'<div class="kicker" style="margin:0">{t["nextl"]}</div>'
+            f'<p style="margin:8px 0 0;font-weight:600"><a href="{path(lang, nxt)}">{html.escape(nxt["title"])}</a></p></div>')
+
+
 def article_page(b, a, by_slug, lang):
     t = S[lang]
     intro, short, sections, faq = render_body(a["body"])
@@ -221,7 +231,13 @@ def article_page(b, a, by_slug, lang):
     url = b.DOMAIN + path(lang, a)
     toc_items = [(sid, x) for sid, x, _, _ in sections] + ([("faq", t["faq"])] if faq else []) + [("how-retainos-fits", t["fits"])]
     toc = "".join(f'<li><a href="#{sid}">{x}</a></li>' for sid, x in toc_items)
-    body = "".join(f'<section class="{cls}" aria-labelledby="{sid}"><h2 id="{sid}">{x}</h2>{h}</section>' if cls else f'<h2 id="{sid}">{x}</h2>{h}' for sid, x, h, cls in sections)
+    rn = readnext(lang, a, by_slug)
+    parts = []
+    for i, (sid, x, hh, cls) in enumerate(sections):
+        parts.append(f'<section class="{cls}" aria-labelledby="{sid}"><h2 id="{sid}">{x}</h2>{hh}</section>' if cls else f'<h2 id="{sid}">{x}</h2>{hh}')
+        if i == 1:
+            parts.append(rn)
+    body = "".join(parts)
     faqh = f'<h2 id="faq">{t["faq"]}</h2><div class="faqv">' + "".join(f"<h3>{q}</h3>{ans}" for q, ans in faq) + "</div>" if faq else ""
     rel = "".join(card(by_slug[s], lang) for s in a["related"])
     pub = a.get("published", PUBLISHED)
@@ -246,7 +262,7 @@ def article_page(b, a, by_slug, lang):
     h = h.replace("</head>", f'<meta property="og:url" content="{url}"><meta property="og:type" content="article"><meta property="article:published_time" content="{pub}"></head>', 1)
     return "".join([h, header(b, lang, alt), '<main id="top"><article class="wrap post">', crumbs(lang, a["title"]),
         f'<div class="phead"><span class="tag">{a["cat"]}</span><h1>{html.escape(a["title"])}</h1>',
-        f'<p class="pmeta">{t["by"]} · <time datetime="{pub}">{t["upd"]} {shown}</time> · {a["mins"]} {t["min"]}</p></div>',
+        f'<p class="pmeta">{t["by"]} <a href="{t["about"]}">Edgar Rodriguez</a> · <time datetime="{pub}">{t["upd"]} {shown}</time> · {a["mins"]} {t["min"]}</p></div>',
         f'<figure class="hero-img"><img src="{img_url(a, 1400)}" alt="{html.escape(a["alt"])}" width="1400" height="788" fetchpriority="high">'
         f'<figcaption>{t["photo"]} <a href="{a["by_url"]}{UTM}" rel="nofollow">{a["by"]}</a> {t["on"]} <a href="{a["photo_url"]}{UTM}" rel="nofollow">Unsplash</a></figcaption></figure>',
         f'<div class="pgrid"><aside class="toc"><details open><summary>{t["toc"]}</summary><ol>' + toc + '</ol></details></aside><div class="prose">',

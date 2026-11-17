@@ -13,6 +13,8 @@ Un programa de lealtad debe hacer que el cliente se sienta reconocido, no confun
 
 **Respuesta corta:** Un programa de lealtad para un pequeño negocio premia acciones claras del cliente, como visitas pagadas verificadas o referidos que califican, con beneficios sencillos y reglas transparentes.
 
+
+Mira cómo funciona en un [salón de belleza](https://retainos.co/es/programa-de-lealtad-para-barberias) y qué cambia cuando los [premios se envían automáticamente](https://retainos.co/es/aprende/premios-automaticos-para-clientes).
 ## ¿Qué tipos de programas de lealtad existen?
 
 **Por visitas:** se gana un beneficio después de cierto número de visitas pagadas que califican. **Por puntos:** se acumulan puntos según reglas publicadas. **Por niveles:** se reciben beneficios distintos al alcanzar metas definidas. **Por referidos:** se gana un beneficio cuando un cliente nuevo completa una compra que califica. **Basado en experiencias:** se recibe acceso a ofertas de restaurantes, descuentos en hoteles o viajes promocionales.

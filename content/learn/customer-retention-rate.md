@@ -14,6 +14,8 @@ A busy appointment calendar doesn't tell you how many customers return. Retentio
 
 **Short answer:** Define an active customer, select a suitable measurement period, count unique customers, and calculate either active-customer retention or the share of a starting customer cohort that returns.
 
+
+If retention is already slipping, [how to win back overdue clients](https://retainos.co/learn/bring-back-salon-clients) covers the follow-up, and the [hair salon program](https://retainos.co/hair-salon-loyalty-program) shows what RetainOS sets up.
 ## Standard Customer Retention Formula
 
 **Retention rate = ((E − N) ÷ S) × 100**, where S is active customers at the start, E is active customers at the end, and N is new customers included in the ending count. Use consistent definitions. Example: S=120, E=135, N=30 gives **87.5%**. This is hypothetical.

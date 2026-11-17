@@ -13,6 +13,8 @@ No todo premio tiene que ser otro descuento en un corte o en el baño de la masc
 
 **Respuesta corta:** El negocio define qué visitas pagadas o referidos califican, verifica que el cliente cumpla las reglas, le entrega un beneficio basado en experiencias y le da instrucciones de canje y términos precisos.
 
+
+Para ver cómo se entrega un premio sin trabajo manual, consulta [premios automáticos para clientes](https://retainos.co/es/aprende/premios-automaticos-para-clientes); para saber cómo se ve en un [salón de belleza](https://retainos.co/es/programa-de-lealtad-para-salones), la página del programa tiene los detalles.
 ## Cómo funciona el proceso
 
 Primero, define la meta. Segundo, inscribe al cliente y registra su actividad. Tercero, verifica las visitas pagadas o los referidos que califican. Cuarto, entrega el premio. Quinto, comparte los términos y las instrucciones. Por último, distingue entre entrega, activación, reserva y canje real.

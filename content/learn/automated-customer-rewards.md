@@ -14,6 +14,8 @@ A customer completes a fifth haircut. Another refers a friend who finishes their
 
 **Short answer:** Automated customer rewards use predefined workflows to record qualifying activity, check eligibility, update loyalty progress, and initiate reward delivery—with staff review where needed.
 
+
+If you are still choosing what to hand out, [experience-based rewards](https://retainos.co/learn/experience-based-loyalty-rewards) explains the trade-offs; the [hair salon program](https://retainos.co/hair-salon-loyalty-program) shows the full setup.
 ## The Seven-Step Workflow
 
 **1. Define rules:** qualifying services, milestones, refunds, and exclusions. **2. Record activity:** booking, payment, staff verification, or authorized integration. **3. Verify:** confirm completed paid activity. **4. Update progress. 5. Initiate issuance. 6. Provide redemption instructions and terms. 7. Track outcomes.** Sending a reward is not the same as successful redemption.

@@ -14,6 +14,8 @@ A loyalty program should make customers feel recognized, not confused. For a loc
 
 **Short answer:** A small-business loyalty program rewards clearly defined customer activity—such as verified paid visits or qualifying referrals—using straightforward benefits and transparent rules.
 
+
+See how this runs for a [hair salon](https://retainos.co/barbershop-loyalty-program), and what changes when the [rewards are sent automatically](https://retainos.co/learn/automated-customer-rewards).
 ## What Types of Loyalty Programs Exist?
 
 **Visit-based:** earn a benefit after a set number of eligible paid visits. **Points-based:** earn points under published rules. **Tiered:** receive different benefits after reaching defined milestones. **Referral:** earn a benefit when a new customer completes a qualifying purchase. **Experience-based:** receive access to eligible dining, hotel savings, or promotional travel offers.

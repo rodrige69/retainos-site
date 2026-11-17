@@ -14,6 +14,8 @@ An empty salon suite earns nothing, and every week it sits empty is income you d
 
 **Short answer:** To fill empty salon suites and keep renters longer, give new renters a reason to sign now that doesn't cut your rent (like a complimentary getaway or hotel savings card), reward current renters who refer a pro who signs, remind and reward renters before their lease ends, and help renters stay busy with a loyalty program for their own clients. Busy renters renew.
 
+
+The [salon suite owner program](https://retainos.co/salon-suite-owner-program) covers the lease rewards, and [how referral programs work](https://retainos.co/learn/salon-barbershop-referral-program) matters when a renter brings another professional with them.
 ## Why Salon Suites Sit Empty
 
 Suite renters are independent business owners. They choose a building for location, price and how it feels, and they leave for the same reasons. The most common one is simple: their book slows down. When a stylist, esthetician or lash artist stops covering rent comfortably, they move to a cheaper suite or go back to a commission salon.

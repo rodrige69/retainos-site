@@ -12,6 +12,8 @@ Terminas el corte, el cliente se pone la chaqueta y se va. Antes de que salga, d
 **Respuesta corta:** Usa la próxima cita para llenar un horario tranquilo, un premio de restaurantes para agradecer un referido que se convierte en un corte pagado, o un certificado de escapada para reconocer a clientes fieles.
 
 
+
+La [página del programa para barberías](https://retainos.co/es/programa-de-lealtad-para-barberias) tiene los planes y precios vigentes y [clientes que vuelven sin descuentos](https://retainos.co/es/aprende/clientes-que-vuelven-sin-descuentos) cubre a fondo las alternativas sin descuento.
 ## 1. Aprovecha el corte de hoy para hablar del siguiente
 «¿Cada cuánto te cortas el pelo? ¿Te guardo un espacio para la próxima?». Si prefiere decidir después y te dio permiso, envíale: «Hola, [Nombre]. Soy [Barbero] de [Barbería]. ¿Ya te toca otro corte? Reserva aquí: [Enlace]».
 

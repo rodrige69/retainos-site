@@ -15,6 +15,8 @@ Dar un descuento en cada visita puede ser tentador, pero el precio no es la úni
 
 **Respuesta corta:** Para que tus clientes vuelvan sin descuentos, ofrece una experiencia confiable, facilita la próxima reserva, haz seguimiento en el momento adecuado, reconoce las visitas completadas y quita los obstáculos para la siguiente cita.
 
+
+¿Tienes un salón o una barbería? El [programa para salones](https://retainos.co/es/programa-de-lealtad-para-salones) muestra cómo funciona en la práctica y, si todavía estás decidiendo qué ofrecer, empieza por [cómo se arma un programa de lealtad](https://retainos.co/es/aprende/programas-de-lealtad-para-pequenos-negocios).
 ## 1. Ofrece una experiencia constante
 
 Que el cliente vuelva empieza por el servicio. Sé claro con los precios, empieza las citas a tiempo cuando puedas, avisa si hay retrasos y cumple lo que prometes. Ningún programa de lealtad compensa malas experiencias repetidas. Pregúntales a tus clientes qué les gustó y qué se puede mejorar.

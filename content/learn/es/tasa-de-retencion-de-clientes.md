@@ -13,6 +13,8 @@ Una agenda llena no te dice cuántos clientes vuelven. Medir la retención te ay
 
 **Respuesta corta:** Define qué es un cliente activo, elige un periodo de medición adecuado, cuenta clientes únicos y calcula la retención de clientes activos o el porcentaje de un grupo inicial de clientes que vuelve.
 
+
+Si la retención ya está bajando, [cómo recuperar clientes atrasados](https://retainos.co/es/aprende/recuperar-clientes-de-salon) cubre el seguimiento y el [programa para salones](https://retainos.co/es/programa-de-lealtad-para-salones) muestra qué configura RetainOS.
 ## Fórmula estándar de retención de clientes
 
 **Tasa de retención = ((F − N) ÷ I) × 100**, donde I son los clientes activos al inicio, F los clientes activos al final y N los clientes nuevos incluidos en el conteo final. Usa siempre las mismas definiciones. Ejemplo: I=120, F=135, N=30 da **87.5%**. Es un ejemplo hipotético.

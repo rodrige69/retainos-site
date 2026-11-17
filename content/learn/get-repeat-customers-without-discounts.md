@@ -16,6 +16,8 @@ Discounting every visit can be tempting, but a lower price is not the only reaso
 
 **Short answer:** To get repeat customers without discounts, deliver a dependable experience, make rebooking easy, follow up at the right time, recognize completed visits, and remove friction from the next appointment.
 
+
+Running a salon or barbershop? The [hair salon program](https://retainos.co/hair-salon-loyalty-program) shows how this works in practice, and if you are still deciding what to offer, start with [how loyalty programs are built](https://retainos.co/learn/small-business-loyalty-programs).
 ## 1. Deliver a Consistent Experience
 
 Repeat business begins with the service itself. Be clear about pricing, start appointments on time when possible, communicate delays, and follow through on what was promised. A loyalty program cannot compensate for repeated poor experiences. Ask customers what they liked and what could improve.

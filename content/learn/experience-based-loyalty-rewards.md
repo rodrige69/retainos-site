@@ -14,6 +14,8 @@ Not every customer reward has to be another discount on a haircut or grooming se
 
 **Short answer:** A business defines qualifying paid visits or referrals, verifies that customers meet the rules, issues an eligible experience-based benefit, and provides accurate redemption instructions and terms.
 
+
+For the mechanics of handing out a reward without manual work, see [automated customer rewards](https://retainos.co/learn/automated-customer-rewards); for how it looks in a [hair salon](https://retainos.co/hair-salon-loyalty-program), the program page has the details.
 ## How the Process Works
 
 First, define the milestone. Second, enroll the customer and record eligible activity. Third, verify paid visits or qualifying referrals. Fourth, issue the reward. Fifth, provide terms and instructions. Finally, distinguish issuance, activation, booking, and actual redemption.

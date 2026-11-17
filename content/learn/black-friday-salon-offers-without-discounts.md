@@ -12,6 +12,8 @@ If your prime December slots already sell at full price, pick a quieter January 
 **Short answer:** Offer priority booking, a low-cost service extra, or recognition for a qualifying referral. Tie the offer to dates with capacity, spell out the terms, and track completed appointments.
 
 
+
+See the [salon program page](https://retainos.co/hair-salon-loyalty-program) for plans, and [how to bring back clients who have not rebooked](https://retainos.co/learn/bring-back-salon-clients) for the follow-up sequence.
 ## 1. Give regulars first pick of January slots
 Open a small set of January appointments to returning clients before your broader announcement. Share the real dates and a direct booking link. Make the message clear about who gets early access and when it ends.
 

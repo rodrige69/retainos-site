@@ -17,6 +17,8 @@ A customer walks in for a holiday cut, thanks you, and reaches for their jacket.
 **Short answer:** Keep the holiday cut at full price. Offer the next appointment before the customer leaves. Use a dining reward as a thank-you for a qualifying return or referral, and reserve a getaway certificate for a higher milestone your shop can afford.
 
 
+
+The [barbershop program page](https://retainos.co/barbershop-loyalty-program) has current plans and pricing, and [getting repeat customers without discounts](https://retainos.co/learn/get-repeat-customers-without-discounts) covers the non-discount alternatives in depth.
 ## 1. Sell the next seat in the chair
 Ask: “When do you usually get cleaned up again? Want me to save you a spot?” If they’d rather decide later, ask permission to text your booking link when they’re due. Example: “Hey [Name], it’s [Barber] at [Shop]. Ready for another cut? Here’s where you can grab a time: [Link].” Use your existing booking link.
 

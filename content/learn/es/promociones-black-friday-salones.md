@@ -12,6 +12,8 @@ Si los mejores horarios de diciembre ya se venden a precio normal, mira qué cit
 **Respuesta corta:** Dale prioridad a tus clientas fieles, incluye un detalle que puedas entregar sin atrasarte o agradece un referido que se convierta en una visita pagada.
 
 
+
+Consulta la [página del programa para salones](https://retainos.co/es/programa-de-lealtad-para-salones) para los planes y [cómo recuperar clientas que no han vuelto a reservar](https://retainos.co/es/aprende/recuperar-clientes-de-salon) para la secuencia de seguimiento.
 ## 1. Dale a tus clientas fieles el primer turno para reservar
 Elige los espacios de enero que quieres llenar. Comparte fechas reales, el enlace y hasta cuándo tendrán acceso anticipado.
 

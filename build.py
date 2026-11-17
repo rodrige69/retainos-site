@@ -687,6 +687,33 @@ ES_BOOKING_COPY = {'salons': ('Recuérdales a tus clientas cuándo les toca un c
     'nail-lash': ('Haz que tus clientas de uñas y pestañas vuelvan.', 'Recuérdales cuándo les toca otra manicura o un retoque de pestañas. Pueden reservar con el enlace que ya usas y ganar premios por volver.', 'Ver planes para uñas y pestañas')}
 
 
+GUIDES = {
+    "full": ("small-business-loyalty-programs", "experience-based-loyalty-rewards"),
+    "family": ("small-business-loyalty-programs", "get-repeat-customers-without-discounts"),
+    "retail": ("get-repeat-customers-without-discounts", "customer-retention-rate"),
+    "care": ("customer-retention-rate", "bring-back-salon-clients"),
+}
+
+GUIDE_LABELS = {
+    "small-business-loyalty-programs": ("How loyalty programs work for small businesses", "Cómo funcionan los programas de lealtad para pequeños negocios", "programas-de-lealtad-para-pequenos-negocios"),
+    "experience-based-loyalty-rewards": ("Complimentary rewards that don't discount your prices", "Premios de cortesía sin bajar tus precios", "premios-de-lealtad-basados-en-experiencias"),
+    "get-repeat-customers-without-discounts": ("Getting repeat customers without discounts", "Clientes que vuelven sin descuentos", "clientes-que-vuelven-sin-descuentos"),
+    "customer-retention-rate": ("How to calculate your customer retention rate", "Cómo calcular tu tasa de retención de clientes", "tasa-de-retencion-de-clientes"),
+    "bring-back-salon-clients": ("How to bring back clients who haven't rebooked", "Cómo recuperar clientes que no han vuelto a reservar", "recuperar-clientes-de-salon"),
+}
+
+
+def guides(v):
+    """Two Learning Center guides under each industry page, so the cluster links both ways."""
+    items = "".join(
+        f'<a href="{url("/learn/" + s, "/es/aprende/" + GUIDE_LABELS[s][2])}">{L(GUIDE_LABELS[s][0], GUIDE_LABELS[s][1])}</a>'
+        + (" &middot; " if i == 0 else "") for i, s in enumerate(GUIDES[mode(v)]))
+    return ('<section id="guides"><div class="wrap"><div style="background:#fff;border:1px solid var(--line);'
+            'border-radius:16px;padding:22px 24px">'
+            f'<div class="kicker">{L("Guides", "Guías")}</div>'
+            f'<p style="margin:10px 0 0">{items}</p></div></div></section>')
+
+
 def vertical_page(v):
     alt = ("/" + v["slug"], "/es/" + v["slug_es"])
     items = faq_owner(v)
@@ -752,7 +779,7 @@ def vertical_page(v):
     return "".join([
         head(*title, *desc, alt=alt, jsonld=ld), topbar(alt), '<main id="top">',
         hero(v, label, None, h1, sub, cta, fine, cta_href),
-        summary_block(*summary), story, gets(v), why(v), plans(v, False), after(), faq_section(items),
+        summary_block(*summary), story, gets(v), why(v), plans(v, False), after(), guides(v), faq_section(items),
         claim(CLAIM_H if not care else ("Your clients already trust you. Make the next visit easy.", "Tus clientes ya confían en ti. Facilita su próxima visita."),
               (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday.")),
         "</main>", footer(), end()])

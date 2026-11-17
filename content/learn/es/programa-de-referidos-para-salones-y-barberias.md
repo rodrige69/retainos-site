@@ -13,6 +13,8 @@ Tus clientes contentos ya recomiendan a su estilista o barbero favorito. Un prog
 
 **Respuesta corta:** Para crear un programa de referidos en tu salón, define qué cuenta como un referido que califica, elige un premio adecuado, dale a tus clientes una forma fácil de compartir, verifica la primera visita pagada del cliente referido y mide costos y resultados.
 
+
+El [programa para barberías](https://retainos.co/es/programa-de-lealtad-para-barberias) cubre la parte de visitas y [cómo estructuran la lealtad los pequeños negocios](https://retainos.co/es/aprende/programas-de-lealtad-para-pequenos-negocios) explica cómo visitas y referidos pueden premiar al mismo cliente.
 ## 1. Define qué es un referido que califica
 
 Una regla útil: la persona referida debe ser un cliente nuevo que complete y pague un servicio que califique. Excluye autorreferidos, duplicados, cancelaciones y transacciones reembolsadas, según los términos publicados.

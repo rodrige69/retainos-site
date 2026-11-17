@@ -14,6 +14,8 @@ A client can leave your salon happy and still forget to schedule another appoint
 
 **Short answer:** Identify clients overdue for their usual service, send a friendly and appropriately authorized reminder, make booking easy, and address any experience issues before reaching for a discount.
 
+
+To check whether win-back is working, see [how to calculate your retention rate](https://retainos.co/learn/customer-retention-rate); the [hair salon program](https://retainos.co/hair-salon-loyalty-program) shows how the reminders and visits are handled for you.
 ## 1. Identify Overdue Clients
 
 Review completed appointment history and group customers by service. A short haircut, root touch-up, and balayage have different maintenance cycles. Use a service-appropriate window rather than declaring every client inactive after the same number of days.

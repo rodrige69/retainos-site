@@ -13,6 +13,8 @@ Una clienta puede salir feliz de tu salón y aun así olvidarse de agendar su pr
 
 **Respuesta corta:** Identifica a las clientas que ya pasaron su ciclo habitual, envíales un recordatorio amable y autorizado, facilita la reserva y resuelve cualquier problema de la experiencia antes de recurrir a un descuento.
 
+
+Para saber si la recuperación está funcionando, consulta [cómo calcular tu tasa de retención](https://retainos.co/es/aprende/tasa-de-retencion-de-clientes); el [programa para salones](https://retainos.co/es/programa-de-lealtad-para-salones) muestra cómo se manejan los recordatorios y las visitas.
 ## 1. Identifica a las clientas atrasadas
 
 Revisa el historial de citas completadas y agrupa a tus clientas por servicio. Un corte corto, un retoque de raíz y un balayage tienen ciclos de mantenimiento distintos. Usa un intervalo adecuado para cada servicio en lugar de declarar inactiva a todo el mundo después del mismo número de días.

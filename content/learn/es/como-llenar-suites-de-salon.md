@@ -14,6 +14,8 @@ Una suite de salón vacía no produce nada, y cada semana que pasa sin inquilino
 
 **Respuesta corta:** Para llenar suites de salón vacías y conservar a tus inquilinos, dale al prospecto una razón para firmar ya sin bajar tu renta (como una escapada o una tarjeta de descuentos en hoteles de cortesía), premia al inquilino que te refiera a un profesional que firme, recuérdale y agradécele la renovación antes de que venza su contrato, y ayúdale a mantenerse ocupado con un programa de lealtad para sus propios clientes. Un inquilino con la agenda llena renueva.
 
+
+El [programa para dueños de suites de salón](https://retainos.co/es/programa-para-duenos-de-suites-de-salon) cubre los premios por contrato y [cómo funcionan los programas de referidos](https://retainos.co/es/aprende/programa-de-referidos-para-salones-y-barberias) importa cuando un inquilino trae a otro profesional.
 ## Por qué se quedan vacías las suites de salón
 
 Quien renta una suite es dueño de su propio negocio. Elige un edificio por la ubicación, el precio y el ambiente, y se va por las mismas razones. La más común es sencilla: se le baja la agenda. Cuando a una estilista, una esteticista o una artista de pestañas ya no le alcanza cómodamente para la renta, se muda a una suite más barata o regresa a un salón por comisión.

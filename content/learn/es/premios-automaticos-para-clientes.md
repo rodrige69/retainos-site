@@ -13,6 +13,8 @@ Un cliente completa su quinto corte. Otra clienta recomienda a una amiga que ter
 
 **Respuesta corta:** Los premios automáticos usan flujos definidos de antemano para registrar la actividad que califica, revisar si se cumplen las reglas, actualizar el progreso de lealtad y enviar el premio, con revisión del personal cuando haga falta.
 
+
+Si todavía estás eligiendo qué entregar, [premios basados en experiencias](https://retainos.co/es/aprende/premios-de-lealtad-basados-en-experiencias) explica las ventajas y desventajas; el [programa para salones](https://retainos.co/es/programa-de-lealtad-para-salones) muestra la configuración completa.
 ## El flujo de siete pasos
 
 **1. Define las reglas:** servicios que califican, metas, reembolsos y exclusiones. **2. Registra la actividad:** reserva, pago, confirmación del personal o una integración autorizada. **3. Verifica:** confirma que el servicio se completó y se pagó. **4. Actualiza el progreso. 5. Envía el premio. 6. Comparte las instrucciones de canje y los términos. 7. Mide los resultados.** Enviar un premio no es lo mismo que el cliente lo haya canjeado.
