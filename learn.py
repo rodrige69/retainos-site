@@ -191,18 +191,6 @@ def fits(lang, kind=None):
             f'<p class="fine"><a href="{t["plans"]}">{l1}</a> · <a href="{t["rewards"]}">{l2}</a></p></div>')
 
 
-def disclose(lang):
-    t = S[lang]
-    if lang == "en":
-        ps = [("Examples are hypothetical.", "Names, amounts, calculations and messages in this article are illustrative, not industry benchmarks or RetainOS results. No improvement in repeat visits, referrals or revenue is guaranteed."),
-              ("Rewards.", f'Hotel savings cards are discounts or credits on eligible bookings, not cash, a gift card or a prepaid stay. Dining rewards are discount offers at participating restaurants and may carry an activation fee. Getaway certificates can involve taxes, nightly or resort fees, meal plans at some properties, and travel costs. Each reward\'s written terms apply. <a href="{t["rewards"]}">Full reward details</a>.'),
-              ("Messages.", "Send marketing texts and emails only to people who agreed to receive them, and honor opt-outs (STOP) right away. This article is general information, not legal advice.")]
-    else:
-        ps = [("Los ejemplos son hipotéticos.", "Los nombres, montos, cálculos y mensajes de este artículo son ilustrativos, no promedios de la industria ni resultados de RetainOS. No se garantiza ninguna mejora en visitas repetidas, referidos o ingresos."),
-              ("Premios.", f'Las tarjetas de descuentos en hoteles son descuentos o créditos en reservas elegibles, no efectivo, ni tarjeta de regalo, ni una estadía prepagada. Los premios de restaurantes son ofertas de descuento en restaurantes participantes y pueden tener un cargo de activación. Los certificados de escapada pueden incluir impuestos, cargos por noche o del resort, planes de comida en algunos hoteles y costos de viaje. Aplican los términos escritos de cada premio. <a href="{t["rewards"]}">Detalles completos de los premios</a>.'),
-              ("Mensajes.", "Envía mensajes de texto y correos de mercadeo solo a quien aceptó recibirlos, y respeta de inmediato a quien pida darse de baja (STOP). Este artículo es información general, no asesoría legal.")]
-    return f'<aside class="disclose" aria-label="{t["disc"]}"><h2 id="disclosures">{t["disc"]}</h2>' + "".join(f"<p><strong>{a}</strong> {b}</p>" for a, b in ps) + "</aside>"
-
 
 def header(b, lang, alt):
     t = S[lang]
@@ -265,7 +253,7 @@ def article_page(b, a, by_slug, lang):
         f'<figcaption>{t["photo"]} <a href="{a["by_url"]}{UTM}" rel="nofollow">{a["by"]}</a> {t["on"]} <a href="{a["photo_url"]}{UTM}" rel="nofollow">Unsplash</a></figcaption></figure>',
         f'<div class="pgrid"><aside class="toc"><details open><summary>{t["toc"]}</summary><ol>' + toc + '</ol></details></aside><div class="prose">',
         f'<div class="quick"><div class="kicker">{t["quick"]}</div><p>{short}</p></div>' if short else "",
-        intro, body, faqh, fits(lang, a.get("fits")), disclose(lang), "</div></div>",
+        intro, body, faqh, fits(lang, a.get("fits")), "</div></div>",
         f'<section class="related"><h2>{t["keep"]}</h2><div class="lgrid">{rel}</div></section>',
         "</article></main>", '<script>if(matchMedia("(max-width:920px)").matches){var d=document.querySelector(".toc details");if(d)d.removeAttribute("open")}</script>',
         b.footer(), b.end()])
