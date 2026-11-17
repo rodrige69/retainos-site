@@ -601,7 +601,7 @@ def social_row():
 
 def footer():
     if not LANG:
-        return (f'<footer><div class="wrap"><span>© 2026 {legal.COMPANY}. RetainOS</span>'
+        return (f'<footer><div class="wrap"><span>© 2026 {legal.COMPANY}. RetainOS is operated by {legal.COMPANY}.</span>'
                 + T('<a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>', '<a href="/es/contacto">Contacto</a> · <a href="/es/privacidad">Privacidad</a> · <a href="/es/terminos">Términos</a>', "span", "flinks")
                 + T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.") + '</div></footer>')
     loyal = [v for v in VERTICALS if mode(v) != "care"]
@@ -612,8 +612,8 @@ def footer():
 <div>{T("Automated Loyalty &amp; Referral Programs", "Programas automatizados de lealtad y referidos", "h3")}<ul class="two">{li(loyal)}</ul>
 {T("Rebooking &amp; Reminder Programs", "Programas de citas y recordatorios", "h3", "", ' style="margin-top:18px"')}<ul>{li(care)}</ul>
 {T("For Building Owners", "Para dueños de edificios", "h3", "", ' style="margin-top:18px"')}<ul><li><a href="{url('/salon-suite-owner-program', '/es/programa-para-duenos-de-suites-de-salon')}">{L("Salon Suite Owners", "Dueños de Suites de Salón")}</a></li></ul></div>
-<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="{url('/learn', '/es/aprende')}">{L("Learning Center", "Centro de aprendizaje")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
-</div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is a service of", "RetainOS es un servicio de")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
+<div>{T("Company", "Empresa", "h3")}<ul><li><a href="{url('/about', '/es/acerca')}">{L("About RetainOS", "Acerca de RetainOS")}</a></li><li><a href="{url('/rewards', '/es/premios')}">{L("Reward details &amp; terms", "Detalles y términos de premios")}</a></li><li><a href="{url('/#faq', '/es#faq')}">{L("FAQ", "Preguntas frecuentes")}</a></li><li><a href="{url('/learn', '/es/aprende')}">{L("Learning Center", "Centro de aprendizaje")}</a></li><li><a href="{url('/contact', '/es/contacto')}">{L("Contact us", "Contáctanos")}</a></li><li><a href="{url('/privacy', '/es/privacidad')}">{L("Privacy policy", "Política de privacidad")}</a></li><li><a href="{url('/terms', '/es/terminos')}">{L("Terms of service", "Términos del servicio")}</a></li></ul></div>
+</div><div class="wrap fbase"><span>© 2026 {legal.COMPANY}. {L("RetainOS is operated by", "RetainOS es operado por")} {legal.COMPANY}.</span>{T("Prices and terms subject to confirmation.", "Precios y términos sujetos a confirmación.")}</div></footer>"""
 
 
 FAB_ICON = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
@@ -933,7 +933,55 @@ def links_page():
         T("More regulars. Less chasing.", "Más clientes fieles. Menos persecución.", "h1"),
         T("Automated loyalty and referral program for local businesses. English and Spanish.", "Programa automatizado de lealtad y referidos para negocios locales. Español e inglés.", "p", "lead"),
         f'<div class="lbtns">{btns}</div>', f'<div class="lsoc">{soc}</div>', other,
+        f'<p style="margin-top:26px;font-size:12px;opacity:.65">© 2026 {legal.COMPANY}. {L("RetainOS is operated by", "RetainOS es operado por")} {legal.COMPANY}.</p>',
         "</div></main>", end(fab=False)])
+
+
+def about_page():
+    alt = ("/about", "/es/acerca")
+    return "".join([
+        head("About RetainOS | Edgar Rodriguez", "Acerca de RetainOS | Edgar Rodriguez",
+             "RetainOS is a done-for-you loyalty, referral, booking and reminder service for local businesses, operated by Edgar Rodriguez in Miami, Florida.",
+             "RetainOS es un servicio de lealtad, referidos, reservas y recordatorios para negocios locales, operado por Edgar Rodriguez en Miami, Florida.", alt=alt),
+        topbar(alt, nav=False), '<main id="top"><section><div class="wrap legal">',
+        T("About", "Acerca de", "div", "kicker"), T("About RetainOS", "Acerca de RetainOS", "h1", "h1-sm"),
+        T("RetainOS is a done-for-you client retention service for local businesses. We set up and run online booking, appointment reminders, loyalty and referral programs, complimentary rewards and review requests, in English and Spanish, so a business keeps the clients it already earned without cutting its prices.",
+          "RetainOS es un servicio de retención de clientes hecho por nosotros para negocios locales. Configuramos y operamos reservas en línea, recordatorios de citas, programas de lealtad y referidos, premios de cortesía y solicitudes de reseñas, en español e inglés, para que un negocio conserve a los clientes que ya ganó sin bajar sus precios.", "p", "lead"),
+        T("What we do", "Qué hacemos", "h2"),
+        "<ul>",
+        T("<strong>Loyalty and referral programs.</strong> Clients join once with a QR code at the front desk, staff confirm each paid visit, and clients earn complimentary rewards for coming back and for referring a friend.",
+          "<strong>Programas de lealtad y referidos.</strong> Los clientes se inscriben una sola vez con un código QR en la recepción, el personal confirma cada visita pagada y los clientes ganan premios de cortesía por volver y por recomendar a un amigo.", "li"),
+        T("<strong>Booking and reminders.</strong> Clients book online and get a reminder when it is time for their next visit, with the booking link the business already uses. Missed calls can get an automatic text back.",
+          "<strong>Reservas y recordatorios.</strong> Los clientes reservan en línea y reciben un recordatorio cuando les toca su próxima visita, con el enlace de reservas que el negocio ya usa. Las llamadas perdidas pueden recibir un mensaje automático.", "li"),
+        T("<strong>Complimentary rewards.</strong> Hotel savings cards, dining rewards and getaway rewards, delivered through our rewards partner. Rewards are never cash and never a discount on the business's own prices.",
+          "<strong>Premios de cortesía.</strong> Tarjetas de descuentos en hoteles, premios de restaurantes y escapadas, entregados a través de nuestro socio de premios. Los premios nunca son efectivo ni un descuento en los precios del negocio.", "li"),
+        T("<strong>Review requests.</strong> Every client gets the same simple request for an honest review. Reviews are never filtered by how positive they are, and rewards are never given for reviews.",
+          "<strong>Solicitudes de reseñas.</strong> Cada cliente recibe la misma solicitud sencilla para dejar una reseña honesta. Las reseñas nunca se filtran por lo positivas que sean y nunca se dan premios por reseñas.", "li"),
+        T("<strong>Set up for you.</strong> QR code, join link, printable poster, staff page and card links, plus a dashboard with live counts. English and Spanish throughout.",
+          "<strong>Configurado por nosotros.</strong> Código QR, enlace de inscripción, póster imprimible, página para el personal y enlaces de tarjeta, más un panel con conteos en vivo. Todo en español e inglés.", "li"),
+        "</ul>",
+        T("Who we work with", "Con quién trabajamos", "h2"),
+        T("Hair salons, barbershops, braiding, nail and lash studios, day spas, med spas and wellness centers, pet groomers, auto repair and detailing shops, laundromats, the front store of a pharmacy, tattoo shops, home services, daycares, kids' activities and tax preparers. Prices and plan contents are confirmed in each order.",
+          "Salones de belleza, barberías, estudios de trenzas, uñas y pestañas, spas de día, med spas y centros de bienestar, peluquerías de mascotas, talleres de autos y detallado, lavanderías, la tienda de una farmacia, estudios de tatuajes, servicios para el hogar, guarderías, actividades infantiles y preparadores de impuestos. Los precios y el contenido de cada plan se confirman en cada pedido.", "p"),
+        T("How it works", "Cómo funciona", "h2"),
+        "<ul>",
+        T("<strong>Kickoff call.</strong> A 15-minute call to pick the plan, the reward stops and the reminder timing for the business.",
+          "<strong>Llamada de inicio.</strong> Una llamada de 15 minutos para elegir el plan, las metas de premios y cuándo salen los recordatorios.", "li"),
+        T("<strong>We build it.</strong> We create the QR code, the join link, the staff page and the card links, and connect the booking link the business already uses.",
+          "<strong>Nosotros lo armamos.</strong> Creamos el código QR, el enlace de inscripción, la página del personal y los enlaces de tarjeta, y conectamos el enlace de reservas que el negocio ya usa.", "li"),
+        T("<strong>Staff confirm visits.</strong> A 4-digit PIN and the client's phone number are all it takes to add a stamp at the counter.",
+          "<strong>El personal confirma las visitas.</strong> Con un PIN de 4 dígitos y el teléfono del cliente se agrega un sello en el mostrador.", "li"),
+        T("<strong>It runs itself.</strong> Reminders, reward notices, referral links and review requests go out on their own, and the owner sees the counts on a dashboard.",
+          "<strong>Funciona solo.</strong> Los recordatorios, avisos de premios, enlaces de referidos y solicitudes de reseñas salen solos, y el dueño ve los conteos en un panel.", "li"),
+        "</ul>",
+        T("Company details", "Datos de la empresa", "h2"),
+        T(f"RetainOS is the brand name of a client retention service. The business is operated by {legal.COMPANY}, based in Miami, Florida.",
+          f"RetainOS es el nombre de marca de un servicio de retención de clientes. El negocio es operado por {legal.COMPANY}, con base en Miami, Florida.", "p"),
+        T(f'{legal.COMPANY} · {legal.ADDRESS} · Phone: <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a>',
+          f'{legal.COMPANY} · {legal.ADDRESS} · Teléfono: <a href="tel:{legal.PHONE_TEL}">{legal.PHONE}</a>', "p"),
+        T('Questions, or a request about your information? Send us a message through our <a href="/contact">contact page</a>. See also our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.',
+          '¿Preguntas o una solicitud sobre tu información? Escríbenos a través de nuestra <a href="/es/contacto">página de contacto</a>. Consulta también nuestra <a href="/es/privacidad">Política de privacidad</a> y nuestros <a href="/es/terminos">Términos del servicio</a>.', "p"),
+        "</div></section></main>", footer(), end()])
 
 
 def write(rel, content):
@@ -966,6 +1014,8 @@ def main():
         write(pre + ("links" if lang == "en" else "enlaces") + ".html", links_page())
         cs = "contact" if lang == "en" else "contacto"
         write(pre + cs + ".html", contact_page()); urls.append("/" + pre + cs)
+        ab = "about" if lang == "en" else "acerca"
+        write(pre + ab + ".html", about_page()); urls.append("/" + pre + ab)
     LANG = None
     for v in VERTICALS:
         if v.get("promo"):

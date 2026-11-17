@@ -3,19 +3,19 @@ Each section: (heading_en, heading_es, [(paragraph_en, paragraph_es), ...]).
 Paragraphs starting with "• " render as list items. Edit here, then run build.py.
 """
 
-COMPANY = "305 Connect"
+COMPANY = "Edgar Rodriguez"
 PHONE = "305-857-5863"
 PHONE_TEL = "+13058575863"
 ADDRESS_LINE = "18117 Biscayne Blvd, Ste 4292"
 CITY_ZIP = "Miami, FL 33160"
 ADDRESS = f"{ADDRESS_LINE}, {CITY_ZIP}"
-UPDATED_EN = "October 27, 2026"
-UPDATED_ES = "27 de octubre de 2026"
+UPDATED_EN = "November 17, 2026"
+UPDATED_ES = "17 de noviembre de 2026"
 
 PRIVACY = [
     ("Who we are", "Quiénes somos", [
-        (f"RetainOS is a service operated by {COMPANY}, a Florida business (\"RetainOS,\" \"we,\" \"us\"). This policy explains what information we collect through retainos.co and our services, how we use it and the choices you have.",
-         f"RetainOS es un servicio operado por {COMPANY}, una empresa de Florida (\"RetainOS\", \"nosotros\"). Esta política explica qué información recopilamos a través de retainos.co y de nuestros servicios, cómo la usamos y qué opciones tienes."),
+        (f"RetainOS is a service operated by {COMPANY}, a business based in Miami, Florida (\"RetainOS,\" \"we,\" \"us\"). This policy explains what information we collect through retainos.co and our services, how we use it and the choices you have.",
+         f"RetainOS es un servicio operado por {COMPANY}, un negocio con base en Miami, Florida (\"RetainOS\", \"nosotros\"). Esta política explica qué información recopilamos a través de retainos.co y de nuestros servicios, cómo la usamos y qué opciones tienes."),
         ("It applies to visitors of our website, to businesses that use RetainOS (\"business customers\") and to the clients of those businesses who receive messages or rewards through RetainOS.",
          "Aplica a quienes visitan nuestro sitio web, a los negocios que usan RetainOS (\"clientes empresariales\") y a los clientes de esos negocios que reciben mensajes o premios a través de RetainOS."),
     ]),
@@ -87,8 +87,8 @@ PRIVACY = [
 
 TERMS = [
     ("About these terms", "Sobre estos términos", [
-        (f"These terms apply to retainos.co and to RetainOS, a service operated by {COMPANY}, a Florida business (\"RetainOS,\" \"we,\" \"us\"). By using the website or our services, you agree to them. If you sign a separate agreement or order form with us, that agreement controls where it differs from these terms.",
-         f"Estos términos aplican a retainos.co y a RetainOS, un servicio operado por {COMPANY}, una empresa de Florida (\"RetainOS\", \"nosotros\"). Al usar el sitio o nuestros servicios, los aceptas. Si firmas un acuerdo o formulario de pedido aparte con nosotros, ese acuerdo prevalece donde sea distinto a estos términos."),
+        (f"These terms apply to retainos.co and to RetainOS, a service operated by {COMPANY}, a business based in Miami, Florida (\"RetainOS,\" \"we,\" \"us\"). By using the website or our services, you agree to them. If you sign a separate agreement or order form with us, that agreement controls where it differs from these terms.",
+         f"Estos términos aplican a retainos.co y a RetainOS, un servicio operado por {COMPANY}, un negocio con base en Miami, Florida (\"RetainOS\", \"nosotros\"). Al usar el sitio o nuestros servicios, los aceptas. Si firmas un acuerdo o formulario de pedido aparte con nosotros, ese acuerdo prevalece donde sea distinto a estos términos."),
     ]),
     ("Our services", "Nuestros servicios", [
         ("RetainOS is a done-for-you client retention service for local businesses: online booking, reminders, loyalty and referral programs, complimentary rewards and review requests, in English and Spanish. Features depend on the plan chosen. Prices, offers and timelines on the website are subject to confirmation in your order.",
