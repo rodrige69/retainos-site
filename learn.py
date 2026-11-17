@@ -177,16 +177,14 @@ def fits(lang, kind=None):
                 f'<div class="ctas"><a class="btn" href="{u1}">{l1}</a><a class="btn alt" href="{t["start"]}">{t["claim"]}</a></div>'
                 f'<p class="fine"><a href="{t["rewards"]}">{"Reward details and terms" if lang == "en" else "Detalles y términos de los premios"}</a></p></div>')
     if lang == "en":
-        h2, p1, p2 = ("Loyalty and referrals, done for you",
-            "RetainOS is an automated loyalty and referral program for local service businesses. Clients check in with a quick QR scan that your team confirms, get a friendly reminder when they're due back, and earn complimentary rewards. By default, that's a $100 hotel savings card after 5 visits, and one for both people when a referred friend completes a first paid visit. Your prices stay the same. We set everything up for you, in English and Spanish.",
-            "Rewards are never given for reviews. For healthcare-related services such as med spas, visit and referral rewards stay off by default.")
+        h2, p1 = ("Loyalty and referrals, done for you",
+            "RetainOS is an automated loyalty and referral program for local service businesses. Clients check in with a quick QR scan that your team confirms, get a friendly reminder when they're due back, and earn complimentary rewards. By default, that's a $100 hotel savings card after 5 visits, and one for both people when a referred friend completes a first paid visit. Your prices stay the same. We set everything up for you, in English and Spanish.")
         l1, l2 = "Plans and pricing", "Reward details and terms"
     else:
-        h2, p1, p2 = ("Lealtad y referidos, hechos por nosotros",
-            "RetainOS es un programa automatizado de lealtad y referidos para negocios de servicios locales. Tus clientes se registran con un escaneo QR rápido que tu equipo confirma, reciben un recordatorio amable cuando les toca volver y ganan premios de cortesía. De entrada, es una tarjeta de descuentos en hoteles de $100 después de 5 visitas, y una para cada persona cuando un amigo referido completa su primera visita pagada. Tus precios no cambian. Nosotros lo configuramos todo, en español e inglés.",
-            "Los premios nunca se dan por reseñas. Para servicios relacionados con la salud, como los med spas, los premios por visitas y referidos están desactivados de entrada.")
+        h2, p1 = ("Lealtad y referidos, hechos por nosotros",
+            "RetainOS es un programa automatizado de lealtad y referidos para negocios de servicios locales. Tus clientes se registran con un escaneo QR rápido que tu equipo confirma, reciben un recordatorio amable cuando les toca volver y ganan premios de cortesía. De entrada, es una tarjeta de descuentos en hoteles de $100 después de 5 visitas, y una para cada persona cuando un amigo referido completa su primera visita pagada. Tus precios no cambian. Nosotros lo configuramos todo, en español e inglés.")
         l1, l2 = "Planes y precios", "Detalles y términos de los premios"
-    return (f'<div class="fitbox"><div class="kicker">{t["fits"]}</div><h2 id="how-retainos-fits">{h2}</h2><p>{p1}</p><p class="fine">{p2}</p>'
+    return (f'<div class="fitbox"><div class="kicker">{t["fits"]}</div><h2 id="how-retainos-fits">{h2}</h2><p>{p1}</p>'
             f'<div class="ctas"><a class="btn" href="{t["start"]}">{t["claim"]}</a><a class="btn alt" href="{t["how"]}">{t["seehow"]}</a></div>'
             f'<p class="fine"><a href="{t["plans"]}">{l1}</a> · <a href="{t["rewards"]}">{l2}</a></p></div>')
 
