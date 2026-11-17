@@ -266,12 +266,14 @@ def index_page(b, arts, lang):
         title = "Learning Center: Loyalty, Referrals & Repeat Customers | RetainOS"
         desc = "Practical, plain-English guides for local service businesses on repeat customers, loyalty programs, referrals, rewards and retention."
         extra = "No hype, no made-up results. Just what works and how to measure it."
-        h1, cta_h, cta_p = "More regulars. Less chasing.", "Want this done for you?", "RetainOS sets up visit rewards, referrals and reminders for your business, in English and Spanish, without cutting your prices."
+        h1, cta_h, cta_p = "More regulars. Less chasing.", "Your regulars already like you. Give them a reason to come back.", "RetainOS sets up visit rewards, referrals and reminders, so clients come back on their own. Done for you, no discounting your prices."
+        cta_btn, cta_btn2, cta_note = "See the plans", "Book a 15-minute call", "Setup fee waived for Black Friday &middot; Month to month"
     else:
         title = "Centro de aprendizaje: lealtad, referidos y clientes que vuelven | RetainOS"
         desc = "Guías prácticas y en lenguaje sencillo para negocios de servicios locales sobre clientes que vuelven, programas de lealtad, referidos, premios y retención."
         extra = "Sin exageraciones ni resultados inventados. Solo lo que funciona y cómo medirlo."
-        h1, cta_h, cta_p = "Más clientes fieles. Menos persecución.", "¿Quieres que lo hagamos por ti?", "RetainOS configura los premios por visitas, los referidos y los recordatorios para tu negocio, en español e inglés, sin bajar tus precios."
+        h1, cta_h, cta_p = "Más clientes fieles. Menos persecución.", "A tus clientes fieles ya les gustas. Dales una razón para volver.", "RetainOS configura los premios por visitas, los referidos y los recordatorios para que tus clientes vuelvan solos. Hecho por nosotros, sin bajar tus precios."
+        cta_btn, cta_btn2, cta_note = "Ver los planes", "Agenda una llamada de 15 minutos", "Sin costo de instalación por Black Friday &middot; Mes a mes"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "CollectionPage", "name": f"RetainOS {t['lc']}", "url": b.DOMAIN + t["base"], "description": desc, "inLanguage": t["inlang"],
          "hasPart": [{"@type": "BlogPosting", "headline": a["title"], "url": b.DOMAIN + path(lang, a)} for a in arts]},
@@ -293,7 +295,7 @@ def index_page(b, arts, lang):
         f'<p class="lead">{desc} {extra}</p>', f'<div class="chips">{chips}</div>',
         f'<div class="featured">{card(arts[0], lang, big=True)}</div>',
         f'<section class="lsec"><h2 id="guides">{t["all"]}</h2><div class="lgrid" id="lgrid">{grid}</div></section>', js,
-        f'<div class="fitbox"><h2>{cta_h}</h2><p>{cta_p}</p><div class="ctas"><a class="btn" href="{t["start"]}">{t["claim"]}</a><a class="btn alt" href="{t["how"]}">{t["seehow"]}</a></div></div>',
+        f'<div class="fitbox"><h2>{cta_h}</h2><p>{cta_p}</p><div class="ctas"><a class="btn" href="{t["plans"]}">{cta_btn}</a><a class="btn alt" href="{t["start"]}">{cta_btn2}</a></div><p class="fine">{cta_note}</p></div>',
         "</div></main>", b.footer(), b.end()])
 
 
