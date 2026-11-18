@@ -357,7 +357,7 @@ def plan(name, price, setup_line, for_, feats, key, label, hi=False, link=None, 
         btn = buy(key, label[0], label[1], hi)
     anchor = f' id="{card_id}"' if card_id else ""
     return f"""<div class="plan{' hi' if hi else ''}"{anchor}><div class="nm">{T(*name)}{badge}</div>
-<div class="pr">${price}<span>{T("/month", "/mes")}</span></div><div class="for">{T(*for_)}</div>
+<div class="pr">${price}<span>{T("/month", "/mes")}</span></div><div class="trial">{T("7-day complimentary trial", "7 días de prueba sin costo")}</div><div class="for">{T(*for_)}</div>
 <div class="setup">{setup_line}</div><ul>{lis}</ul>{btn}</div>"""
 
 
@@ -421,7 +421,7 @@ def plans(v, promo):
 {buy("right-hand", "Start Right Hand", "Empezar con Mano Derecha", True)}</div></div>"""
     return f"""<section id="plans"><div class="wrap">
 {T("Plans", "Planes", "div", "kicker")}{T(*h, "h2")}
-{T("Black Friday: setup fees waived on Come Back and Booked Solid.", "Black Friday: sin costo de instalación en Regresa y Agenda Llena.", "p", "bfnote")}
+{T("Black Friday: setup fees waived on Come Back and Booked Solid. Offer ends December 1.", "Black Friday: sin costo de instalación en Regresa y Agenda Llena. La oferta termina el 1 de diciembre.", "p", "bfnote")}
 <div class="plans">{cards}</div>
 {T("Month to month. No long-term contracts. No commission on your clients. Ever.", "Mes a mes. Sin contratos a largo plazo. Nunca cobramos comisión por tus clientes.", "p", "nocomm")}
 {addon}
@@ -659,7 +659,7 @@ def home_page():
              ("Reward your regulars without cutting your prices. Clients earn complimentary rewards for coming back and referring friends. We set it up. It runs itself.",
               "Premia a tus clientes fieles sin bajar tus precios. Ganan premios de cortesía por volver y por recomendarte. Nosotros lo configuramos. Funciona solo."), CTA, FINE),
         problem(tint=True), how(HOME, L("home", "es-home")), industries(), gets(HOME), why(), plans(HOME, False), after(), faq_section(items),
-        claim(CLAIM_H, ("Pick your plan and check out in a minute. Setup fee waived for Black Friday.", "Elige tu plan y paga en un minuto. Sin costo de instalación por Black Friday.")),
+        claim(CLAIM_H, ("Pick your plan and check out in a minute. Setup fee waived for Black Friday (ends December 1). 7-day complimentary trial.", "Elige tu plan y paga en un minuto. Sin costo de instalación por Black Friday (hasta el 1 de diciembre). 7 días de prueba sin costo.")),
         "</main>", footer(), end()])
 
 
@@ -781,7 +781,7 @@ def vertical_page(v):
         hero(v, label, None, h1, sub, cta, fine, cta_href),
         summary_block(*summary), story, gets(v), why(v), plans(v, False), after(), guides(v), faq_section(items),
         claim(CLAIM_H if not care else ("Your clients already trust you. Make the next visit easy.", "Tus clientes ya confían en ti. Facilita su próxima visita."),
-              (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday.")),
+              (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday (ends December 1). 7-day complimentary trial.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday (hasta el 1 de diciembre). 7 días de prueba sin costo.")),
         "</main>", footer(), end()])
 
 
