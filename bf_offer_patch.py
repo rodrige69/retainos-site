@@ -46,7 +46,7 @@ PAGES = {
   hero_old='<a class="btn" href="#come-back"><span>Start with Come Back · $39/month</span></a>',
   hero_new='<a class="btn" href="#blackfriday"><span>Claim the Black Friday offer</span></a>',
   video="/media/retainos-explainer-salon-blackfriday.mp4",
-  poster="/media/retainos-explainer-poster.jpg",
+  poster="/media/retainos-explainer-salon-blackfriday-poster.jpg",
   primary="https://retainos-come-back-11112220-cb257563.b-cdn.net/offer",
   alt="https://retainos-booked-solid-11112244-70f50fe0.b-cdn.net/offer",
   t=dict(
@@ -68,7 +68,7 @@ PAGES = {
   anchor='<section class="tint"><div class="wrap"><div class="kicker">En resumen</div>',
   hero_old='<a class="btn" href="#come-back"><span>Empieza con Regresa · $39 al mes</span></a>',
   hero_new='<a class="btn" href="#blackfriday"><span>Aprovecha la oferta de Black Friday</span></a>',
-  video="/media/retainos-explainer-salon-blackfriday-es.mp4",
+  video="/media/retainos-full-picture-explainer-es.mp4",
   poster="/media/retainos-explainer-poster-es.jpg",
   primary="https://retainos-regresa-es-11112333-8fa98bda.b-cdn.net/offer",
   alt="https://retainos-agenda-llena-es-11112333-df31b1c4.b-cdn.net/offer",
