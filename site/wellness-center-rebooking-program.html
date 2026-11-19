@@ -326,7 +326,27 @@ footer a{color:inherit;font-weight:700}
 @media (max-width:560px){.bfbar{font-size:13.5px;padding:10px 12px}}
 .bfbar .bfe{display:inline-block;margin:0 6px}
 @media (max-width:560px){.bfbar .bfe{display:none}}
-.trial{font-weight:700;font-size:14px;color:var(--accent-dk);margin:2px 0 6px}</style>
+.trial{font-weight:700;font-size:14px;color:var(--accent-dk);margin:2px 0 6px}
+#blackfriday{background:var(--dark);color:#F3F1EC;padding:56px 0}
+#blackfriday .bfgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+#blackfriday .bfk{display:inline-block;background:#FFD60A;color:#111;font-weight:800;font-size:13px;letter-spacing:.6px;text-transform:uppercase;border-radius:999px;padding:6px 14px;margin-bottom:16px}
+#blackfriday h2{color:#fff;margin:0 0 12px}
+#blackfriday .bflead{color:#E4E1DA;font-size:18px;margin:0 0 20px}
+#blackfriday video{width:100%;border-radius:18px;background:#000;display:block;aspect-ratio:16/9;object-fit:cover}
+#blackfriday ul.bfl{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:12px}
+#blackfriday ul.bfl li{display:flex;gap:12px;align-items:flex-start;font-size:17px;color:#F3F1EC}
+#blackfriday ul.bfl svg{flex:none;margin-top:3px}
+#blackfriday .bfcount{display:flex;gap:10px;margin:0 0 20px;align-items:stretch}
+#blackfriday .bfcount div{background:var(--dark2);border:1px solid #3a3e45;border-radius:12px;padding:10px 6px;min-width:64px;text-align:center}
+#blackfriday .bfcount b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:28px;line-height:1.1;color:#FFD60A}
+#blackfriday .bfcount span{font-size:12px;color:#C9C6BF;text-transform:uppercase;letter-spacing:.5px}
+#blackfriday .bfends{color:#C9C6BF;font-size:14px;margin:-8px 0 20px}
+#blackfriday .btn{background:#FFD60A;color:#111;width:100%}
+#blackfriday .btn:hover{background:#fff;color:#111}
+#blackfriday .bfalt{display:block;text-align:center;margin-top:14px;color:#fff;font-weight:700}
+#blackfriday .bffine{color:#C9C6BF;font-size:13.5px;margin:16px 0 0}
+@media (max-width:920px){#blackfriday .bfgrid{grid-template-columns:1fr}#blackfriday{padding:40px 0}}
+</style>
 <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "Service", "name": "Client Rebooking & Reminder Program for Wellness Centers", "provider": {"@type": "Organization", "name": "RetainOS", "url": "https://retainos.co"}, "areaServed": "US", "availableLanguage": ["en", "es"]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to switch booking apps?", "acceptedAnswer": {"@type": "Answer", "text": "No. Come Back works alongside the one you use now. Booked Solid lets you use our booking if you want it, and we move your clients over."}}, {"@type": "Question", "name": "Do you take a cut of my bookings?", "acceptedAnswer": {"@type": "Answer", "text": "Never. One flat monthly price."}}, {"@type": "Question", "name": "Can my clients get messages in Spanish?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Every message comes in English or Spanish."}}, {"@type": "Question", "name": "Can I offer rewards?", "acceptedAnswer": {"@type": "Answer", "text": "Visit and referral rewards stay off by default for healthcare-related services, because gifts tied to visits or referrals can break healthcare rules. Cash-pay services that aren't medical treatment may qualify after review. Staff contests are always available."}}, {"@type": "Question", "name": "Do messages include treatment details?", "acceptedAnswer": {"@type": "Answer", "text": "No. Reminders only say it's time to book, never what the treatment is."}}, {"@type": "Question", "name": "Is there a contract?", "acceptedAnswer": {"@type": "Answer", "text": "No. Plans are month to month. Cancel anytime."}}]}]</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSTD5HYECJ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YSTD5HYECJ');
@@ -337,7 +357,7 @@ document.addEventListener('click',function(ev){var a=ev.target.closest('a.btn,bu
 <div class="eyebrow"><span>Client Rebooking &amp; Reminder Program for Wellness Centers</span></div>
 <h1>Keep wellness plans on track.</h1>
 <p class="sub">Online booking with deposits, timely reminders and honest review requests. We set it up. It runs itself.</p>
-<div class="ctas"><a class="btn" href="#plans"><span>Claim your spot</span></a><a class="btn alt" href="#how"><span>See how it works</span></a></div>
+<div class="ctas"><a class="btn" href="#blackfriday"><span>Claim the Black Friday offer</span></a><a class="btn alt" href="#how"><span>See how it works</span></a></div>
 
 </div>
 <div class="heroph"><div class="phone"><div class="screen">
@@ -348,7 +368,7 @@ document.addEventListener('click',function(ev){var a=ev.target.closest('a.btn,bu
 <div class="prog"><strong><span>Confirmed</span></strong><small><span>Friday 10:30 AM · Deposit received</span></small></div>
 <div class="stop"><span>Reply STOP to opt out</span></div>
 </div></div></div>
-</div><section class="tint"><div class="wrap"><div class="kicker">In short</div><p class="lead lead-lg">RetainOS is a client rebooking and reminder program for wellness centers. Clients book online with a deposit, get a text when they're due for their next session, and receive a simple request for an honest review. Missed calls get an instant text back. Visit and referral rewards stay off by default for healthcare-related services. We set everything up for you, in English and Spanish.</p></div></section><section><div class="wrap">
+</div><section id="blackfriday"><div class="wrap bfgrid"><div><video controls playsinline preload="metadata" poster="/media/retainos-explainer-salon-blackfriday-poster.jpg" aria-label="RetainOS Black Friday explainer video for salons"><source src="/media/retainos-explainer-salon-blackfriday.mp4" type="video/mp4"></video></div><div><span class="bfk">Black Friday · Ends December 1</span><h2>Get your rewards program running with $0 setup.</h2><p class="bflead">Watch how RetainOS brings your regulars back, then start your 7-day complimentary trial.</p><ul class="bfl"><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD60A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span><strong>$99 setup fee waived</strong> on Come Back and Booked Solid. We set everything up for you.</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD60A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span><strong>7-day complimentary trial.</strong> Your card is not charged until day 8.</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD60A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span><strong>Cancel online any time before day 8</strong> and you will not be charged. After that, month to month.</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD60A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span><strong>No commission</strong>, and your prices stay the same.</span></li></ul><div class="bfcount" data-bf aria-hidden="true"><div><b data-d>0</b><span>days</span></div><div><b data-h>00</b><span>hours</span></div><div><b data-m>00</b><span>min</span></div><div><b data-s>00</b><span>sec</span></div></div><p class="bfends">Offer ends December 1 at 11:59 PM ET.</p><a class="btn big" href="https://retainos-come-back-11112220-cb257563.b-cdn.net/offer">Start my 7-day trial · Come Back $39/mo</a><a class="bfalt" href="https://retainos-booked-solid-11112244-70f50fe0.b-cdn.net/offer">Want more? See Booked Solid · $79/mo &rarr;</a><p class="bffine">Setup fee waived through December 1 on Come Back and Booked Solid. After the 7-day complimentary trial, billed monthly until you cancel. Terms &amp; Conditions apply.</p></div></div></section><section class="tint"><div class="wrap"><div class="kicker">In short</div><p class="lead lead-lg">RetainOS is a client rebooking and reminder program for wellness centers. Clients book online with a deposit, get a text when they're due for their next session, and receive a simple request for an honest review. Missed calls get an instant text back. Visit and referral rewards stay off by default for healthcare-related services. We set everything up for you, in English and Spanish.</p></div></section><section><div class="wrap">
 <h2>You're great at the work. Keeping clients on schedule is a second job.</h2>
 <p class="lead">Packages go unused and plans stall when nobody follows up. A timely reminder keeps clients on the plan they already chose.</p>
 <p class="lead">Remembering who's due. Chasing no-shows. Asking for reviews after a great visit. It all matters, and it's the first thing to slip on a busy day.</p>
@@ -404,5 +424,10 @@ document.addEventListener('click',function(ev){var a=ev.target.closest('a.btn,bu
 <h3 style="margin-top:18px">For Building Owners</h3><ul><li><a href="/salon-suite-owner-program">Salon Suite Owners</a></li></ul></div>
 <div><h3>Company</h3><ul><li><a href="/about">About RetainOS</a></li><li><a href="/rewards">Reward details &amp; terms</a></li><li><a href="/#faq">FAQ</a></li><li><a href="/learn">Learning Center</a></li><li><a href="/contact">Contact us</a></li><li><a href="/privacy">Privacy policy</a></li><li><a href="/terms">Terms of service</a></li></ul></div>
 </div><div class="wrap fbase"><span>© 2026 Edgar Rodriguez. RetainOS is operated by Edgar Rodriguez.</span><span>Engineered by <a href="https://clientcontactpro.com">Client Contact Pro</a></span></div></footer><a class="fab" href="/contact"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Questions?</span></a><script>(function(){var f=document.querySelector('.fab');if(!f||!('IntersectionObserver' in window))return;var n=0;var io=new IntersectionObserver(function(es){es.forEach(function(e){n+=e.isIntersecting?1:-1});f.classList.toggle('fab-hide',n>0)});['plans','claim'].forEach(function(i){var el=document.getElementById(i);if(el)io.observe(el)})})();</script>
-</body>
+<script>(function(){var end=Date.UTC(2026,11,2,4,59,59);var s=document.getElementById('blackfriday');if(!s)return;
+function p(n){return n<10?'0'+n:''+n}
+function tick(){var t=end-Date.now();if(t<=0){s.style.display='none';var b=document.querySelector('.bfbar');if(b)b.style.display='none';return false}
+var d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),m=Math.floor(t%36e5/6e4),x=Math.floor(t%6e4/1e3);
+var e=s.querySelector('[data-bf]');if(e){e.querySelector('[data-d]').textContent=d;e.querySelector('[data-h]').textContent=p(h);e.querySelector('[data-m]').textContent=p(m);e.querySelector('[data-s]').textContent=p(x)}return true}
+if(tick()){setInterval(tick,1000)}})();</script></body>
 </html>

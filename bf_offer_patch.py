@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Add the Black Friday offer block (video + offer stack + countdown + CTA) to the
-hair salon, braiding salon and barbershop pages. Idempotent: skips a page that already has id="blackfriday".
+hair salon, braiding, barbershop pages and the featured placement on the home page and beauty/wellness verticals. Idempotent: skips a page that already has id="blackfriday".
 Run from the repo root:  python3 bf_offer_patch.py
 Same caveat as bf_trial_patch.py: build.py does not know this block, so re-running
 build.py would drop it. Re-run this script afterwards.
@@ -118,6 +118,29 @@ for src, dst, old, new in [
         PAGES[dst]["t"] = dict(PAGES[dst]["t"], h2="Get your barbershop's rewards program running with $0 setup.",
                                aria="RetainOS Black Friday explainer video for barbers")
 
+# Featured placement: home page + remaining beauty/wellness verticals, directly under the hero.
+# Salon explainer video, Come Back / Regresa $39 button, same countdown. "generic": the block is
+# inserted before the first <section> after </header> and the hero's plans button is repointed.
+GENERIC_EN = copy.deepcopy(PAGES["site/hair-salon-loyalty-program.html"])
+GENERIC_ES = copy.deepcopy(PAGES["site/es/programa-de-lealtad-para-salones.html"])
+GENERIC_EN["t"] = dict(GENERIC_EN["t"], h2="Get your rewards program running with $0 setup.")
+GENERIC_ES["t"] = dict(GENERIC_ES["t"], h2="Activa tu programa de recompensas sin costo de instalación.")
+HOME_BULLETS = 2   # the home page shows only the first two offer lines
+for path, base, home in [
+ ("site/index.html", GENERIC_EN, True), ("site/es/index.html", GENERIC_ES, True),
+ ("site/nail-lash-loyalty-program.html", GENERIC_EN, False), ("site/es/programa-de-lealtad-para-unas-y-pestanas.html", GENERIC_ES, False),
+ ("site/waxing-brow-bar-loyalty-program.html", GENERIC_EN, False), ("site/es/programa-de-lealtad-para-depilacion-y-cejas.html", GENERIC_ES, False),
+ ("site/tattoo-shop-loyalty-program.html", GENERIC_EN, False), ("site/es/programa-de-lealtad-para-estudios-de-tatuajes.html", GENERIC_ES, False),
+ ("site/day-spa-massage-loyalty-program.html", GENERIC_EN, False), ("site/es/programa-de-lealtad-para-spas-y-masajes.html", GENERIC_ES, False),
+ ("site/med-spa-rebooking-program.html", GENERIC_EN, False), ("site/es/programa-de-citas-para-med-spas.html", GENERIC_ES, False),
+ ("site/wellness-center-rebooking-program.html", GENERIC_EN, False), ("site/es/programa-de-citas-para-centros-de-bienestar.html", GENERIC_ES, False),
+]:
+    c = copy.deepcopy(base)
+    c["generic"] = True
+    if home:
+        c["t"]["bullets"] = c["t"]["bullets"][:HOME_BULLETS]
+    PAGES[path] = c
+
 def block(c):
     t = c["t"]
     lis = "".join(f"<li>{CHECK}<span>{b}</span></li>" for b in t["bullets"])
@@ -139,11 +162,20 @@ for path, c in PAGES.items():
     html = open(path, encoding="utf-8").read()
     if 'id="blackfriday"' in html:
         print("skip (already patched):", path); continue
-    for k in ("anchor", "hero_old"):
-        if html.count(c[k]) != 1:
-            sys.exit(f"{path}: expected exactly one match for {k}, found {html.count(c[k])}")
-    html = html.replace(c["hero_old"], c["hero_new"])
-    html = html.replace(c["anchor"], block(c) + c["anchor"])
+    if c.get("generic"):
+        h = html.find("</header>")
+        sec = html.find("<section", h)
+        m = re.search(r'<a class="btn" href="#plans"><span>[^<]*</span></a>', html[:sec])
+        if h < 0 or sec < 0 or not m:
+            sys.exit(f"{path}: could not find the hero button or the first section")
+        label = ("Claim the Black Friday offer" if "/es/" not in path else "Aprovecha la oferta de Black Friday")
+        html = html[:m.start()] + f'<a class="btn" href="#blackfriday"><span>{label}</span></a>' + html[m.end():sec] + block(c) + html[sec:]
+    else:
+        for k in ("anchor", "hero_old"):
+            if html.count(c[k]) != 1:
+                sys.exit(f"{path}: expected exactly one match for {k}, found {html.count(c[k])}")
+        html = html.replace(c["hero_old"], c["hero_new"])
+        html = html.replace(c["anchor"], block(c) + c["anchor"])
     i = html.rfind("</style>")
     html = html[:i] + CSS + html[i:]
     html = html.replace("</body>", JS + "</body>", 1)
