@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Add the Black Friday offer block (video + offer stack + countdown + CTA) to the
-hair salon pages. Idempotent: skips a page that already has id="blackfriday".
+hair and braiding salon pages. Idempotent: skips a page that already has id="blackfriday".
 Run from the repo root:  python3 bf_offer_patch.py
 Same caveat as bf_trial_patch.py: build.py does not know this block, so re-running
 build.py would drop it. Re-run this script afterwards.
@@ -68,8 +68,8 @@ PAGES = {
   anchor='<section class="tint"><div class="wrap"><div class="kicker">En resumen</div>',
   hero_old='<a class="btn" href="#come-back"><span>Empieza con Regresa · $39 al mes</span></a>',
   hero_new='<a class="btn" href="#blackfriday"><span>Aprovecha la oferta de Black Friday</span></a>',
-  video="/media/retainos-full-picture-explainer-es.mp4",
-  poster="/media/retainos-explainer-poster-es.jpg",
+  video="/media/retainos-explainer-salon-blackfriday-es.mp4",
+  poster="/media/retainos-explainer-salon-blackfriday-es-poster.jpg",
   primary="https://retainos-regresa-es-11112333-8fa98bda.b-cdn.net/offer",
   alt="https://retainos-agenda-llena-es-11112333-df31b1c4.b-cdn.net/offer",
   t=dict(
@@ -88,6 +88,18 @@ PAGES = {
    fine="Sin costo de instalación hasta el 1 de diciembre en Regresa y Agenda Llena. Después de la prueba sin costo de 7 días, se cobra cada mes hasta que canceles. Aplican los Términos y Condiciones."),
  ),
 }
+
+# Braiding salon pages: same offer block, same videos, hero button repointed.
+import copy
+for src, dst, old, new in [
+ ("site/hair-salon-loyalty-program.html", "site/braiding-salon-loyalty-program.html",
+  '<a class="btn" href="#plans"><span>Claim your spot</span></a>',
+  '<a class="btn" href="#blackfriday"><span>Claim the Black Friday offer</span></a>'),
+ ("site/es/programa-de-lealtad-para-salones.html", "site/es/programa-de-lealtad-para-salones-de-trenzas.html",
+  '<a class="btn" href="#plans"><span>Reserva tu lugar</span></a>',
+  '<a class="btn" href="#blackfriday"><span>Aprovecha la oferta de Black Friday</span></a>'),
+]:
+    PAGES[dst] = dict(copy.deepcopy(PAGES[src]), hero_old=old, hero_new=new)
 
 def block(c):
     t = c["t"]
