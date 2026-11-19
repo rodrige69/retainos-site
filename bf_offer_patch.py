@@ -101,8 +101,17 @@ for src, dst, old, new in [
  ("site/hair-salon-loyalty-program.html", "site/barbershop-loyalty-program.html",
   '<a class="btn" href="#come-back"><span>Start with Come Back · $39/month</span></a>',
   '<a class="btn" href="#blackfriday"><span>Claim the Black Friday offer</span></a>'),
+ ("site/es/programa-de-lealtad-para-salones.html", "site/es/programa-de-lealtad-para-barberias.html",
+  '<a class="btn" href="#come-back"><span>Empieza con Regresa · $39 al mes</span></a>',
+  '<a class="btn" href="#blackfriday"><span>Aprovecha la oferta de Black Friday</span></a>'),
 ]:
     PAGES[dst] = dict(copy.deepcopy(PAGES[src]), hero_old=old, hero_new=new)
+    if dst == "site/es/programa-de-lealtad-para-barberias.html":
+        PAGES[dst].update(video="/media/retainos-explainer-barbers-blackfriday-es.mp4",
+                          poster="/media/retainos-explainer-barbers-blackfriday-es-poster.jpg")
+        PAGES[dst]["t"] = dict(PAGES[dst]["t"], h2="Activa el programa de recompensas de tu barbería sin costo de instalación.",
+                               lead="Mira cómo RetainOS hace que tus clientes vuelvan, y empieza tu prueba sin costo de 7 días.",
+                               aria="Video explicativo de Black Friday de RetainOS para barberías")
     if dst == "site/barbershop-loyalty-program.html":
         PAGES[dst].update(video="/media/retainos-explainer-barbers-blackfriday.mp4",
                           poster="/media/retainos-explainer-barbers-blackfriday-poster.jpg")
