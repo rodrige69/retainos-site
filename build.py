@@ -1062,7 +1062,7 @@ def main():
     # Black Friday trial wording + offer block are applied by post-build patch scripts (idempotent).
     # Re-run them here so a rebuild does not silently drop them. Remove after Dec 1.
     import subprocess
-    for script in ("bf_trial_patch.py", "bf_offer_patch.py", "rh_soon_patch.py"):
+    for script in ("bf_trial_patch.py", "bf_offer_patch.py", "rh_soon_patch.py", "cancel_link_patch.py"):
         if os.path.exists(os.path.join(HERE, script)):
             subprocess.run([sys.executable, script], cwd=HERE, check=False)
     print(f"built {len(urls)} public pages + {sum(1 for v in VERTICALS if v.get('promo'))} promo pages")
