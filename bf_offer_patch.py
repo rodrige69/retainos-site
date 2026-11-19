@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Add the Black Friday offer block (video + offer stack + countdown + CTA) to the
-hair and braiding salon pages. Idempotent: skips a page that already has id="blackfriday".
+hair salon, braiding salon and barbershop pages. Idempotent: skips a page that already has id="blackfriday".
 Run from the repo root:  python3 bf_offer_patch.py
 Same caveat as bf_trial_patch.py: build.py does not know this block, so re-running
 build.py would drop it. Re-run this script afterwards.
@@ -98,8 +98,25 @@ for src, dst, old, new in [
  ("site/es/programa-de-lealtad-para-salones.html", "site/es/programa-de-lealtad-para-salones-de-trenzas.html",
   '<a class="btn" href="#plans"><span>Reserva tu lugar</span></a>',
   '<a class="btn" href="#blackfriday"><span>Aprovecha la oferta de Black Friday</span></a>'),
+ ("site/hair-salon-loyalty-program.html", "site/barbershop-loyalty-program.html",
+  '<a class="btn" href="#come-back"><span>Start with Come Back · $39/month</span></a>',
+  '<a class="btn" href="#blackfriday"><span>Claim the Black Friday offer</span></a>'),
+ ("site/es/programa-de-lealtad-para-salones.html", "site/es/programa-de-lealtad-para-barberias.html",
+  '<a class="btn" href="#come-back"><span>Empieza con Regresa · $39 al mes</span></a>',
+  '<a class="btn" href="#blackfriday"><span>Aprovecha la oferta de Black Friday</span></a>'),
 ]:
     PAGES[dst] = dict(copy.deepcopy(PAGES[src]), hero_old=old, hero_new=new)
+    if dst == "site/es/programa-de-lealtad-para-barberias.html":
+        PAGES[dst].update(video="/media/retainos-explainer-barbers-blackfriday-es.mp4",
+                          poster="/media/retainos-explainer-barbers-blackfriday-es-poster.jpg")
+        PAGES[dst]["t"] = dict(PAGES[dst]["t"], h2="Activa el programa de recompensas de tu barbería sin costo de instalación.",
+                               lead="Mira cómo RetainOS hace que tus clientes vuelvan, y empieza tu prueba sin costo de 7 días.",
+                               aria="Video explicativo de Black Friday de RetainOS para barberías")
+    if dst == "site/barbershop-loyalty-program.html":
+        PAGES[dst].update(video="/media/retainos-explainer-barbers-blackfriday.mp4",
+                          poster="/media/retainos-explainer-barbers-blackfriday-poster.jpg")
+        PAGES[dst]["t"] = dict(PAGES[dst]["t"], h2="Get your barbershop's rewards program running with $0 setup.",
+                               aria="RetainOS Black Friday explainer video for barbers")
 
 def block(c):
     t = c["t"]
