@@ -21,5 +21,8 @@
       { "key": "Service-Worker-Allowed", "value": "/" } ] },
     { "source": "/manifest.webmanifest", "headers": [
       { "key": "Content-Type", "value": "application/manifest+json" } ] }
+  ],
+  "crons": [
+    { "path": "/api/push/reminders", "schedule": "0 15 * * *" }
   ]
 }

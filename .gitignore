@@ -6,3 +6,4 @@ app/server.pid
 
 # MCP server config — may contain API keys, never commit
 .agents/mcp.json
+node_modules/
