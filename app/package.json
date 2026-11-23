@@ -1,0 +1,8 @@
+{
+  "name": "retainos-app",
+  "private": true,
+  "description": "Static pages + Vercel functions. Only server-side dependency: web-push (opt-in push pilot).",
+  "dependencies": {
+    "web-push": "3.6.7"
+  }
+}
