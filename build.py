@@ -715,6 +715,8 @@ def guides(v):
 
 
 def vertical_page(v):
+    if v["key"] == "daycare":
+        return daycare_page(v)
     alt = ("/" + v["slug"], "/es/" + v["slug_es"])
     items = faq_owner(v)
     care = mode(v) == "care"
@@ -783,6 +785,84 @@ def vertical_page(v):
         claim(CLAIM_H if not care else ("Your clients already trust you. Make the next visit easy.", "Tus clientes ya confían en ti. Facilita su próxima visita."),
               (f"Pick your plan and check out in a minute. Built for {v['short_en']}. Setup fee waived for Black Friday (ends December 1). 7-day complimentary trial.", f"Elige tu plan y paga en un minuto. Hecho para {v['short_es']}. Sin costo de instalación por Black Friday (hasta el 1 de diciembre). 7 días de prueba sin costo.")),
         "</main>", footer(), end()])
+
+
+def daycare_page(v):
+    """A distinct parent-referral offer, not the visit-based loyalty template."""
+    alt = ("/" + v["slug"], "/es/" + v["slug_es"])
+    contact = url("/contact", "/es/contacto")
+    css = """<style>
+.ref-hero{padding:80px 0 72px;background:linear-gradient(135deg,#fff7ed,#fff 70%)}
+.ref-hero .wrap{max-width:1040px}.ref-hero h1{max-width:850px;line-height:1.05}
+.ref-kicker{font-size:.9rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9a3412}
+.ref-intro{max-width:740px;font-size:1.3rem;line-height:1.55;margin:25px 0}
+.ref-note{font-size:.94rem;color:#555;max-width:760px;margin-top:16px}
+.ref-section{padding:72px 0}.ref-section h2{max-width:800px}
+.ref-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:32px}
+.ref-card{background:#fff;border:1px solid #e9dfd7;border-radius:20px;padding:27px;box-shadow:0 9px 25px #251c1109}
+.ref-card h3{margin:0 0 12px}.ref-card p{margin:0;line-height:1.6}
+.ref-sample{background:#19252c;color:white;border-radius:24px;padding:36px;margin-top:30px}
+.ref-sample h3,.ref-sample p{color:white}.ref-sample .ref-note{color:#e0e5e7}
+.ref-list{padding-left:22px;line-height:1.8}.ref-list li{margin:9px 0}
+.ref-cta{background:#f7eee8;text-align:center;padding:70px 0}
+.ref-cta p{max-width:700px;margin:18px auto 28px;line-height:1.6}
+.ref-faq{max-width:850px}.ref-faq h3{margin:28px 0 6px}.ref-faq p{margin:0;line-height:1.65}
+@media(max-width:740px){.ref-grid{grid-template-columns:1fr}.ref-hero{padding:55px 0}.ref-section{padding:48px 0}.ref-sample{padding:24px}}
+</style>"""
+    def card(title, body):
+        return f'<div class="ref-card"><h3>{title}</h3><p>{body}</p></div>'
+    steps = [
+        ("Choose the rules", "Elige las reglas", "Tell us which age groups have staffed openings, what counts as a qualifying enrollment, and which rewards you want to offer.", "Dinos en qué grupos de edad tienes cupos que puedes atender, qué inscripción califica y qué recompensa quieres ofrecer."),
+        ("Invite your families", "Invita a tus familias", "Give parents a clear flyer or message they can share. A new family names the person who referred them when they first contact your school.", "Dales a los padres un volante o mensaje claro para compartir. La familia nueva indica quién la recomendó al comunicarse por primera vez."),
+        ("Confirm and thank them", "Confirma y agradece", "You confirm the enrollment and your chosen milestone. We keep the referral record and prepare rewards for your approval.", "Tú confirmas la inscripción y el requisito que elegiste. Nosotros llevamos el registro y preparamos las recompensas para tu aprobación."),
+    ]
+    step_html = "".join(card(L(a,b),L(c,d)) for a,b,c,d in steps)
+    faq = [
+        ("Do we need to replace our childcare software?", "¿Hay que cambiar el sistema de la escuela?", "No. The pilot works alongside the enrollment process you already use. Your director confirms which referred families qualify.", "No. El programa piloto funciona con el proceso de inscripción que ya usas. La dirección confirma qué familias recomendadas califican."),
+        ("Can we choose our own reward?", "¿Podemos elegir la recompensa?", "Yes. Tuition credits, a school perk, or an eligible dining or travel certificate can be considered. We agree on the rules and actual costs before you invite parents.", "Sí. Podemos considerar créditos de matrícula, un beneficio de la escuela o un certificado de restaurante o viaje disponible. Acordamos las reglas y los costos antes de invitar a los padres."),
+        ("When does a referral count?", "¿Cuándo cuenta una recomendación?", "Your school sets the condition. For example, a new family might need to enroll and stay 30 days. You verify it before a reward is approved.", "Tu escuela define el requisito. Por ejemplo, una familia nueva podría inscribirse y permanecer 30 días. Tú lo confirmas antes de aprobar la recompensa."),
+    ]
+    faq_html = "".join(f'<h3>{L(a,b)}</h3><p>{L(c,d)}</p>' for a,b,c,d in faq)
+    return "".join([
+        head("Parent Referral Program for Daycares & Preschools | RetainOS",
+             "Programa de referidos para guarderías y preescolares | RetainOS",
+             "A parent referral program for daycares and preschools with staffed openings. Choose the rules and rewards; we prepare materials and track enrolled referrals.",
+             "Un programa de referidos para guarderías y preescolares con cupos disponibles. Tú eliges las reglas y los premios; nosotros preparamos el material y llevamos el registro.",alt=alt),
+        css,topbar(alt,nav=False),'<main id="top">',
+        '<section class="ref-hero"><div class="wrap"><div class="ref-kicker">',
+        L("RetainOS · Parent referral program","RetainOS · Programa de referidos para padres"),'</div><h1>',
+        L("Let happy families introduce your next families.","Deja que tus familias contentas te presenten a las próximas."),'</h1><p class="ref-intro">',
+        L("A simple referral program for daycares and preschools with room to enroll. You choose the rules and rewards. We prepare parent materials, track introductions, and bring qualified rewards to you for approval.",
+          "Un programa sencillo de referidos para guarderías y preescolares con cupos disponibles. Tú eliges las reglas y las recompensas. Preparamos el material para los padres, registramos las recomendaciones y te presentamos los premios que califican para tu aprobación."),
+        '</p><a class="btn" href="',contact,'">',L("Talk about my school","Hablemos de mi escuela"),
+        '</a><p class="ref-note">',L("Built around your existing enrollment process. No new parent app required.","Funciona con tu proceso de inscripción actual. Los padres no necesitan otra aplicación."),'</p></div></section>',
+        '<section id="how" class="ref-section"><div class="wrap"><div class="ref-kicker">',L("How it works","Cómo funciona"),'</div><h2>',
+        L("A clear invitation. A confirmed enrollment. A thank-you you control.","Una invitación clara. Una inscripción confirmada. Un agradecimiento que tú decides."),
+        '</h2><div class="ref-grid">',step_html,'</div></div></section>',
+        '<section class="ref-section tint"><div class="wrap"><div class="ref-kicker">',L("Example program","Ejemplo de programa"),'</div><h2>',
+        L("Start with a tuition credit. Add a milestone if it fits.","Comienza con un crédito de matrícula. Añade una meta si te conviene."),
+        '</h2><div class="ref-sample"><h3>',L("One possible setup","Una opción posible"),'</h3><p>',
+        L("A parent earns a $50 tuition credit for each new family who enrolls and stays 30 days. After three qualifying families, the parent earns an additional bonus chosen by the school.",
+          "Un padre recibe $50 de crédito de matrícula por cada familia nueva que se inscriba y permanezca 30 días. Después de tres familias que califiquen, recibe una recompensa adicional elegida por la escuela."),
+        '</p><p class="ref-note">',L("Example only. Your school sets the amount, milestone, eligibility and bonus. The third family also earns the regular credit in this example.",
+          "Es solo un ejemplo. Tu escuela define el monto, la meta, los requisitos y la recompensa adicional. En este ejemplo, la tercera familia también genera el crédito habitual."),
+        '</p></div></div></section>',
+        '<section class="ref-section"><div class="wrap"><h2>',L("Your program, with a little less to manage.","Tu programa, con menos trabajo administrativo."),'</h2><ul class="ref-list">',
+        ''.join(f'<li>{L(a,b)}</li>' for a,b in [
+            ("Parent flyer and share message tailored to the school","Volante y mensaje para compartir adaptados a la escuela"),
+            ("A simple record of referred families and their status","Un registro sencillo de las familias recomendadas y su estado"),
+            ("Director confirmation before a reward is issued","Confirmación de la dirección antes de entregar un premio"),
+            ("A review of referrals, tours and qualified enrollments","Un resumen de recomendaciones, visitas e inscripciones que califican"),
+        ]),'</ul><p class="ref-note">',
+        L("Optional dining and travel rewards depend on the provider and the school’s choice. Hotel savings cards are discounts on eligible bookings, not cash. Getaway certificates may have taxes, fees, booking deadlines, age and occupancy rules; full terms must be shown before a school offers them.",
+          "Los premios de restaurantes y viajes son opcionales y dependen del proveedor y de la escuela. Las tarjetas de ahorro para hoteles ofrecen descuentos en reservas elegibles; no son dinero en efectivo. Los certificados de estadía pueden tener impuestos, cargos, plazos de reserva y requisitos de edad y ocupación. Hay que mostrar los términos completos antes de ofrecerlos."),
+        '</p></div></section>',
+        '<section class="ref-section tint"><div class="wrap ref-faq"><h2>',L("Questions directors ask","Preguntas de los directores"),'</h2>',faq_html,'</div></section>',
+        '<section class="ref-cta"><div class="wrap"><h2>',L("Have staffed openings? Let's see if referrals fit.","¿Tienes cupos que puedes atender? Veamos si este programa te conviene."),
+        '</h2><p>',L("Tell us which age groups you can enroll. We’ll sketch a simple program for your school and explain the work and reward costs before you decide.",
+                      "Cuéntanos en qué grupos de edad puedes inscribir niños. Te mostraremos un programa sencillo y te explicaremos el trabajo y los costos antes de que decidas."),
+        '</p><a class="btn" href="',contact,'">',L("Talk about my school","Hablemos de mi escuela"),'</a></div></section>',
+        '</main>',footer(),end()])
 
 
 def rewards_page():
