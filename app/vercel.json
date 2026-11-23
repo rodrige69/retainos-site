@@ -14,5 +14,12 @@
     { "source": "/claim", "destination": "/claim.html" },
     { "source": "/claim/:code", "destination": "/claim.html?code=:code" },
     { "source": "/:shop", "destination": "/shop.html?shop=:shop" }
+  ],
+  "headers": [
+    { "source": "/sw.js", "headers": [
+      { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+      { "key": "Service-Worker-Allowed", "value": "/" } ] },
+    { "source": "/manifest.webmanifest", "headers": [
+      { "key": "Content-Type", "value": "application/manifest+json" } ] }
   ]
 }
