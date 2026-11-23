@@ -15,8 +15,19 @@
   try {
     var shop = (new URLSearchParams(location.search).get("shop") || "").toLowerCase();
     if (/^[a-z0-9-]{2,80}$/.test(shop)) {
+      /* Switch to the shop's manifest only after it loads cleanly; otherwise keep
+         the static one, so a problem here can never block installing. */
       var link = document.querySelector('link[rel="manifest"]');
-      if (link) link.href = "/api/manifest?shop=" + encodeURIComponent(shop);
+      var shopUrl = "/api/manifest?shop=" + encodeURIComponent(shop);
+      if (link && window.fetch) {
+        fetch(shopUrl, { credentials: "include" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (m) {
+            if (m && m.name && m.icons && m.icons.length) link.href = shopUrl;
+            else if (window.console) console.warn("shop manifest not used", m);
+          })
+          .catch(function (e) { if (window.console) console.warn("shop manifest failed", e); });
+      }
       /* iPhone uses this meta for the icon label; fill it once the page shows the shop name. */
       var setIosTitle = function () {
         var el = document.getElementById("shopName");
